@@ -10,16 +10,27 @@ if not exist ".git" (
 )
 if not exist logs mkdir logs
 
+rem Uma juncao que parou no meio (conflito): fica com os arquivos deste computador e conclui
+if exist ".git\MERGE_HEAD" (
+    echo Concluindo a juncao pendente com os arquivos deste computador...
+    git add -A
+    git commit --no-edit >nul
+)
+
 rem Mensagem: argumento do comando, ou digitada, ou automatica com data e hora
 set "MSG=%~1"
 if "%MSG%"=="" set /p "MSG=Descreva a mudanca (Enter = mensagem automatica): "
 if "%MSG%"=="" set "MSG=Atualizacao %date% %time:~0,5%"
 
 git add -A
-git diff --cached --quiet && echo Nada novo para enviar. && timeout /t 3 >nul && exit /b 0
-git commit -m "%MSG%" >nul
-echo Enviando "%MSG%"...
+git diff --cached --quiet || git commit -m "%MSG%" >nul
+echo Enviando...
 git pull origin main --no-edit -X ours > logs\github-log.txt 2>&1
+if exist ".git\MERGE_HEAD" (
+    rem conflito que o git nao resolve sozinho (ex.: arquivo apagado de um lado): vale a versao deste computador
+    git add -A
+    git commit --no-edit >> logs\github-log.txt 2>&1
+)
 git push origin main >> logs\github-log.txt 2>&1
 if errorlevel 1 (
     echo.
@@ -30,4 +41,4 @@ if errorlevel 1 (
 )
 echo.
 echo  [OK] Repositorio atualizado: https://github.com/Dakuraasa/Dakura-Origin-a-Minecraft-Mod-
-timeout /t 4 >nul
+timeout /t 5 >nul
