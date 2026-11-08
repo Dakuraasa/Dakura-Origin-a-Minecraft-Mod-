@@ -1,0 +1,119 @@
+{
+	"id": "elfo",
+	"order": 6,
+	"name": "Elfo",
+	"epithet": "Quem Mede o Tempo em Séculos",
+	"icon": "dakura_origins:textures/race/elfo.png",
+	"icon_size": [
+		55,
+		55
+	],
+	"palette": {
+		"ink": [
+			"#0E1410",
+			"#1C2A20",
+			"#2F5D3A",
+			"#5E8C4F",
+			"#C9B26B",
+			"#F5EFD9"
+		],
+		"sky": "#070A08",
+		"glow": "#FFF8E6",
+		"text": "#123524",
+		"accent": "#2F5D3A",
+		"muted": "#5E806B"
+	},
+	"description": "Elfos vivem tanto que os anos humanos passam por eles como estações. Leves, atentos e pacientes, atravessam florestas sem quebrar um galho e acertam uma flecha onde outros mal enxergam o alvo. Não são fortes nem robustos, e explosões e estrondos ferem seus ouvidos sensíveis. Mas quem já caçou ao lado de um elfo sabe: ele percebe o perigo muito antes de qualquer outro, e já está longe quando o golpe chega.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Passos leves: mais rápido e cai de alturas maiores sem se ferir."
+		},
+		{
+			"type": "vantagem",
+			"text": "Arqueiro nato: flechas e outros projéteis causam 50% a mais de dano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Longevo: a fome cai na metade do ritmo."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Corpo frágil: 9 corações e golpes mais fracos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Ouvidos sensíveis: explosões causam o dobro de dano."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Paladar refinado: recusa carne podre, olho de aranha e batata venenosa."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.1
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.safe_fall_distance",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -0.5
+		},
+		{
+			"type": "dakura_origins:archery",
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:slow_hunger",
+			"factor": 0.5
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_explosion",
+			"multiplier": 2.0
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"forbidden": [
+				"minecraft:rotten_flesh",
+				"minecraft:spider_eye",
+				"minecraft:poisonous_potato"
+			],
+			"message": "dakura_origins.message.elf_food"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:dash",
+			"name": "Recuo Ágil",
+			"description": "Salta para trás num piscar de olhos e ganha velocidade por um instante.",
+			"cooldown": 100,
+			"power": 1.3,
+			"lift": 0.45
+		},
+		{
+			"type": "dakura_origins:keen_sight",
+			"name": "Olhar de Caçador",
+			"description": "Por 10 segundos, enxerga o contorno de toda criatura num raio de 40 blocos, até atrás de paredes.",
+			"cooldown": 900,
+			"duration": 200,
+			"radius": 40
+		}
+	]
+}

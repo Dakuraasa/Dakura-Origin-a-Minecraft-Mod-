@@ -1,0 +1,22 @@
+{
+	"replace": false,
+	"values": [
+		"minecraft:armor_stand",
+		"minecraft:skeleton",
+		"minecraft:stray",
+		"minecraft:bogged",
+		"minecraft:wither_skeleton",
+		"minecraft:skeleton_horse",
+		"minecraft:iron_golem",
+		"minecraft:snow_golem",
+		"minecraft:blaze",
+		"minecraft:breeze",
+		"minecraft:vex",
+		"minecraft:allay",
+		"minecraft:shulker",
+		"minecraft:wither",
+		"minecraft:ender_dragon",
+		"minecraft:warden",
+		"minecraft:elder_guardian"
+	]
+}

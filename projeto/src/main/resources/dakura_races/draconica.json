@@ -1,0 +1,82 @@
+{
+	"id": "draconica",
+	"order": 3,
+	"name": "Dracônica",
+	"epithet": "A Fera que Não Divide o Céu",
+	"icon": "dakura_origins:textures/race/draconica.png",
+	"icon_size": [146, 160],
+
+	"palette": {
+		"ink": ["#120820", "#24103F", "#3E1E6B", "#62359E", "#9566D6", "#D9B8FF"],
+		"sky": "#05020C",
+		"glow": "#F2E6FF",
+		"text": "#123524",
+		"accent": "#5B2A86",
+		"muted": "#5E806B"
+	},
+
+	"description": "Dracônicos não nascem: eclodem, já famintos e já em guerra. São montanhas de escama e músculo que odeiam paredes, tetos e qualquer voz que não seja a própria. Não fazem alianças, não pedem perdão e não esquecem uma ofensa. O fogo é seu berço, a carne é sua única comida, e cada inimigo abatido os faz crescer, mais altos, mais duros e mais cruéis, até que o próprio céu pareça pequeno demais para eles.",
+
+	"traits": [
+		{ "type": "vantagem", "text": "Corpo colossal: começa com 2,5 blocos e cresce até 3,5 conforme amadurece." },
+		{ "type": "vantagem", "text": "Couraça natural equivalente a uma armadura de ferro completa, e muito mais vida." },
+		{ "type": "vantagem", "text": "Filho do calor: imune a fogo e lava, e se regenera dentro das chamas." },
+		{ "type": "vantagem", "text": "Força bruta superior. Vida, couraça, força e o dano das habilidades aumentam a cada estágio." },
+		{ "type": "desvantagem", "text": "Só come carne." },
+		{ "type": "desvantagem", "text": "Não cabe em armaduras: no lugar delas, amadurece matando monstros." },
+		{ "type": "desvantagem", "text": "Sem cerca de 6 blocos livres acima de si, fica lento, faminto e trêmulo." },
+		{ "type": "desvantagem", "text": "Não usa experiência: a barra mostra sua maturidade." }
+	],
+
+	"powers": [
+		{ "type": "dakura_origins:maturity", "thresholds": [500, 1500], "points_per_health": 0.5,
+		  "only_monsters": true, "colors": ["#7ED957", "#F2B33D", "#D9364A"] },
+
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.scale",
+		  "maturity_range": [0.389, 0.944], "smooth": true, "smooth_step": 0.02, "check_space": true },
+
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.max_health", "stage_values": [10, 16, 24] },
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.armor", "stage_values": [15, 17, 20] },
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.armor_toughness", "stage_values": [0, 2, 4] },
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.attack_damage", "stage_values": [2.0, 3.5, 5.0] },
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.knockback_resistance", "stage_values": [0.1, 0.2, 0.3] },
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.step_height", "stage_values": [0.4, 0.5, 0.6] },
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:player.block_interaction_range", "stage_values": [0.5, 1.0, 1.5] },
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:player.entity_interaction_range", "stage_values": [0.5, 1.0, 1.5] },
+
+		{ "type": "dakura_origins:damage_immunity", "damage_tag": "minecraft:is_fire" },
+		{ "type": "dakura_origins:regeneration", "when": "in_heat", "interval": 10, "amount": 1.0 },
+
+		{ "type": "dakura_origins:restricted_diet", "allowed": ["#minecraft:meat"],
+		  "message": "dakura_origins.message.meat_only" },
+		{ "type": "dakura_origins:no_armor", "message": "dakura_origins.message.no_armor" },
+		{ "type": "dakura_origins:claustrophobia", "clearance": 6, "slowness": 0, "exhaustion_per_second": 0.25 }
+	],
+
+	"abilities": [
+		{
+			"type": "dakura_origins:fireball",
+			"name": "Bola de Fogo",
+			"description": "Dispara uma esfera de fogo dracônico que explode com a força de uma TNT e incendeia o local.",
+			"cooldown": 100,
+			"speed": 1.6,
+			"life": 50,
+			"explosion_power": 4.0,
+			"block_power": 1.5,
+			"fire_count": 10,
+			"fire_radius": 3,
+			"maturity_damage": [1.0, 1.4, 1.8]
+		},
+		{
+			"type": "dakura_origins:stomp",
+			"name": "Pisão Dracônico",
+			"description": "Ergue a pata e desce com todo o peso: a onda de choque arremessa para cima tudo num raio de 4 blocos e causa dano pesado.",
+			"cooldown": 240,
+			"radius": 4,
+			"damage": 8.0,
+			"launch": 0.9,
+			"windup": 9,
+			"maturity_damage": [1.0, 1.4, 1.8]
+		}
+	]
+}

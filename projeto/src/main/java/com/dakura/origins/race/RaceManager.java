@@ -1,0 +1,171 @@
+package com.dakura.origins.race;
+
+import com.dakura.origins.network.CooldownPayload;
+import com.dakura.origins.network.OpenSelectionPayload;
+import com.dakura.origins.network.SelectionResultPayload;
+import com.dakura.origins.power.RacePower;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+/**
+ * Regras de "quem é qual raça" (lado do servidor): aplicar/remover poderes,
+ * repassar ticks e disparar habilidades com tempo de recarga.
+ */
+public final class RaceManager {
+	private static final Map<UUID, long[]> COOLDOWNS = new HashMap<>();
+	private static long serverTicks = 0;
+
+	private RaceManager() {}
+
+	// ------------------------------------------------------------ consulta
+
+	public static Optional<Race> getRace(ServerPlayerEntity player) {
+		return RaceRegistry.get(player.getAttached(RaceAttachments.RACE));
+	}
+
+	public static boolean hasRace(ServerPlayerEntity player) {
+		return getRace(player).isPresent();
+	}
+
+	// ------------------------------------------------------------ eventos
+
+	public static void onJoin(ServerPlayerEntity player) {
+		Optional<Race> race = getRace(player);
+		sendCooldown(player, CooldownPayload.reset());
+		if (race.isPresent()) {
+			applyPowers(player, race.get());
+			if (ServerPlayNetworking.canSend(player, SelectionResultPayload.ID)) {
+				ServerPlayNetworking.send(player, new SelectionResultPayload(true, race.get().id()));
+			}
+		} else {
+			if (player.getAttached(RaceAttachments.RACE) != null) player.removeAttached(RaceAttachments.RACE);
+			requestSelection(player, "");
+		}
+	}
+
+	public static void onLeave(ServerPlayerEntity player) {
+		getRace(player).ifPresent(r -> removeAbilities(player, r));
+		COOLDOWNS.remove(player.getUuid());
+	}
+
+	public static void onRespawn(ServerPlayerEntity player) {
+		getRace(player).ifPresent(r -> {
+			removeAbilities(player, r);
+			applyPowers(player, r);
+		});
+	}
+
+	public static void tick(MinecraftServer server) {
+		serverTicks++;
+		for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+			if (!player.isAlive()) continue;
+			Optional<Race> race = getRace(player);
+			if (race.isEmpty()) continue;
+			for (RacePower power : race.get().powers()) power.tick(player);
+		}
+	}
+
+	// ------------------------------------------------------------ escolha
+
+	public static void requestSelection(ServerPlayerEntity player, String preselect) {
+		if (ServerPlayNetworking.canSend(player, OpenSelectionPayload.ID)) {
+			ServerPlayNetworking.send(player, new OpenSelectionPayload(preselect));
+		} else {
+			// o cliente sem o mod não tem as traduções: o texto reserva aparece em português
+			player.sendMessage(Text.translatableWithFallback("dakura_origins.message.install_mod",
+					"[Dakura Origins] Instale o mod para escolher sua raça.").formatted(Formatting.RED), false);
+		}
+	}
+
+	public static boolean choose(ServerPlayerEntity player, String raceId) {
+		if (hasRace(player)) return false;
+		Optional<Race> race = RaceRegistry.get(raceId);
+		if (race.isEmpty()) return false;
+		setRace(player, race.get());
+		return true;
+	}
+
+	public static void setRace(ServerPlayerEntity player, Race race) {
+		clearRace(player);
+		player.setAttached(RaceAttachments.RACE, race.id());
+		applyPowers(player, race);
+		if (ServerPlayNetworking.canSend(player, SelectionResultPayload.ID)) {
+			ServerPlayNetworking.send(player, new SelectionResultPayload(true, race.id()));
+		}
+		player.sendMessage(Text.translatable("dakura_origins.message.awakened",
+				colored(race.nameText(), race.palette().ink()[5])).formatted(Formatting.GRAY), false);
+	}
+
+	public static void clearRace(ServerPlayerEntity player) {
+		getRace(player).ifPresent(r -> {
+			removeAbilities(player, r);
+			for (RacePower power : r.powers()) power.onRemove(player);
+		});
+		if (player.getAttached(RaceAttachments.RACE) != null) player.removeAttached(RaceAttachments.RACE);
+		COOLDOWNS.remove(player.getUuid());
+		sendCooldown(player, CooldownPayload.reset());
+	}
+
+	public static void restartSelection(ServerPlayerEntity player) {
+		String previous = player.getAttached(RaceAttachments.RACE);
+		clearRace(player);
+		requestSelection(player, previous == null ? "" : previous);
+	}
+
+	private static void applyPowers(ServerPlayerEntity player, Race race) {
+		for (RacePower power : race.powers()) power.onApply(player);
+	}
+
+	private static void removeAbilities(ServerPlayerEntity player, Race race) {
+		for (Race.AbilityInfo info : race.abilities()) {
+			if (info.ability() != null) info.ability().onRemove(player);
+		}
+	}
+
+	// ------------------------------------------------------------ habilidades
+
+	public static void useAbility(ServerPlayerEntity player, int slot) {
+		if (!player.isAlive() || (player.isSpectator() && !com.dakura.origins.power.ability.PhaseAbility.isPhased(player))) return;
+		Optional<Race> race = getRace(player);
+		if (race.isEmpty() || slot < 0 || slot >= race.get().abilities().size()) return;
+		Race.AbilityInfo info = race.get().abilities().get(slot);
+
+		long[] ready = COOLDOWNS.computeIfAbsent(player.getUuid(), u -> new long[2]);
+		if (slot < ready.length && serverTicks < ready[slot]) {
+			long secs = (ready[slot] - serverTicks + 19) / 20;
+			player.sendMessage(Text.translatable("dakura_origins.message.cooldown", info.nameText(), secs)
+					.formatted(Formatting.GRAY), true);
+			return;
+		}
+		if (info.ability() == null) {
+			player.sendMessage(Text.translatable("dakura_origins.message.not_implemented", info.nameText())
+					.formatted(Formatting.GRAY), true);
+			return;
+		}
+		if (info.ability().activate(player) && slot < ready.length) {
+			ready[slot] = serverTicks + info.cooldownTicks();
+			if (info.cooldownTicks() > 0) {
+				sendCooldown(player, new CooldownPayload(slot, info.cooldownTicks(), info.cooldownTicks()));
+			}
+		}
+	}
+
+	/** Avisa a HUD do jogador (indicadores de recarga). */
+	private static void sendCooldown(ServerPlayerEntity player, CooldownPayload payload) {
+		if (ServerPlayNetworking.canSend(player, CooldownPayload.ID)) ServerPlayNetworking.send(player, payload);
+	}
+
+	private static MutableText colored(MutableText text, int rgb) {
+		return text.styled(s -> s.withColor(TextColor.fromRgb(rgb & 0xFFFFFF)).withBold(true));
+	}
+}

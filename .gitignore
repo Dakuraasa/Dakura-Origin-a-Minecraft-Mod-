@@ -1,0 +1,6 @@
+projeto/build/
+projeto/.gradle/
+projeto/run/
+logs/
+builds/
+*.log

@@ -1,0 +1,185 @@
+{
+	"id": "driade",
+	"order": 5,
+	"name": "Dríade",
+	"epithet": "A Ninfa que Ouve as Raízes",
+	"icon": "dakura_origins:textures/race/driade.png",
+	"icon_size": [
+		128,
+		127
+	],
+	"palette": {
+		"ink": [
+			"#0B1A0F",
+			"#173322",
+			"#2C5A3A",
+			"#4F8C5C",
+			"#9CCB8E",
+			"#F2E6F0"
+		],
+		"sky": "#050B07",
+		"glow": "#FFF4FA",
+		"text": "#123524",
+		"accent": "#3F7A4A",
+		"muted": "#5E806B"
+	},
+	"description": "Dríades são ninfas da natureza, nascidas da seiva e do orvalho. Não enxergam com os olhos, mas sentem o mundo pelas raízes, pelo vento e pelo calor do sol na pele. São pacíficas com quem respeita a floresta e implacáveis com quem a fere. Onde pisam, as plantas crescem; onde caem, nascem flores. Mas o fogo as consome, o Nether as queima viva e a própria floresta pune, sem perdão, a dríade que ousar derrubar uma árvore.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Corpo esguio de 2,5 blocos, mais forte e resistente que um humano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Fotossíntese: sob o sol, regenera mais rápido e a fome se enche sozinha."
+		},
+		{
+			"type": "vantagem",
+			"text": "Plantações por perto crescem muito mais rápido."
+		},
+		{
+			"type": "vantagem",
+			"text": "Em florestas sua força aumenta."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune a veneno, decomposição e aos espinhos de arbustos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Completamente cega e não come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "À noite fica um pouco mais fraca."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Quebrar uma árvore é traição: a floresta a mata na hora."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O fogo causa o dobro de dano, e no Nether ela pega fogo."
+		},
+		{
+			"type": "neutro",
+			"text": "Ao morrer, flores brotam pelo chão ao redor."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:flower_crown"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.scale",
+			"operation": "add_value",
+			"amount": 0.389
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 1.5
+		},
+		{
+			"type": "dakura_origins:photosynthesis",
+			"heal": 1.0,
+			"heal_interval": 40,
+			"food_interval": 60
+		},
+		{
+			"type": "dakura_origins:growth_aura",
+			"radius": 6,
+			"interval": 10,
+			"attempts": 8,
+			"chance": 0.3
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"amount": 2.0,
+			"when": "forest"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"amount": -1.0,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"effects": [
+				"minecraft:poison",
+				"minecraft:wither"
+			]
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_type": "minecraft:sweet_berry_bush"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:blindness"
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"forbidden": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.no_meat"
+		},
+		{
+			"type": "dakura_origins:nature_oath"
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fire",
+			"multiplier": 2.0
+		},
+		{
+			"type": "dakura_origins:environment_damage",
+			"when": "nether",
+			"interval": 20,
+			"ignite": true
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:vine_snare",
+			"name": "Vinhas Rasteiras",
+			"description": "Vinhas correm pelo chão até o inimigo, prendem seus pés na terra e o deixam muito lento.",
+			"cooldown": 160,
+			"range": 16,
+			"speed": 0.9,
+			"root_ticks": 50,
+			"slow_ticks": 80,
+			"damage": 2.0
+		},
+		{
+			"type": "dakura_origins:solar_beam",
+			"name": "Raio Solar",
+			"description": "Só de dia, sob o céu aberto: ergue os braços, junta a luz do sol e solta um raio que queima quem estiver à frente e quebra blocos.",
+			"cooldown": 1200,
+			"charge": 30,
+			"fire": 24,
+			"range": 24,
+			"damage": 3.0,
+			"damage_interval": 4,
+			"break_interval": 3,
+			"max_hardness": 3.0
+		}
+	]
+}

@@ -1,0 +1,66 @@
+{
+	"id": "vampirica",
+	"order": 2,
+	"name": "Vampírica",
+	"epithet": "A Fome que Sorri no Escuro",
+	"icon": "dakura_origins:textures/race/vampirica.png",
+	"icon_size": [109, 109],
+
+	"palette": {
+		"ink": ["#1A0508", "#33080F", "#5C0E1C", "#8E1B33", "#C7263E", "#F27A86"],
+		"sky": "#07020A",
+		"glow": "#FFD6DC",
+		"text": "#123524",
+		"accent": "#8E1B33",
+		"muted": "#5E806B"
+	},
+
+	"description": "Eles não caçam por fome: caçam porque gostam. Os Vampíricos são o sorriso que se abre no escuro, a respiração fria no seu pescoço, o abraço que não solta. Mais rápidos e mais fortes que qualquer mortal, enxergam na noite como se ela lhes pertencesse e fecham as próprias feridas antes que o sangue esfrie. Mas o sol os despedaça, e comida comum vira cinza na boca. Só o sangue os sustenta, e quando a sede chega ao fim, toda a sua glória apodrece junto.",
+
+	"traits": [
+		{ "type": "vantagem", "text": "Força e velocidade sobre-humanas." },
+		{ "type": "vantagem", "text": "Visão noturna: a escuridão não esconde nada." },
+		{ "type": "vantagem", "text": "Regeneração acelerada das próprias feridas." },
+		{ "type": "desvantagem", "text": "A luz do sol queima a carne. Chuva, água e sombra protegem." },
+		{ "type": "desvantagem", "text": "Só se alimenta de sangue: comida comum é rejeitada." },
+		{ "type": "desvantagem", "text": "Com a fome zerada, perde todos os dons da raça." }
+	],
+
+	"powers": [
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.attack_damage",
+		  "operation": "add_value", "amount": 2.0, "requires_food": true },
+		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.movement_speed",
+		  "operation": "add_multiplied_base", "amount": 0.15, "requires_food": true },
+		{ "type": "dakura_origins:status_effect", "effect": "minecraft:night_vision", "requires_food": true },
+		{ "type": "dakura_origins:regeneration", "interval": 30, "amount": 1.0, "exhaustion": 0.5, "requires_food": true },
+		{ "type": "dakura_origins:sunlight_damage", "interval": 20, "damage": 1.5, "fire_seconds": 3, "helmet_protects": false },
+		{ "type": "dakura_origins:restricted_diet", "allowed": [],
+		  "message": "dakura_origins.message.blood_only" }
+	],
+
+	"abilities": [
+		{
+			"type": "dakura_origins:vampire_bite",
+			"name": "Mordida Vampírica",
+			"description": "Agarra a presa à sua frente num abraço predatório e bebe sua vida por 1,5 s, curando-se e saciando a fome. Sangue de monstro é podre: envenena.",
+			"cooldown": 160,
+			"range": 3.0,
+			"duration": 30,
+			"hits": 5,
+			"damage_per_hit": 1.2,
+			"heal_ratio": 1.0,
+			"food_ratio": 1.0,
+			"saturation_ratio": 0.4,
+			"monster_effects": [
+				{ "effect": "minecraft:poison", "duration": 80, "amplifier": 0 }
+			]
+		},
+		{
+			"type": "dakura_origins:bat_form",
+			"name": "Forma de Morcego",
+			"description": "Desfaz-se em fumaça e vira morcego: voo livre, sem limite de tempo. Aperte de novo para voltar.",
+			"cooldown": 20,
+			"fly_speed": 0.06
+		}
+	]
+}

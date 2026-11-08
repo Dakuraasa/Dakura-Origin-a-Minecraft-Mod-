@@ -1,0 +1,27 @@
+{
+	"id": "humano",
+	"order": 1,
+	"name": "Humano",
+	"epithet": "O Andarilho Comum",
+	"icon": "dakura_origins:textures/race/humano.png",
+	"icon_size": [44, 47],
+
+	"palette": {
+		"ink": ["#1E1238", "#2F1A55", "#4A2A80", "#6E3FB0", "#A066D8", "#E0A8F0"],
+		"sky": "#0B0718",
+		"glow": "#F3E6FF",
+		"text": "#123524",
+		"accent": "#A8445A",
+		"muted": "#5E806B"
+	},
+
+	"description": "Antes das escamas, das asas e dos pactos com a noite, havia apenas o Humano. Nascido do barro e da teimosia, ele não carrega bênção nem maldição: apenas as próprias mãos, uma picareta e a vontade de moldar o mundo bloco a bloco. Onde outras raças dependem do sangue, o Humano depende da escolha. É o ponto de partida de toda lenda, o andarilho que acende a primeira tocha na escuridão e, contra todas as probabilidades, sobrevive à primeira noite.",
+
+	"traits": [
+		{ "type": "neutro", "text": "Nenhuma vantagem, nenhuma desvantagem: você é exatamente como o mundo te criou." },
+		{ "type": "neutro", "text": "Livre de fraquezas: nenhum bioma, alimento ou criatura te trata diferente." },
+		{ "type": "neutro", "text": "A experiência clássica do Minecraft, sem atalhos e sem amarras." }
+	],
+
+	"abilities": []
+}

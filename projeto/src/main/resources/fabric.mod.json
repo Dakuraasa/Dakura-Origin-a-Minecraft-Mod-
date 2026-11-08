@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "dakura_origins",
+	"version": "${version}",
+	"name": "Dakura Origins",
+	"description": "Escolha sua origem. Cada raça é um capítulo: poderes, fraquezas e duas habilidades ativas.",
+	"authors": [
+		"Dakura (Artur Carmo dos Santos)"
+	],
+	"contact": {
+		"sources": "https://github.com/arturcsantos1610"
+	},
+	"license": "All-Rights-Reserved",
+	"icon": "assets/dakura_origins/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.dakura.origins.DakuraOrigins"
+		],
+		"client": [
+			"com.dakura.origins.client.DakuraOriginsClient"
+		]
+	},
+	"mixins": [
+		"dakura_origins.mixins.json",
+		{
+			"config": "dakura_origins.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
