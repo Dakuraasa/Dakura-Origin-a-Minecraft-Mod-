@@ -47,6 +47,52 @@ public abstract class BipedEntityModelMixin {
 
 		float sun = AbilityAnimations.progress(entity, "solar", animationProgress);
 		if (sun >= 0f) poseSolar(sun, animationProgress);
+
+		float cr = AbilityAnimations.progress(entity, "crouch", animationProgress);
+		if (cr >= 0f) poseCrouch(cr);
+
+		float ram = AbilityAnimations.progress(entity, "ram", animationProgress);
+		if (ram >= 0f) poseRam(ram);
+
+		float lift = AbilityAnimations.progress(entity, "lift", animationProgress);
+		if (lift >= 0f) poseLift(lift);
+	}
+
+	// ------------------------------------------------------------------ Cabra / Minotauro
+
+	/** Carregando o salto: tronco baixo, braços para trás. */
+	private void poseCrouch(float p) {
+		float w = AbilityAnimations.window(p, 0.00f, 0.15f, 0.97f, 1.00f);
+		body.pitch = MathHelper.lerp(w, body.pitch, 0.3f);
+		rightArm.pitch = MathHelper.lerp(w, rightArm.pitch, 0.55f);
+		leftArm.pitch = MathHelper.lerp(w, leftArm.pitch, 0.55f);
+		head.pitch = MathHelper.lerp(w, head.pitch, head.pitch * 0.5f - 0.1f);
+		hat.copyTransform(head);
+	}
+
+	/** Cabeçada: cabeça baixa com os chifres à frente, braços para trás. */
+	private void poseRam(float p) {
+		float w = AbilityAnimations.window(p, 0.00f, 0.15f, 0.55f, 1.00f);
+		head.pitch = MathHelper.lerp(w, head.pitch, 0.75f);
+		hat.copyTransform(head);
+		body.pitch = MathHelper.lerp(w, body.pitch, 0.4f);
+		rightArm.pitch = MathHelper.lerp(w, rightArm.pitch, 0.8f);
+		leftArm.pitch = MathHelper.lerp(w, leftArm.pitch, 0.8f);
+		rightArm.roll = MathHelper.lerp(w, rightArm.roll, 0.15f);
+		leftArm.roll = MathHelper.lerp(w, leftArm.roll, -0.15f);
+	}
+
+	/** Arranca a pedra: braços sobem sobre a cabeça e depois arremessam para a frente. */
+	private void poseLift(float p) {
+		float up = AbilityAnimations.window(p, 0.00f, 0.35f, 0.62f, 0.70f);
+		float thr = AbilityAnimations.window(p, 0.62f, 0.72f, 0.82f, 1.00f);
+		float target = up >= thr ? -3.0f : -1.3f;
+		float w = Math.max(up, thr);
+		rightArm.pitch = MathHelper.lerp(w, rightArm.pitch, target);
+		leftArm.pitch = MathHelper.lerp(w, leftArm.pitch, target);
+		rightArm.roll = MathHelper.lerp(up, rightArm.roll, -0.2f);
+		leftArm.roll = MathHelper.lerp(up, leftArm.roll, 0.2f);
+		body.pitch = MathHelper.lerp(thr, body.pitch, 0.25f);
 	}
 
 	// ------------------------------------------------------------------ Mordida Vampírica

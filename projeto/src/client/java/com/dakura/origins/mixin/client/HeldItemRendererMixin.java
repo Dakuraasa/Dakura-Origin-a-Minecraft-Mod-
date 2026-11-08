@@ -17,6 +17,7 @@ public abstract class HeldItemRendererMixin {
 			at = @At("HEAD"), cancellable = true)
 	private void dakura$hideHands(float tickDelta, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers,
 								  ClientPlayerEntity player, int light, CallbackInfo ci) {
-		if (BatFormState.isBat(player)) ci.cancel();
+		if (BatFormState.isBat(player) || com.dakura.origins.power.ability.FoxFormAbility.isFox(player)
+				|| com.dakura.origins.power.ability.MorphAbility.morphType(player) != null) ci.cancel();
 	}
 }

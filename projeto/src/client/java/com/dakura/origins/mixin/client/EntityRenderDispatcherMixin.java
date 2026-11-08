@@ -24,6 +24,18 @@ public abstract class EntityRenderDispatcherMixin {
 			BatEntity bat = BatDisguise.prepare(player);
 			((EntityRenderDispatcher) (Object) this).render(bat, x, y, z, yaw, tickDelta, matrices, vertexConsumers, light);
 			ci.cancel();
+		} else if (entity instanceof AbstractClientPlayerEntity player && com.dakura.origins.power.ability.FoxFormAbility.isFox(player)) {
+			var fox = com.dakura.origins.client.anim.FoxDisguise.prepare(player,
+					com.dakura.origins.power.EntityFlags.clientHas(player, com.dakura.origins.power.ability.FoxFormAbility.SNOW_FLAG));
+			((EntityRenderDispatcher) (Object) this).render(fox, x, y, z, yaw, tickDelta, matrices, vertexConsumers, light);
+			ci.cancel();
+		} else if (entity instanceof AbstractClientPlayerEntity player) {
+			net.minecraft.entity.EntityType<?> type = com.dakura.origins.power.ability.MorphAbility.morphType(player);
+			if (type == null) return;
+			net.minecraft.entity.LivingEntity form = com.dakura.origins.client.anim.MorphDisguise.prepare(player, type);
+			if (form == null) return;
+			((EntityRenderDispatcher) (Object) this).render(form, x, y, z, yaw, tickDelta, matrices, vertexConsumers, light);
+			ci.cancel();
 		}
 	}
 }

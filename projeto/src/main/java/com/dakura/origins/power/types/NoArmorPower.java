@@ -22,15 +22,26 @@ import net.minecraft.util.Formatting;
 public final class NoArmorPower implements RacePower {
 	private static final EquipmentSlot[] SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 	private final Text message;
+	private final java.util.EnumSet<EquipmentSlot> slots = java.util.EnumSet.noneOf(EquipmentSlot.class);
 
 	public NoArmorPower(JsonObject json) {
 		this.message = JsonParams.message(json, "message", "dakura_origins.message.no_armor")
 				.formatted(Formatting.DARK_RED);
+		for (String s : JsonParams.strings(json, "slots")) {
+			switch (s) {
+				case "head" -> slots.add(EquipmentSlot.HEAD);
+				case "chest" -> slots.add(EquipmentSlot.CHEST);
+				case "legs" -> slots.add(EquipmentSlot.LEGS);
+				case "feet" -> slots.add(EquipmentSlot.FEET);
+				default -> {}
+			}
+		}
+		if (slots.isEmpty()) slots.addAll(java.util.List.of(SLOTS));
 	}
 
 	@Override
 	public Text useRejection(PlayerEntity player, ItemStack stack) {
-		return stack.getItem() instanceof ArmorItem ? message : null;
+		return stack.getItem() instanceof ArmorItem a && slots.contains(a.getSlotType()) ? message : null;
 	}
 
 	@Override
@@ -46,7 +57,7 @@ public final class NoArmorPower implements RacePower {
 	private void strip(ServerPlayerEntity player) {
 		if (player.isCreative() || player.isSpectator()) return;
 		boolean removed = false;
-		for (EquipmentSlot slot : SLOTS) {
+		for (EquipmentSlot slot : slots) {
 			ItemStack stack = player.getEquippedStack(slot);
 			if (!stack.isEmpty() && stack.getItem() instanceof ArmorItem) {
 				player.equipStack(slot, ItemStack.EMPTY);

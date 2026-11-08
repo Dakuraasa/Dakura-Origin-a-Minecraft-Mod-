@@ -9,7 +9,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 public final class FlowerCrownPower implements RacePower {
 	public static final String FLAG = "flower_crown";
 
-	public FlowerCrownPower(JsonObject json) {}
+	public FlowerCrownPower(JsonObject json) {
+		CosmeticPower.register(FLAG);
+	}
 
 	@Override
 	public void onApply(ServerPlayerEntity player) {

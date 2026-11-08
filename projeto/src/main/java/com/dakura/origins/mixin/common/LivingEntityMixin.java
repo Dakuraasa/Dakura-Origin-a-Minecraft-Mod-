@@ -16,6 +16,12 @@ public abstract class LivingEntityMixin {
 		if ((Object) this instanceof PlayerEntity p && InvertedPotionPower.inverts(p)) cir.setReturnValue(true);
 	}
 
+	/** Huli Jing: não sabe nadar (pular na água não sobe). */
+	@Inject(method = "swimUpward", at = @At("HEAD"), cancellable = true)
+	private void dakura$noSwim(net.minecraft.registry.tag.TagKey<net.minecraft.fluid.Fluid> fluid, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+		if ((Object) this instanceof PlayerEntity p && com.dakura.origins.power.types.MarkerPower.has(p, "no_swim")) ci.cancel();
+	}
+
 	/** Dríade: imune a veneno e decomposição (Wither). */
 	@Inject(method = "canHaveStatusEffect", at = @At("HEAD"), cancellable = true)
 	private void dakura$effectImmunity(net.minecraft.entity.effect.StatusEffectInstance effect, CallbackInfoReturnable<Boolean> cir) {

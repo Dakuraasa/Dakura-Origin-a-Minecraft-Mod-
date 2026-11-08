@@ -52,6 +52,26 @@ public class DakuraOriginsClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		com.dakura.origins.client.config.DakuraConfig.load();
+		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
+				com.dakura.origins.entity.ModEntities.HULI_CLONE, com.dakura.origins.client.render.HuliCloneRenderer::new);
+		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
+				com.dakura.origins.entity.ModEntities.UNDEAD_MINION, net.minecraft.client.render.entity.ZombieEntityRenderer::new);
+		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
+				com.dakura.origins.entity.ModEntities.FEATHER, com.dakura.origins.client.render.FeatherRenderer::new);
+		// opção "Aparências de raça" na tela de Personalização da skin (fica salva em config/dakura_origins.json)
+		ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
+			if (!(screen instanceof net.minecraft.client.gui.screen.option.SkinOptionsScreen)) return;
+			net.fabricmc.fabric.api.client.screen.v1.Screens.getButtons(screen).add(
+					net.minecraft.client.gui.widget.ButtonWidget.builder(cosmeticsLabel(), b -> {
+						com.dakura.origins.client.config.DakuraConfig.raceCosmetics = !com.dakura.origins.client.config.DakuraConfig.raceCosmetics;
+						com.dakura.origins.client.config.DakuraConfig.save();
+						b.setMessage(cosmeticsLabel());
+					}).dimensions(6, 6, 170, 20)
+							.tooltip(net.minecraft.client.gui.tooltip.Tooltip.of(net.minecraft.text.Text.translatable("dakura_origins.option.race_cosmetics.tooltip")))
+							.build());
+		});
+
 		ABILITY_1 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"key.dakura_origins.habilidade_1", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_Z, "category.dakura_origins"));
 		ABILITY_2 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -65,6 +85,8 @@ public class DakuraOriginsClient implements ClientModInitializer {
 				(type, renderer, helper, context) -> {
 					if (renderer instanceof net.minecraft.client.render.entity.PlayerEntityRenderer pr) {
 						helper.register(new com.dakura.origins.client.render.FlowerCrownFeature(pr));
+						helper.register(new com.dakura.origins.client.render.FoxEarsFeature(pr));
+						helper.register(new com.dakura.origins.client.render.RaceFeatureRenderer(pr));
 					}
 				});
 		HudRenderCallback.EVENT.register(com.dakura.origins.client.hud.SecondChanceOverlay::render);
@@ -141,7 +163,19 @@ public class DakuraOriginsClient implements ClientModInitializer {
 						new Vec3d(payload.vx(), payload.vy(), payload.vz()), payload.state()));
 
 		ClientPlayNetworking.registerGlobalReceiver(EntityFlagPayload.ID, (payload, context) ->
-				EntityFlags.clientSet(payload.entityId(), payload.flag(), payload.value()));
+		{
+			EntityFlags.clientSet(payload.entityId(), payload.flag(), payload.value());
+			if (payload.flag().equals(com.dakura.origins.power.ability.FoxFormAbility.FLAG) && context.client().world != null) {
+				Entity e = context.client().world.getEntityById(payload.entityId());
+				if (e != null) e.calculateDimensions();
+				if (!payload.value()) com.dakura.origins.client.anim.FoxDisguise.forget(payload.entityId());
+			}
+			if (payload.flag().startsWith(com.dakura.origins.power.ability.MorphAbility.PREFIX) && context.client().world != null) {
+				Entity e = context.client().world.getEntityById(payload.entityId());
+				if (e != null) e.calculateDimensions();
+				if (!payload.value()) com.dakura.origins.client.anim.MorphDisguise.forget(payload.entityId());
+			}
+		});
 
 		ClientPlayNetworking.registerGlobalReceiver(MaturityPayload.ID, (payload, context) ->
 				MaturityPower.clientPoints = payload.points());
@@ -169,10 +203,14 @@ public class DakuraOriginsClient implements ClientModInitializer {
 				client.setScreen(new RaceSelectionScreen(preselect));
 			}
 			if (client.player != null && !currentRace.isEmpty()) RaceAccess.clientPlayerId = client.player.getUuid();
-			while (ABILITY_1.wasPressed()) sendAbility(0);
-			while (ABILITY_2.wasPressed()) sendAbility(1);
+			handleKey(client, ABILITY_1, 0);
+			handleKey(client, ABILITY_2, 1);
 			while (RACE_PAGE.wasPressed()) openRacePage(client);
 			ClientEffects.tick(client);
+			if (client.world != null) {
+				com.dakura.origins.client.anim.FoxDisguise.tick(client.world);
+				com.dakura.origins.client.anim.MorphDisguise.tick(client.world);
+			}
 		});
 
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
@@ -188,9 +226,17 @@ public class DakuraOriginsClient implements ClientModInitializer {
 			AbilityAnimations.clear();
 			ClientEffects.clear();
 			ClientEffects.KEEN_UNTIL = 0;
+			com.dakura.origins.client.anim.FoxDisguise.clear();
+			com.dakura.origins.client.anim.MorphDisguise.clear();
+			HELD[0] = HELD[1] = -1;
 			AbilityHud.clear();
 			com.dakura.origins.client.hud.SecondChanceOverlay.clear();
 		});
+	}
+
+	private static net.minecraft.text.Text cosmeticsLabel() {
+		return net.minecraft.text.Text.translatable("dakura_origins.option.race_cosmetics",
+				net.minecraft.screen.ScreenTexts.onOrOff(com.dakura.origins.client.config.DakuraConfig.raceCosmetics));
 	}
 
 	/** Página de consulta da raça atual (só no jogo, sem outra tela aberta por cima). */
@@ -204,6 +250,42 @@ public class DakuraOriginsClient implements ClientModInitializer {
 	private static void sendAbility(int slot) {
 		if (!mustChoose && ClientPlayNetworking.canSend(UseAbilityPayload.ID)) {
 			ClientPlayNetworking.send(new UseAbilityPayload(slot));
+		}
+	}
+
+	/** Ticks que cada tecla está segurada (-1 = solta), para habilidades de carregar/segurar. */
+	private static final int[] HELD = {-1, -1};
+
+	public static int held(int slot) {
+		return HELD[slot];
+	}
+
+	private static boolean chargeable(MinecraftClient client, int slot) {
+		if (client.player == null) return false;
+		return RaceAccess.getRace(client.player).map(r -> slot < r.abilities().size() && r.abilities().get(slot).ability() != null
+				&& r.abilities().get(slot).ability().chargeable()).orElse(false);
+	}
+
+	private static void handleKey(MinecraftClient client, KeyBinding bind, int slot) {
+		if (!chargeable(client, slot)) {
+			HELD[slot] = -1;
+			while (bind.wasPressed()) sendAbility(slot);
+			return;
+		}
+		while (bind.wasPressed()) { }
+		boolean down = bind.isPressed() && client.currentScreen == null && !mustChoose;
+		if (down) {
+			if (HELD[slot] < 0) {
+				HELD[slot] = 0;
+				sendAbility(slot | 1 << 8);
+			} else {
+				HELD[slot]++;
+				if (HELD[slot] <= 30 && HELD[slot] % 6 == 0 && client.player != null) client.player.playSound(
+						net.minecraft.sound.SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.12f, 0.6f + HELD[slot] / 40f);
+			}
+		} else if (HELD[slot] >= 0) {
+			sendAbility(slot | 2 << 8 | Math.min(4095, HELD[slot]) << 12);
+			HELD[slot] = -1;
 		}
 	}
 }

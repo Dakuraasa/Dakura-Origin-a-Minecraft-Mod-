@@ -1,12 +1,13 @@
 {
 	"id": "elfo",
 	"order": 6,
+	"tag": "mixed",
 	"name": "Elfo",
 	"epithet": "Quem Mede o Tempo em Séculos",
 	"icon": "dakura_origins:textures/race/elfo.png",
 	"icon_size": [
-		55,
-		55
+		96,
+		96
 	],
 	"palette": {
 		"ink": [

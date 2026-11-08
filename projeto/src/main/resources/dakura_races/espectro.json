@@ -1,48 +1,112 @@
 {
 	"id": "espectro",
 	"order": 4,
+	"tag": "exploration",
 	"name": "Espectro",
 	"epithet": "A Alma que Não Partiu",
 	"icon": "dakura_origins:textures/race/espectro.png",
-	"icon_size": [114, 128],
-
+	"icon_size": [
+		114,
+		128
+	],
 	"palette": {
-		"ink": ["#06080C", "#10161F", "#1E2A38", "#3A4E63", "#7D93A8", "#DCE8F2"],
+		"ink": [
+			"#06080C",
+			"#10161F",
+			"#1E2A38",
+			"#3A4E63",
+			"#7D93A8",
+			"#DCE8F2"
+		],
 		"sky": "#030407",
 		"glow": "#EAF3FF",
 		"text": "#123524",
 		"accent": "#2F4A5E",
 		"muted": "#5E806B"
 	},
-
 	"description": "Ele morreu, mas não foi embora. O Espectro é a alma que se recusou a partir: o vulto no fim do corredor, o frio que atravessa a parede, os olhos que te observam no escuro quando você jura estar sozinho. Não sente fome, não precisa de luz, e os monstros o deixam passar como se já fosse um deles. Quando a morte vem buscá-lo de novo, ele simplesmente se nega a ir. Mas a água o desfaz, o Nether reclama o que é seu, e tudo que cura os vivos queima o que restou dele.",
-
 	"traits": [
-		{ "type": "vantagem", "text": "Já está morto: não sente fome e não precisa comer." },
-		{ "type": "vantagem", "text": "Visão noturna natural e permanente." },
-		{ "type": "vantagem", "text": "Um pouco mais forte que um humano, porém mais frágil: só 8 corações." },
-		{ "type": "vantagem", "text": "Monstros não o atacam, a menos que ele ataque primeiro." },
-		{ "type": "vantagem", "text": "Segunda Chance (passiva): ao morrer, continua de pé com 1 coração e uma leve regeneração. Recarga de 5 minutos." },
-		{ "type": "desvantagem", "text": "Água o dissolve: chuva e oceanos causam dano alto." },
-		{ "type": "desvantagem", "text": "O Nether é o inferno: lá ele se desfaz como na chuva." },
-		{ "type": "desvantagem", "text": "Poções de cura e efeitos positivos o ferem; efeitos negativos lhe dão força." }
+		{
+			"type": "vantagem",
+			"text": "Já está morto: não sente fome e não precisa comer."
+		},
+		{
+			"type": "vantagem",
+			"text": "Visão noturna natural e permanente."
+		},
+		{
+			"type": "vantagem",
+			"text": "Um pouco mais forte que um humano, porém mais frágil: só 8 corações."
+		},
+		{
+			"type": "vantagem",
+			"text": "Monstros não o atacam, a menos que ele ataque primeiro."
+		},
+		{
+			"type": "vantagem",
+			"text": "Segunda Chance (passiva): ao morrer, continua de pé com 1 coração e uma leve regeneração. Recarga de 5 minutos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Água o dissolve: chuva e oceanos causam dano alto."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O Nether é o inferno: lá ele se desfaz como na chuva."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Poções de cura e efeitos positivos o ferem; efeitos negativos lhe dão força."
+		}
 	],
-
 	"powers": [
-		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.attack_damage",
-		  "operation": "add_value", "amount": 1.0 },
-		{ "type": "dakura_origins:translucent" },
-		{ "type": "dakura_origins:attribute", "attribute": "minecraft:generic.max_health",
-		  "operation": "add_value", "amount": -4.0 },
-		{ "type": "dakura_origins:no_hunger" },
-		{ "type": "dakura_origins:status_effect", "effect": "minecraft:night_vision" },
-		{ "type": "dakura_origins:monster_truce" },
-		{ "type": "dakura_origins:environment_damage", "when": "water", "interval": 20, "damage": 4.0 },
-		{ "type": "dakura_origins:environment_damage", "when": "nether", "interval": 20, "damage": 4.0 },
-		{ "type": "dakura_origins:inverted_potions", "damage_per_level": 2.0 },
-		{ "type": "dakura_origins:second_chance", "cooldown": 6000, "regen_seconds": 5 }
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 1.0
+		},
+		{
+			"type": "dakura_origins:translucent"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -4.0
+		},
+		{
+			"type": "dakura_origins:no_hunger"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:monster_truce"
+		},
+		{
+			"type": "dakura_origins:environment_damage",
+			"when": "water",
+			"interval": 20,
+			"damage": 4.0
+		},
+		{
+			"type": "dakura_origins:environment_damage",
+			"when": "nether",
+			"interval": 20,
+			"damage": 4.0
+		},
+		{
+			"type": "dakura_origins:inverted_potions",
+			"damage_per_level": 2.0
+		},
+		{
+			"type": "dakura_origins:second_chance",
+			"cooldown": 6000,
+			"regen_seconds": 5
+		}
 	],
-
 	"abilities": [
 		{
 			"type": "dakura_origins:phase",

@@ -1,0 +1,145 @@
+{
+	"id": "demonio",
+	"order": 12,
+	"tag": "support",
+	"name": "Demônio",
+	"epithet": "O Que Sempre Cobra o Preço",
+	"icon": "dakura_origins:textures/race/demonio.png",
+	"icon_size": [
+		95,
+		95
+	],
+	"palette": {
+		"ink": [
+			"#0D0507",
+			"#22080E",
+			"#4A0F1C",
+			"#8E1B30",
+			"#D9475A",
+			"#FFD3D8"
+		],
+		"sky": "#070203",
+		"glow": "#FFE1E5",
+		"text": "#123524",
+		"accent": "#8E1B30",
+		"muted": "#5E806B"
+	},
+	"description": "Criaturas das trevas que vivem de enganar e negociar com os humanos. Sorriem na troca e cobram depois. Os monstros os reconhecem e se afastam, e o Nether os recebe como em casa. Mas o brilho de um encantamento os fere como nada mais.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Mais força e velocidade que um humano; ainda mais forte no Nether."
+		},
+		{
+			"type": "vantagem",
+			"text": "Grande desconto com aldeões, que diminui cada vez que você bate neles."
+		},
+		{
+			"type": "vantagem",
+			"text": "Os monstros não o atacam, a menos que ele ataque primeiro."
+		},
+		{
+			"type": "vantagem",
+			"text": "Quanto mais perto da morte, mais regenera."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune ao fogo."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Armas encantadas causam muito mais dano nele, e ele não pode usar nem vestir nada encantado."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Veneno, fome e decomposição o machucam mais."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só come carne."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "demon_horns"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.1
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"amount": 2.0,
+			"when": "nether"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.armor",
+			"amount": 3.0,
+			"when": "nether"
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "villager_discount"
+		},
+		{
+			"type": "dakura_origins:monster_truce"
+		},
+		{
+			"type": "dakura_origins:desperate_regeneration",
+			"max": 1.5,
+			"interval": 20
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:enchanted_weakness",
+			"multiplier": 1.75
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_types": [
+				"minecraft:magic",
+				"minecraft:wither",
+				"minecraft:starve"
+			],
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"allowed": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.meat_only"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:charm",
+			"name": "Encanto",
+			"description": "Encanta o alvo na mira e o faz te seguir sem te atacar. Monstros de porte normal, aldeões e animais ficam encantados sem limite; os demais, só 3 segundos.",
+			"cooldown": 1200,
+			"range": 16,
+			"short": 60,
+			"max": 4
+		},
+		{
+			"type": "dakura_origins:morph",
+			"name": "Metamorfose",
+			"description": "Guarda a última criatura que você matou. Toque para virar ela (e de novo para voltar); segure para liberar a forma guardada. As voadoras voam e as aquáticas respiram na água.",
+			"cooldown": 100
+		}
+	]
+}

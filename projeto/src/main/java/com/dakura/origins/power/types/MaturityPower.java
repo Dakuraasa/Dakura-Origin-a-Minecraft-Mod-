@@ -53,6 +53,8 @@ public final class MaturityPower implements RacePower {
 	private final float pointsPerHealth;
 	private final boolean onlyMonsters;
 	private final int[] colors;
+	private final String growMessage;
+	private final boolean undead;
 
 	public MaturityPower(JsonObject json) {
 		List<Integer> t = new ArrayList<>();
@@ -63,6 +65,8 @@ public final class MaturityPower implements RacePower {
 		this.onlyMonsters = JsonParams.bool(json, "only_monsters", true);
 		List<String> c = JsonParams.strings(json, "colors");
 		if (c.isEmpty()) c = List.of("#7ED957", "#F2B33D", "#D9364A");
+		this.growMessage = JsonParams.str(json, "grow_message", "dakura_origins.message.maturity_grow");
+		this.undead = "undead".equals(JsonParams.str(json, "style", "dragon"));
 		this.colors = c.stream().mapToInt(s -> 0xFF000000 | Integer.parseInt(s.replace("#", ""), 16)).toArray();
 	}
 
@@ -188,7 +192,14 @@ public final class MaturityPower implements RacePower {
 	}
 
 	private void celebrate(ServerPlayerEntity player) {
-		player.sendMessage(Text.translatable("dakura_origins.message.maturity_grow").formatted(Formatting.GOLD), true);
+		player.sendMessage(Text.translatable(growMessage).formatted(undead ? Formatting.DARK_AQUA : Formatting.GOLD), true);
+		if (undead) {
+			player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
+					SoundEvents.ENTITY_WITHER_SKELETON_AMBIENT, SoundCategory.PLAYERS, 0.8f, 0.7f);
+			if (player.getWorld() instanceof ServerWorld sw) sw.spawnParticles(ParticleTypes.SOUL, player.getX(), player.getBodyY(0.5),
+					player.getZ(), 24, 0.4, 0.6, 0.4, 0.03);
+			return;
+		}
 		player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
 				SoundEvents.ENTITY_ENDER_DRAGON_GROWL, SoundCategory.PLAYERS, 0.7f, 1.3f);
 		if (player.getWorld() instanceof ServerWorld sw) {

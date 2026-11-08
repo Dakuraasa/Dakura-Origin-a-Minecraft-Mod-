@@ -1,5 +1,7 @@
 package com.dakura.origins.client.hud;
 
+import com.dakura.origins.power.EntityFlags;
+
 import com.dakura.origins.DakuraOrigins;
 import com.dakura.origins.client.DakuraOriginsClient;
 import com.dakura.origins.client.anim.AbilityAnimations;
@@ -30,7 +32,7 @@ import java.util.Optional;
  */
 public final class AbilityHud {
 	private static final Identifier BOOK = DakuraOrigins.id("textures/gui/book.png");
-	private static final int KEY = 20;          // tamanho da tecla
+	private static final int KEY = 22;          // tamanho da tecla
 	private static final int GAP = 3;           // entre as teclas
 	private static final int INFO_GAP = 7;      // entre as teclas e o livro
 	private static final int MARGIN = 4;
@@ -108,6 +110,7 @@ public final class AbilityHud {
 		float now = mc.world.getTime() + counter.getTickDelta(false);
 		long wall = System.currentTimeMillis();
 		int accent = race.palette().ink()[4];
+		INK = race.palette().ink();
 		TextRenderer tr = mc.textRenderer;
 
 		int x = MARGIN, y = h - MARGIN - KEY;
@@ -137,7 +140,7 @@ public final class AbilityHud {
 				: cooling ? 0xFF3A3846
 				: accent;
 		int faceTop = keycap(ctx, x, y, border, pressed);
-		int fx = x + 2, fy = faceTop, fw = KEY - 4, fh = KEY - 6;
+		int fx = x + 2, fy = faceTop, fw = KEY - 4, fh = KEY - 7;
 
 		if (cooling) {
 			float frac = Math.min(1f, remaining / TOTAL[slot]);
@@ -167,6 +170,11 @@ public final class AbilityHud {
 			case "dakura_origins:bat_form" -> BatFormState.CLIENT.contains(mc.player.getId());
 			case "dakura_origins:breath" -> AbilityAnimations.active("breath").contains(mc.player.getId());
 			case "dakura_origins:phase" -> mc.player.isSpectator();
+			case "dakura_origins:passive" -> EntityFlags.clientHas(mc.player, "berserk");
+			case "dakura_origins:morph" -> com.dakura.origins.power.ability.MorphAbility.morphType(mc.player) != null;
+			case "dakura_origins:buff_mode" -> EntityFlags.clientHas(mc.player, "prowl") || EntityFlags.clientHas(mc.player, "hunt");
+			case "dakura_origins:charged_jump", "dakura_origins:meteor" -> AbilityAnimations.active("crouch").contains(mc.player.getId())
+					|| EntityFlags.clientHas(mc.player, "meteor");
 			default -> false;
 		};
 	}
@@ -184,7 +192,7 @@ public final class AbilityHud {
 		boolean pressed = DakuraOriginsClient.RACE_PAGE.isPressed() && mc.currentScreen == null;
 		int border = hover ? 0xFFFBE6EA : 0xFFF9C6CB;
 		int faceTop = keycap(ctx, x, y, border, pressed);
-		ctx.drawTexture(BOOK, x + 3, faceTop, 14, 14, 0f, 0f, 43, 43, 43, 43);
+		ctx.drawTexture(BOOK, x + 4, faceTop, 14, 14, 0f, 0f, 43, 43, 43, 43);
 		drawLabel(ctx, tr, 2, DakuraOriginsClient.RACE_PAGE, x + KEY - 2, faceTop + KEY - 6, 0.5f, 0xFFFFFFFF, true);
 		if (hover) {
 			ctx.drawTooltip(tr, Text.translatable("dakura_origins.hud.page"), x + KEY, y);
@@ -202,19 +210,39 @@ public final class AbilityHud {
 	 * Tecla de teclado em pixel art: contorno, lateral escura embaixo (dá volume) e topo
 	 * com reflexo. Apertada, ela "afunda" 1 pixel. @return y onde começa o rosto da tecla.
 	 */
+	/** Tons da raça atual (do escuro ao claro), usados para pintar as teclas. */
+	private static int[] INK = {0x141219, 0x2A2733, 0x3A3846, 0x6A6880, 0xB8B6C8, 0xFFFFFF};
+
+	/** Tecla com a cor da raça: aro arredondado, lateral escura, rosto em degradê, brilho e cantos de gema. */
 	private static int keycap(DrawContext ctx, int x, int y, int border, boolean pressed) {
 		int x2 = x + KEY, y2 = y + KEY;
-		// contorno com cantos arredondados
-		ctx.fill(x + 1, y, x2 - 1, y2, border);
-		ctx.fill(x, y + 1, x2, y2 - 1, border);
-		// corpo (lateral da tecla)
-		ctx.fill(x + 1, y + 1, x2 - 1, y2 - 1, 0xF0141219);
-		int top = pressed ? y + 2 : y + 1;
-		int bottom = pressed ? y2 - 2 : y2 - 3;
-		// rosto da tecla
-		ctx.fill(x + 2, top, x2 - 2, bottom, 0xE62A2733);
-		ctx.fill(x + 2, top, x2 - 2, top + 1, 0x38FFFFFF);
-		ctx.fill(x + 2, top + 1, x + 3, bottom, 0x18FFFFFF);
+		// sombra no chão
+		ctx.fill(x + 2, y2, x2 - 1, y2 + 1, 0x50000000);
+		// aro com cantos bem arredondados
+		ctx.fill(x + 2, y, x2 - 2, y2, border);
+		ctx.fill(x, y + 2, x2, y2 - 2, border);
+		ctx.fill(x + 1, y + 1, x2 - 1, y2 - 1, border);
+		// lateral (profundidade da tecla)
+		int side = 0xF0000000 | Race.Palette.mix(INK[1], 0x000000, 0.35f);
+		ctx.fill(x + 2, y + 1, x2 - 2, y2 - 1, side);
+		ctx.fill(x + 1, y + 2, x2 - 1, y2 - 2, side);
+		int top = pressed ? y + 3 : y + 2;
+		int bottom = pressed ? y2 - 2 : y2 - 4;
+		// rosto: degradê vertical do tom médio ao escuro
+		int h = Math.max(1, bottom - top);
+		for (int i = 0; i < h; i++) {
+			int c = Race.Palette.mix(INK[3], INK[2], i / (float) h);
+			int inset = (i == 0 || i == h - 1) ? 3 : 2;
+			ctx.fill(x + inset, top + i, x2 - inset, top + i + 1, 0xF0000000 | c);
+		}
+		// brilho de cima e da esquerda, sombra interna embaixo
+		ctx.fill(x + 3, top, x2 - 3, top + 1, 0x60FFFFFF);
+		ctx.fill(x + 2, top + 1, x + 3, bottom - 1, 0x26FFFFFF);
+		ctx.fill(x + 3, bottom - 1, x2 - 3, bottom, 0x30000000);
+		// cantos de gema
+		int gem = 0x90000000 | INK[5];
+		ctx.fill(x + 3, top + 2, x + 4, top + 3, gem);
+		ctx.fill(x2 - 4, top + 2, x2 - 3, top + 3, gem);
 		return top + 1;
 	}
 

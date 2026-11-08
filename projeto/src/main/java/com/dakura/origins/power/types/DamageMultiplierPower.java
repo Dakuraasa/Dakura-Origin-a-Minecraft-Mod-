@@ -17,15 +17,20 @@ public final class DamageMultiplierPower implements RacePower {
 	private static boolean reentry;
 	private final TagKey<net.minecraft.entity.damage.DamageType> tag;
 	private final float multiplier;
+	private final java.util.List<String> types;
 
 	public DamageMultiplierPower(JsonObject json) {
 		this.tag = TagKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(JsonParams.str(json, "damage_tag", "minecraft:is_fire")));
 		this.multiplier = JsonParams.num(json, "multiplier", 2f);
+		this.types = JsonParams.strings(json, "damage_types");
 	}
 
 	@Override
 	public boolean allowDamage(ServerPlayerEntity player, DamageSource source, float amount) {
-		if (reentry || !source.isIn(tag)) return true;
+		if (reentry) return true;
+		boolean match = types.isEmpty() ? source.isIn(tag)
+				: source.getTypeRegistryEntry().getKey().map(k -> types.contains(k.getValue().toString())).orElse(false);
+		if (!match) return true;
 		reentry = true;
 		try {
 			player.damage(source, amount * multiplier);

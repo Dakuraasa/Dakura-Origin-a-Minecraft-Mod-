@@ -48,6 +48,8 @@
 
 ## Raças
 
+Cada página tem um selo com o perfil da raça: ⚔️ combate · 🧭 exploração · 💚 casual · 🪙 suporte · 🏹 exploração e combate.
+
 ### Humano
 A experiência clássica do Minecraft, sem vantagens nem fraquezas.
 
@@ -80,6 +82,45 @@ A experiência clássica do Minecraft, sem vantagens nem fraquezas.
 - **Recuo Ágil:** salto rápido para trás.
 - **Olhar de Caçador:** vê o contorno de criaturas através de paredes.
 
+### Huli Jing (de fogo e das Neves)
+- **Vantagens:** mais forte, sem dano de queda, golpes incendeiam (ou congelam), passos silenciosos e invisível parada, as raposas a seguem.
+- **Fraquezas:** 8 corações, nenhum efeito funciona nela, só come carne, não sabe nadar.
+- **Forma de Raposa** e **Ilusões de Raposa**.
+
+### Cabra
+- **Vantagens:** mais resistente, sem dano de queda, mais rápida, fome lenta, anda sobre neve fofa e magma, imune a congelar.
+- **Fraquezas:** lenta em desertos, só come vegetais e precisa comer mais, só dorme no alto.
+- **Salto da Montanha:** segure para carregar e solte para saltar altíssimo.
+- **Cabeçada:** arremessa o alvo para longe.
+
+### Minotauro
+- **Vantagens:** 2,5 blocos, muita força e resistência, quebra blocos rápido, fome lenta.
+- **Fraquezas:** ataques e passos lentos, odeia lugares apertados, vegetariano, sem capacete.
+- **Fúria do Touro (passiva):** com 4 corações entra em fúria, bufando fumaça.
+- **Arremesso de Rocha:** arranca uma pedra do chão e a arremessa; explode no impacto.
+
+### Gárgula
+- **Vantagens:** muito resistente e forte, voa com asas de pedra, vira estátua parada e se recupera, imune a empurrões, fogo e afogamento.
+- **Fraquezas:** não come nada, afunda na água.
+- **Pele de Pedra (passiva):** golpes enormes perdem 3 corações.
+- **Meteoro:** salta, vira pedra e despenca causando dano em área.
+
+### Morto-vivo
+- **Vantagens:** não come, os mortos-vivos o ignoram, golpes causam Wither, nível de 1 a 4 matando monstros.
+- **Fraquezas:** fogo dobrado, água fere, cura fere.
+- **Exército dos Mortos:** 5 zumbis que atacam quem você atacar, com equipamento conforme o nível.
+
+### Demônio
+- **Vantagens:** força e velocidade, desconto com aldeões, monstros em trégua, regenera perto da morte, mais forte no Nether, imune a fogo.
+- **Fraquezas:** armas encantadas ferem muito e nada encantado pode ser usado, veneno/fome/Wither ferem mais, só come carne.
+- **Encanto:** o alvo passa a te seguir.
+- **Metamorfose:** vira a última criatura que matou (segure para liberar).
+
+### Vastaya (ave, felina e cão)
+- **Vantagens:** mais rápida e forte, quedas leves, os animais não fogem; nas florestas é silenciosa, sem nome, fora dos radares e ignorada pelos monstros.
+- **Sentidos Aguçados:** radar de monstros e jogadores.
+- **Ave:** Rajada de Penas · **Felina:** Corrida Felina · **Cão:** Caçada.
+
 ## Criar raças novas
 
 As raças são arquivos JSON em `projeto/src/main/resources/dakura_races/`. Outros mods podem adicionar raças pelo mesmo caminho. Os detalhes estão no [LEIA-ME.md](LEIA-ME.md).
@@ -88,9 +129,15 @@ As raças são arquivos JSON em `projeto/src/main/resources/dakura_races/`. Outr
 
 Requer o **JDK 21**. No Windows, rode `COMPILAR.bat`. O `.jar` sai na pasta `builds/`.
 
+## Atualizar o repositório
+
+- `ATUALIZAR-GITHUB.bat`: um clique envia tudo o que mudou (pede uma mensagem; Enter usa data e hora). Também aceita a mensagem direto: `ATUALIZAR-GITHUB.bat "minha mudança"`.
+- `SUBIR-NO-GITHUB.bat`: primeiro envio e publicação da versão (release com o `.jar`).
+
 ## Créditos
 
 - Ícone da Vampírica: arte de **EV GANIN**.
+- Ícone do Elfo: arte de **PIKAT.io**.
 - Fontes: EB Garamond e Cormorant Garamond (licença OFL).
 
 ---

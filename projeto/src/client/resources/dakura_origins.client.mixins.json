@@ -4,6 +4,7 @@
 	"package": "com.dakura.origins.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
+		"AbstractClientPlayerEntityMixin",
 		"BipedEntityModelMixin",
 		"EntityRenderDispatcherMixin",
 		"HeldItemRendererMixin",

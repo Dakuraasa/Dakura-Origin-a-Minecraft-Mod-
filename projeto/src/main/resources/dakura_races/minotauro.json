@@ -1,0 +1,176 @@
+{
+	"id": "minotauro",
+	"order": 9,
+	"tag": "combat",
+	"name": "Minotauro",
+	"epithet": "A Fúria do Labirinto",
+	"icon": "dakura_origins:textures/race/minotauro.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#120B07",
+			"#2A1A10",
+			"#55301A",
+			"#9A5A2C",
+			"#E09A55",
+			"#FFE3C2"
+		],
+		"sky": "#0A0604",
+		"glow": "#FFE9CF",
+		"text": "#123524",
+		"accent": "#8A4A22",
+		"muted": "#5E806B"
+	},
+	"description": "Gigantes com cabeça de touro, criados nos labirintos de pedra. Lentos e pesados, mas cada golpe derruba muralhas. Odeiam ser encurralados, e quando sangram de verdade a fúria toma conta: bufando fumaça, ficam ainda mais fortes.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "2,5 blocos de altura, muita força e muita resistência."
+		},
+		{
+			"type": "vantagem",
+			"text": "Quebra blocos bem mais rápido, e a fome cai devagar."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Ataques mais lentos e passos pesados."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Fica lento e inquieto em lugares apertados."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Vegetariano, e cada alimento enche menos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Não consegue usar capacete por causa dos chifres."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "bull_horns"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.scale",
+			"operation": "add_value",
+			"amount": 0.389
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 6.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor_toughness",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.knockback_resistance",
+			"operation": "add_value",
+			"amount": 0.4
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.25
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.1
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:player.block_break_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.6
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.step_height",
+			"operation": "add_value",
+			"amount": 0.4
+		},
+		{
+			"type": "dakura_origins:slow_hunger",
+			"factor": 0.6
+		},
+		{
+			"type": "dakura_origins:claustrophobia",
+			"clearance": 4,
+			"slowness": 1,
+			"exhaustion_per_second": 0.2
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"forbidden": [
+				"#minecraft:meat",
+				"#minecraft:fishes",
+				"minecraft:rabbit_stew"
+			],
+			"message": "dakura_origins.message.no_meat"
+		},
+		{
+			"type": "dakura_origins:food_multiplier",
+			"factor": 0.6
+		},
+		{
+			"type": "dakura_origins:no_armor",
+			"slots": [
+				"head"
+			],
+			"message": "dakura_origins.message.no_helmet"
+		},
+		{
+			"type": "dakura_origins:berserk",
+			"threshold": 8,
+			"release": 12,
+			"strength": 1,
+			"regen": 1
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:passive",
+			"name": "Fúria do Touro",
+			"description": "Passiva: com 4 corações ou menos entra em fúria, com regeneração forte e muito mais força, bufando fumaça branca. Passa quando se recupera.",
+			"cooldown": 0
+		},
+		{
+			"type": "dakura_origins:boulder",
+			"name": "Arremesso de Rocha",
+			"description": "Arranca um bloco grande de pedra do chão e o arremessa na mira: explode no impacto e solta estilhaços.",
+			"cooldown": 400,
+			"windup": 14,
+			"speed": 1.25,
+			"power": 2.2,
+			"damage": 6,
+			"size": 1.4
+		}
+	]
+}

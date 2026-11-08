@@ -1,0 +1,158 @@
+{
+	"id": "cabra",
+	"order": 8,
+	"tag": "exploration",
+	"name": "Cabra",
+	"epithet": "Os Cascos das Montanhas",
+	"icon": "dakura_origins:textures/race/cabra.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#0E1014",
+			"#1D232B",
+			"#3B4654",
+			"#7D8A99",
+			"#C9D3DC",
+			"#F7F9FB"
+		],
+		"sky": "#07080B",
+		"glow": "#F4F8FF",
+		"text": "#123524",
+		"accent": "#5B6B7D",
+		"muted": "#5E806B"
+	},
+	"description": "Sátiros das montanhas que herdaram tudo da cabra: cascos firmes, chifres duros e lã grossa. Vivem nos picos nevados, onde nenhum tombo os assusta e nenhum frio os alcança. Teimosos e incansáveis, só descansam lá no alto, perto do céu.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Mais resistente que um humano, com a mesma força e vida."
+		},
+		{
+			"type": "vantagem",
+			"text": "Não toma dano de queda."
+		},
+		{
+			"type": "vantagem",
+			"text": "Mais rápido, e a fome cai devagar."
+		},
+		{
+			"type": "vantagem",
+			"text": "Os cascos andam sobre neve fofa e blocos de magma sem se ferir."
+		},
+		{
+			"type": "vantagem",
+			"text": "A lã protege do frio e do calor: imune a congelar, e o fogo fere menos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Fica lento em desertos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só come vegetais, e cada alimento enche menos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só consegue dormir no alto (acima da altura 100)."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor_toughness",
+			"operation": "add_value",
+			"amount": 1.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.knockback_resistance",
+			"operation": "add_value",
+			"amount": 0.1
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.1
+		},
+		{
+			"type": "dakura_origins:slow_hunger",
+			"factor": 0.6
+		},
+		{
+			"type": "dakura_origins:powder_snow_walker"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_type": "minecraft:hot_floor"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_freezing"
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fire",
+			"multiplier": 0.6
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.25,
+			"when": "desert"
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"forbidden": [
+				"#minecraft:meat",
+				"#minecraft:fishes",
+				"minecraft:rabbit_stew"
+			],
+			"message": "dakura_origins.message.no_meat"
+		},
+		{
+			"type": "dakura_origins:food_multiplier",
+			"factor": 0.6
+		},
+		{
+			"type": "dakura_origins:sleep_altitude",
+			"min_y": 100
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:charged_jump",
+			"name": "Salto da Montanha",
+			"description": "Segure a tecla para carregar e solte para saltar, como um cavalo, mas muito mais alto. Quanto mais carga, mais alto e mais longe.",
+			"cooldown": 60,
+			"max_charge": 30,
+			"min_power": 0.6,
+			"max_power": 1.55,
+			"forward": 0.5
+		},
+		{
+			"type": "dakura_origins:headbutt",
+			"name": "Cabeçada",
+			"description": "Investe com os chifres e arremessa para bem longe o primeiro alvo à frente.",
+			"cooldown": 140,
+			"range": 3.5,
+			"damage": 4,
+			"knockback": 2.6,
+			"lunge": 0.7
+		}
+	]
+}

@@ -1,0 +1,139 @@
+{
+	"id": "gargula",
+	"order": 10,
+	"tag": "mixed",
+	"name": "Gárgula",
+	"epithet": "A Sentinela de Pedra",
+	"icon": "dakura_origins:textures/race/gargula.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#0D0D10",
+			"#1F1E24",
+			"#3D3B45",
+			"#77737F",
+			"#BDB8C4",
+			"#F2EFF5"
+		],
+		"sky": "#060608",
+		"glow": "#EDE8F7",
+		"text": "#123524",
+		"accent": "#5E5868",
+		"muted": "#5E806B"
+	},
+	"description": "Estátuas que a magia acordou. A carne é pedra, o sangue é encanto, e as pequenas asas de rocha voam de verdade. Não comem nem bebem: quando precisam de forças, ficam imóveis e voltam a ser estátua até o corpo se refazer.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Mesma vida de um humano, mas muito mais resistente e mais forte."
+		},
+		{
+			"type": "vantagem",
+			"text": "Voa de verdade com asas de pedra (dois pulos para levantar voo)."
+		},
+		{
+			"type": "vantagem",
+			"text": "Parada no chão por 5 segundos, vira estátua e recupera vida e fome."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune a empurrões e ao fogo, e não se afoga."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Não consegue comer nada (em compensação, a fome cai devagar)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Afunda na água e não sabe nadar."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "stone_wings"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 8.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor_toughness",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.knockback_resistance",
+			"operation": "add_value",
+			"amount": 1.0
+		},
+		{
+			"type": "dakura_origins:flight",
+			"speed": 0.035,
+			"exhaustion": 0.02
+		},
+		{
+			"type": "dakura_origins:statue",
+			"still_ticks": 100,
+			"interval": 20,
+			"heal": 1.0,
+			"food": 1
+		},
+		{
+			"type": "dakura_origins:damage_cap",
+			"above": 10,
+			"reduce": 6
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_type": "minecraft:drown"
+		},
+		{
+			"type": "dakura_origins:no_swim"
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"allowed": [],
+			"message": "dakura_origins.message.stone_diet"
+		},
+		{
+			"type": "dakura_origins:slow_hunger",
+			"factor": 0.4
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:passive",
+			"name": "Pele de Pedra",
+			"description": "Passiva: golpes de mais de 5 corações perdem 3 corações de dano.",
+			"cooldown": 0
+		},
+		{
+			"type": "dakura_origins:meteor",
+			"name": "Meteoro",
+			"description": "Salta altíssimo, vira pedra e despenca: o impacto fere tudo em volta, sem arremessar ninguém. Sem dano de queda.",
+			"cooldown": 500,
+			"launch": 1.9,
+			"fall": 2.6,
+			"radius": 4.5,
+			"damage": 12
+		}
+	]
+}

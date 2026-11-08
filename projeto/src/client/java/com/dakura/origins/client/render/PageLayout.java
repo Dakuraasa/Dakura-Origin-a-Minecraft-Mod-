@@ -54,11 +54,14 @@ public final class PageLayout {
 	private int height;
 
 	public final String raceId;
+	/** 0 = página única (tudo); 1 = página direita (retrato, nome e descrição); 2 = página esquerda (vantagens, fraquezas, habilidades). */
+	public final int part;
 
-	private PageLayout(TextRenderer tr, int innerW, String raceId) {
+	private PageLayout(TextRenderer tr, int innerW, String raceId, int part) {
 		this.tr = tr;
 		this.innerW = innerW;
 		this.raceId = raceId;
+		this.part = part;
 	}
 
 	public int innerWidth() {
@@ -74,12 +77,83 @@ public final class PageLayout {
 	}
 
 	public static PageLayout build(Race race, int innerW, TextRenderer tr, List<Text> abilityKeys, @Nullable Details details) {
-		PageLayout l = new PageLayout(tr, innerW, race.id());
-		l.compose(race, abilityKeys, details);
+		return build(race, innerW, tr, abilityKeys, details, 0);
+	}
+
+	public static PageLayout build(Race race, int innerW, TextRenderer tr, List<Text> abilityKeys, @Nullable Details details, int part) {
+		PageLayout l = new PageLayout(tr, innerW, race.id(), part);
+		if (part == 1) l.composePortrait(race);
+		else l.compose(race, abilityKeys, details);
 		return l;
 	}
 
+	/** Página direita do livro aberto: numeral, retrato centralizado, nome, epíteto e descrição. */
+	private void composePortrait(Race race) {
+		iconW = 0;
+		iconH = -100; // o texto não contorna o retrato: ocupa a largura toda
+		MutableText num = DakuraFonts.heading(roman(race.order()));
+		ops.add(new TextOp(num, 0, -2, Role.MUTED, 1.6f));
+
+		int boxW = ICON_BOX_W + 16, boxH = ICON_BOX_H + 8;
+		float fit = Math.min(boxW / (float) race.iconWidth(), boxH / (float) race.iconHeight());
+		if (fit >= 1f) fit = (float) Math.floor(fit);
+		int drawW = Math.max(1, Math.round(race.iconWidth() * fit));
+		int drawH = Math.max(1, Math.round(race.iconHeight() * fit));
+		ops.add(new ImageOp(race.icon(), (innerW - drawW) / 2, 4, drawW, drawH, race.iconWidth(), race.iconHeight()));
+		int y = drawH + 10;
+
+		MutableText name = DakuraFonts.heading(race.nameText().getString());
+		float nameScale = 1.5f;
+		ops.add(new TextOp(name, (innerW - Math.round(tr.getWidth(name) * nameScale)) / 2, y, Role.ACCENT, nameScale));
+		y += 16;
+		String epithet = race.epithetText().getString();
+		if (!epithet.isBlank()) {
+			MutableText ep = DakuraFonts.bodyItalic(epithet);
+			ops.add(new TextOp(ep, (innerW - tr.getWidth(ep)) / 2, y, Role.MUTED, 1f));
+			y += LINE_H + 2;
+		}
+		int dw = Math.min(DIVIDER_W, innerW);
+		ops.add(new ImageOp(DIVIDER, (innerW - dw) / 2, y, dw, DIVIDER_H, DIVIDER_W, DIVIDER_H));
+		y += DIVIDER_H + 6;
+
+		boolean first = true;
+		for (String paragraph : race.descriptionText().getString().split("\\n")) {
+			if (paragraph.isBlank()) continue;
+			y = flow(paragraph.trim(), y, Role.TEXT, first, 0) + 4;
+			first = false;
+		}
+		height = y + 2;
+	}
+
 	private void compose(Race race, List<Text> abilityKeys, @Nullable Details details) {
+		int y;
+		if (part == 2) {
+			iconW = 0;
+			iconH = -100;
+			y = 2;
+		} else {
+			y = composeHeader(race);
+		}
+
+		if (details != null && details.status() != null) {
+			MutableText st = DakuraFonts.bodyItalic(details.status());
+			ops.add(new TextOp(st, (innerW - tr.getWidth(st)) / 2, y, Role.MUTED, 1f));
+			y += LINE_H + 4;
+		}
+
+		if (details == null && part != 2) {
+			// página de escolha: lista única, a cor da ✦ diz se é vantagem ou fraqueza
+			for (Race.Trait trait : race.traits()) y = trait(trait, y);
+		} else {
+			// livro aberto e página de consulta: agrupada
+			y = traitGroup(race, Race.TraitKind.VANTAGEM, "page.advantages", y);
+			y = traitGroup(race, Race.TraitKind.DESVANTAGEM, "page.weaknesses", y);
+			y = traitGroup(race, Race.TraitKind.NEUTRO, "page.traits", y);
+		}
+		composeAbilities(race, abilityKeys, details, y);
+	}
+
+	private int composeHeader(Race race) {
 		// ícone: encaixado na caixa padrão, centralizado nela
 		int boxW = innerW >= 180 ? ICON_BOX_W : ICON_BOX_W / 2;
 		int boxH = innerW >= 180 ? ICON_BOX_H : ICON_BOX_H / 2;
@@ -121,24 +195,10 @@ public final class PageLayout {
 		y = Math.max(y + 2, iconH + 4);
 		int dw = Math.min(DIVIDER_W, innerW);
 		ops.add(new ImageOp(DIVIDER, (innerW - dw) / 2, y, dw, DIVIDER_H, DIVIDER_W, DIVIDER_H));
-		y += DIVIDER_H + 7;
+		return y + DIVIDER_H + 7;
+	}
 
-		if (details != null && details.status() != null) {
-			MutableText st = DakuraFonts.bodyItalic(details.status());
-			ops.add(new TextOp(st, (innerW - tr.getWidth(st)) / 2, y, Role.MUTED, 1f));
-			y += LINE_H + 4;
-		}
-
-		if (details == null) {
-			// página de escolha: lista única, a cor da ✦ diz se é vantagem ou fraqueza
-			for (Race.Trait trait : race.traits()) y = trait(trait, y);
-		} else {
-			// página de consulta: agrupada
-			y = traitGroup(race, Race.TraitKind.VANTAGEM, "page.advantages", y);
-			y = traitGroup(race, Race.TraitKind.DESVANTAGEM, "page.weaknesses", y);
-			y = traitGroup(race, Race.TraitKind.NEUTRO, "page.traits", y);
-		}
-
+	private void composeAbilities(Race race, List<Text> abilityKeys, @Nullable Details details, int y) {
 		if (!race.abilities().isEmpty()) {
 			y = heading(tr("page.abilities"), y);
 			for (int i = 0; i < race.abilities().size(); i++) {

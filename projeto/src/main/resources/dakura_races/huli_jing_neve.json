@@ -1,0 +1,138 @@
+{
+	"id": "huli_jing_neve",
+	"order": 7,
+	"name": "Huli Jing das Neves",
+	"epithet": "A Raposa que Não Divide o Inverno",
+	"icon": "dakura_origins:textures/race/huli_jing_neve.png",
+	"icon_size": [
+		93,
+		93
+	],
+	"palette": {
+		"ink": [
+			"#090C10",
+			"#151C24",
+			"#2C3A4A",
+			"#6C8299",
+			"#BFD3E6",
+			"#F4F8FC"
+		],
+		"sky": "#05070A",
+		"glow": "#F4FAFF",
+		"text": "#123524",
+		"accent": "#4F6F8F",
+		"muted": "#5E806B"
+	},
+	"description": "Uma Huli Jing nascida da neve: tão bela quanto fria, e tão mesquinha quanto qualquer outra. Não divide comida, abrigo nem atenção, e some na brancura quando alguém se aproxima. Suas ilusões congelam quem a contraria, e seu rastro é de geada. Desconfiada, solitária e orgulhosa demais para pedir ajuda, ela prefere a companhia das raposas à de qualquer pessoa.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Mais forte que um humano, porém com só 8 corações."
+		},
+		{
+			"type": "vantagem",
+			"text": "Não toma dano de queda."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune ao gelo e anda sobre a neve fofa; cada golpe, com qualquer arma, deixa o inimigo lento."
+		},
+		{
+			"type": "vantagem",
+			"text": "Passos silenciosos; parada por 3 segundos, fica invisível e nenhum monstro a percebe."
+		},
+		{
+			"type": "vantagem",
+			"text": "As raposas não fogem dela e até a seguem por um tempo."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Nenhum efeito funciona nela, bom ou ruim (nem a maçã dourada)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Não sabe nadar: a água não a fere, mas ela afunda."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "fox_ears_snow"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 1.5
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -4.0
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_freezing"
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "frost",
+			"seconds": 4
+		},
+		{
+			"type": "dakura_origins:stealth",
+			"still_ticks": 60
+		},
+		{
+			"type": "dakura_origins:fox_friend"
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"all": true
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"allowed": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.meat_only"
+		},
+		{
+			"type": "dakura_origins:no_swim"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:fox_form",
+			"name": "Forma de Raposa",
+			"description": "Vira uma raposa da neve, sem limite de tempo: mais rápida, pula mais alto, regenera e deixa um rastro de gelo. Aperte de novo para voltar.",
+			"cooldown": 20,
+			"snow": true,
+			"speed": 0.35,
+			"jump": 0.3
+		},
+		{
+			"type": "dakura_origins:fox_clones",
+			"name": "Ilusões de Raposa",
+			"description": "Invoca 3 ilusões de si mesma, com sua arma e armadura, que caçam o inimigo mais próximo ou quem ela acertar, com golpes de gelo. Duram 7 segundos.",
+			"cooldown": 900,
+			"count": 3,
+			"duration": 140,
+			"snow": true
+		}
+	],
+	"variant_of": "huli_jing"
+}

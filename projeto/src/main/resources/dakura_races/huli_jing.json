@@ -1,0 +1,138 @@
+{
+	"id": "huli_jing",
+	"order": 7,
+	"tag": "mixed",
+	"name": "Huli Jing",
+	"epithet": "A Raposa que Não Divide Nada",
+	"icon": "dakura_origins:textures/race/huli_jing.png",
+	"icon_size": [
+		93,
+		93
+	],
+	"palette": {
+		"ink": [
+			"#120A06",
+			"#2A140B",
+			"#5A2412",
+			"#A8431C",
+			"#E8823F",
+			"#FFE6CC"
+		],
+		"sky": "#0A0503",
+		"glow": "#FFF1E2",
+		"text": "#123524",
+		"accent": "#A8431C",
+		"muted": "#5E806B"
+	},
+	"description": "Huli Jing são raposas de fogo que aprenderam a andar entre as pessoas, mas nunca a gostar delas. Mesquinhas, desconfiadas e antissociais, não dividem nada: nem comida, nem abrigo, nem uma palavra a mais do que o necessário. Somem quando querem, enganam quem insiste e queimam quem as toca. Só as raposas do mundo a tratam como família, e é a única companhia que ela tolera.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Mais forte que um humano, porém com só 8 corações."
+		},
+		{
+			"type": "vantagem",
+			"text": "Não toma dano de queda."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune ao fogo; cada golpe, com qualquer arma, incendeia o inimigo."
+		},
+		{
+			"type": "vantagem",
+			"text": "Passos silenciosos; parada por 3 segundos, fica invisível e nenhum monstro a percebe."
+		},
+		{
+			"type": "vantagem",
+			"text": "As raposas não fogem dela e até a seguem por um tempo."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Nenhum efeito funciona nela, bom ou ruim (nem a maçã dourada)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Não sabe nadar: a água não a fere, mas ela afunda."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "fox_ears"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 1.5
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -4.0
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "fire",
+			"seconds": 4
+		},
+		{
+			"type": "dakura_origins:stealth",
+			"still_ticks": 60
+		},
+		{
+			"type": "dakura_origins:fox_friend"
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"all": true
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"allowed": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.meat_only"
+		},
+		{
+			"type": "dakura_origins:no_swim"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:fox_form",
+			"name": "Forma de Raposa",
+			"description": "Vira uma raposa de fogo, sem limite de tempo: mais rápida, pula mais alto, regenera e deixa um rastro de fogo. Aperte de novo para voltar.",
+			"cooldown": 20,
+			"snow": false,
+			"speed": 0.35,
+			"jump": 0.3
+		},
+		{
+			"type": "dakura_origins:fox_clones",
+			"name": "Ilusões de Raposa",
+			"description": "Invoca 3 ilusões de si mesma, com sua arma e armadura, que caçam o inimigo mais próximo ou quem ela acertar, com golpes de fogo. Duram 7 segundos.",
+			"cooldown": 900,
+			"count": 3,
+			"duration": 140,
+			"snow": false
+		}
+	]
+}

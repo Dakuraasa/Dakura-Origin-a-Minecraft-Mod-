@@ -25,6 +25,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityRendererMixin {
 	@Unique
 	private static boolean dakura$ghost = false;
+	@Unique
+	private static int dakura$tint = -1;
+	@Unique
+	private static boolean dakura$stone = false;
+
+	/** Vastaya camuflada na floresta: sem nome sobre a cabeça. */
+	@Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true, require = 0)
+	private void dakura$hideLabel(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
+		if (com.dakura.origins.power.types.ForestStealthPower.camouflaged(entity)) cir.setReturnValue(false);
+	}
 
 	@Inject(method = "isShaking", at = @At("RETURN"), cancellable = true)
 	private void dakura$crampedShake(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
@@ -37,7 +47,10 @@ public abstract class LivingEntityRendererMixin {
 			at = @At("HEAD"))
 	private void dakura$ghostStart(LivingEntity entity, float yaw, float tickDelta, MatrixStack matrices,
 								   VertexConsumerProvider vertices, int light, CallbackInfo ci) {
-		dakura$ghost = EntityFlags.clientHas(entity, TranslucentPower.FLAG);
+		dakura$ghost = com.dakura.origins.client.config.DakuraConfig.cosmetic(entity, TranslucentPower.FLAG);
+		dakura$tint = entity instanceof com.dakura.origins.entity.HuliCloneEntity c ? (c.isSnow() ? 0xC8E6FF : 0xFFC9A0) : -1;
+		dakura$stone = EntityFlags.clientHas(entity, com.dakura.origins.power.types.StatuePower.FLAG)
+				|| EntityFlags.clientHas(entity, com.dakura.origins.power.ability.MeteorAbility.FLAG);
 	}
 
 	@Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
@@ -45,6 +58,8 @@ public abstract class LivingEntityRendererMixin {
 	private void dakura$ghostEnd(LivingEntity entity, float yaw, float tickDelta, MatrixStack matrices,
 								 VertexConsumerProvider vertices, int light, CallbackInfo ci) {
 		dakura$ghost = false;
+		dakura$tint = -1;
+		dakura$stone = false;
 	}
 
 	/** Camada translúcida (a mesma que o vanilla usa para invisíveis vistos por aliados). */
@@ -52,7 +67,8 @@ public abstract class LivingEntityRendererMixin {
 	@Inject(method = "getRenderLayer", at = @At("HEAD"), cancellable = true)
 	private void dakura$ghostLayer(LivingEntity entity, boolean showBody, boolean translucent, boolean showOutline,
 								   CallbackInfoReturnable<RenderLayer> cir) {
-		if (showBody && EntityFlags.clientHas(entity, TranslucentPower.FLAG)) {
+		if (showBody && (com.dakura.origins.client.config.DakuraConfig.cosmetic(entity, TranslucentPower.FLAG)
+				|| entity instanceof com.dakura.origins.entity.HuliCloneEntity)) {
 			cir.setReturnValue(RenderLayer.getItemEntityTranslucentCull(
 					((EntityRenderer<LivingEntity>) (Object) this).getTexture(entity)));
 		}
@@ -63,6 +79,8 @@ public abstract class LivingEntityRendererMixin {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;III)V"),
 			index = 4, require = 0)
 	private int dakura$ghostAlpha(int color) {
+		if (dakura$tint != -1) return 0xA8000000 | dakura$tint;   // ilusões da Huli Jing: translúcidas e tingidas
+		if (dakura$stone) return (color & 0xFF000000) | 0x8C8A86;  // Gárgula em estátua ou meteoro: cinza pedra
 		return dakura$ghost ? (color & 0x00FFFFFF) | 0x99000000 : color;
 	}
 }

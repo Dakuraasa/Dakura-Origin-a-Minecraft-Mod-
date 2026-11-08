@@ -9,6 +9,8 @@ Ao entrar num mundo, a tela trava num livro de origens e o jogador escolhe a ra�
 DakuraOrigins/
 ├─ COMPILAR.bat             → gera o .jar em builds\
 ├─ TESTAR-NO-MINECRAFT.bat  → abre um Minecraft de teste com o mod
+├─ ATUALIZAR-GITHUB.bat     → envia as mudanças para o GitHub (um clique)
+├─ SUBIR-NO-GITHUB.bat      → primeiro envio + release da versão
 ├─ builds/                  → o .jar pronto aparece aqui
 ├─ logs/                    → logs de compilação/teste
 ├─ arte/                    → artes originais + scripts que geraram os pixels
@@ -63,6 +65,8 @@ Nos campos `message` dos poderes dá para usar uma chave de tradução ou um tex
 
 1. Copie `dakura_races/vampirica.json` para `dakura_races/<id>.json` e edite:
    - `order`: número da página (vira o numeral romano).
+   - `tag`: selo do perfil no topo da página (`combat`, `exploration`, `casual`, `support` ou `mixed`).
+   - `variant_of` (opcional): vira uma variante na mesma página da raça base (fita para alternar).
    - `icon` + `icon_size`: o PNG em `assets/dakura_origins/textures/race/` e o tamanho dele em pixels.
      **Padrão dos ícones:** a arte original sem alterações (só recorte), fundo transparente e a
      figura centralizada no recorte. Na página, todo ícone é encaixado numa caixa de 88×96,
@@ -87,6 +91,10 @@ Nos campos `message` dos poderes dá para usar uma chave de tradução ou um tex
 | `dakura_origins:no_armor` | não pode vestir armadura | `message` |
 | `dakura_origins:claustrophobia` | lento, faminto e trêmulo sem espaço acima | `clearance`, `slowness`, `exhaustion_per_second` |
 
+Tipos novos desta versão: `marker` (`kind`), `food_multiplier`, `sleep_altitude`, `berserk`, `flight`,
+`statue`, `damage_cap`, `desperate_regeneration`, `enchanted_weakness`, `forest_stealth`, além de
+`conditional_attribute` com `"when": "desert" | "nether"`, `no_armor` com `slots` e `damage_multiplier` com `damage_types`.
+
 Todos aceitam `"requires_food": true`, que desliga o poder quando a fome chega a zero.
 
 ### Tipos de habilidade (`abilities`)
@@ -97,6 +105,10 @@ Todos aceitam `"requires_food": true`, que desliga o poder quando a fome chega a
 | `dakura_origins:bat_form` | vira o morcego vanilla e voa (`fly_speed`) |
 | `dakura_origins:fireball` | bola de fogo que explode e incendeia (`speed`, `life`, `explosion_power`, `block_power`, `fire_count`, `fire_radius`) |
 | `dakura_origins:breath` | rajada contínua de fogo em cone (`duration`, `windup`, `range`, `cone`, `damage`, `damage_interval`, `fire_seconds`, `break_interval`, `break_per_interval`, `slow`) |
+
+Também: `passive`, `charged_jump` (segurar e soltar), `headbutt`, `boulder`, `meteor`, `summon_undead`,
+`charm`, `morph` (toque/segurar), `feather_barrage`, `buff_mode`, `stomp`, `phase`, `vine_snare`, `solar_beam`,
+`dash`, `keen_sight`, `fox_form` e `fox_clones`.
 
 `fireball` e `breath` aceitam `maturity_damage`: o multiplicador do dano em cada estágio de
 maturidade (ex.: `[1.0, 1.4, 1.8]`).

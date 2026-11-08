@@ -13,12 +13,18 @@ import net.minecraft.entity.player.PlayerEntity;
  * { "type": "dakura_origins:monster_truce" }
  */
 public final class MonsterTrucePower implements RacePower {
-	public MonsterTrucePower(JsonObject json) {}
+	private final boolean undeadOnly;
+
+	public MonsterTrucePower(JsonObject json) {
+		this.undeadOnly = com.dakura.origins.power.JsonParams.bool(json, "undead_only", false);
+	}
 
 	/** true = este monstro não pode mirar este jogador agora. */
 	public static boolean blocks(MobEntity mob, LivingEntity target) {
 		if (!(mob instanceof Monster) || !(target instanceof PlayerEntity player)) return false;
 		if (mob.getAttacker() == player) return false;
-		return SpectreSupport.has(player, MonsterTrucePower.class);
+		return com.dakura.origins.race.RaceAccess.getRace(player).map(r -> r.powers().stream().anyMatch(p ->
+				p instanceof MonsterTrucePower t && (!t.undeadOnly
+						|| mob.getType().isIn(net.minecraft.registry.tag.EntityTypeTags.UNDEAD)))).orElse(false);
 	}
 }

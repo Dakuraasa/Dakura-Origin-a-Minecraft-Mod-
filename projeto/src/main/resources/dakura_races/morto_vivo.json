@@ -1,0 +1,115 @@
+{
+	"id": "morto_vivo",
+	"order": 11,
+	"tag": "combat",
+	"name": "Morto-vivo",
+	"epithet": "O Que Voltou por Vingança",
+	"icon": "dakura_origins:textures/race/morto_vivo.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#080B0C",
+			"#141D20",
+			"#283A3D",
+			"#4F7468",
+			"#9FC4A0",
+			"#E6F5DC"
+		],
+		"sky": "#040607",
+		"glow": "#D9F7E3",
+		"text": "#123524",
+		"accent": "#3E6655",
+		"muted": "#5E806B"
+	},
+	"description": "Morreu, mas não aceitou. A alma rastejou de volta para o próprio corpo e agora só quer acertar as contas. Não come, não descansa, e os mortos do mundo o reconhecem como um deles. Cada monstro que derruba fortalece o exército que ele ergue do chão.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Não precisa comer."
+		},
+		{
+			"type": "vantagem",
+			"text": "Zumbis, esqueletos e outros mortos-vivos o ignoram, a menos que ele ataque."
+		},
+		{
+			"type": "vantagem",
+			"text": "Seus golpes causam decomposição (Wither)."
+		},
+		{
+			"type": "vantagem",
+			"text": "Matar monstros fortalece seus zumbis, em 4 níveis (no lugar da experiência)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O fogo causa o dobro de dano."
+		},
+		{
+			"type": "desvantagem",
+			"text": "A água o fere."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Poções e poderes de cura o machucam."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:no_hunger"
+		},
+		{
+			"type": "dakura_origins:monster_truce",
+			"undead_only": true
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "wither",
+			"seconds": 3
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fire",
+			"multiplier": 2.0
+		},
+		{
+			"type": "dakura_origins:environment_damage",
+			"when": "water",
+			"interval": 20,
+			"damage": 2.0
+		},
+		{
+			"type": "dakura_origins:inverted_potions",
+			"damage_per_level": 2.0
+		},
+		{
+			"type": "dakura_origins:maturity",
+			"thresholds": [
+				150,
+				450,
+				1000
+			],
+			"points_per_health": 0.5,
+			"only_monsters": true,
+			"colors": [
+				"#6E7F5A",
+				"#8FA35E",
+				"#B9C77A",
+				"#E2E8B0"
+			],
+			"grow_message": "dakura_origins.message.undead_grow",
+			"style": "undead"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:summon_undead",
+			"name": "Exército dos Mortos",
+			"description": "Ergue 5 zumbis de cota de malha que atacam quem você atacar (ou quem te atacar) por 30 segundos. Com mais níveis ganham espadas e armaduras melhores, até ferro encantado.",
+			"cooldown": 1200,
+			"count": 5,
+			"duration": 600
+		}
+	]
+}

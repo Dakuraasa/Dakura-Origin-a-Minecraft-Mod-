@@ -1,6 +1,7 @@
 {
 	"id": "driade",
 	"order": 5,
+	"tag": "casual",
 	"name": "Dríade",
 	"epithet": "A Ninfa que Ouve as Raízes",
 	"icon": "dakura_origins:textures/race/driade.png",

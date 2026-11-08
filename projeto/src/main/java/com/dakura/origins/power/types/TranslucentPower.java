@@ -12,7 +12,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 public final class TranslucentPower implements RacePower {
 	public static final String FLAG = "translucent";
 
-	public TranslucentPower(JsonObject json) {}
+	public TranslucentPower(JsonObject json) {
+		CosmeticPower.register(FLAG);
+	}
 
 	@Override
 	public void onApply(ServerPlayerEntity player) {

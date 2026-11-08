@@ -4,9 +4,14 @@
 	"package": "com.dakura.origins.mixin.common",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+		"EntityMixin",
+		"FleeEntityGoalMixin",
+		"FoxEntityAccessor",
 		"LivingEntityMixin",
 		"MobEntityMixin",
-		"PlayerEntityMixin"
+		"PlayerEntityMixin",
+		"PowderSnowBlockMixin",
+		"VillagerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

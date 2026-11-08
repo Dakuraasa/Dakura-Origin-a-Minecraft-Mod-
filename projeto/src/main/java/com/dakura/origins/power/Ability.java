@@ -15,4 +15,17 @@ public interface Ability {
 
 	/** Limpeza quando o jogador perde a raça, sai do servidor ou morre. */
 	default void onRemove(ServerPlayerEntity player) {}
+
+	/** true = a tecla é segurada: o cliente avisa quando começa a segurar e quando solta. */
+	default boolean chargeable() {
+		return false;
+	}
+
+	/** Começou a segurar a tecla (só para habilidades chargeable). */
+	default void holdStart(ServerPlayerEntity player) {}
+
+	/** Soltou a tecla depois de heldTicks. Retorne true se a habilidade foi usada (recarga começa). */
+	default boolean release(ServerPlayerEntity player, int heldTicks) {
+		return activate(player);
+	}
 }

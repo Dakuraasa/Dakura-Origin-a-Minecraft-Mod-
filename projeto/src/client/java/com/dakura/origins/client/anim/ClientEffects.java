@@ -89,7 +89,8 @@ public final class ClientEffects {
 	public static boolean keenOutline(Entity e) {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		return System.currentTimeMillis() < KEEN_UNTIL && mc.player != null && e != mc.player
-				&& e instanceof LivingEntity && e.squaredDistanceTo(mc.player) < KEEN_RADIUS_SQ;
+				&& e instanceof LivingEntity && e.squaredDistanceTo(mc.player) < KEEN_RADIUS_SQ
+				&& !com.dakura.origins.power.types.ForestStealthPower.camouflaged(e);
 	}
 
 	/** Efeitos em pontos do mundo (FxPayload). */
@@ -98,6 +99,12 @@ public final class ClientEffects {
 		if (world == null || !near(p)) return;
 		Random rnd = world.random;
 		switch (name) {
+			case "clone_poof" -> {
+				boolean snow = a > 0.5f;
+				spiral(world, p, 0.45, 1.9, 2, 16, snow ? FROST : EMBER_SOFT, snow ? ParticleTypes.SNOWFLAKE : ParticleTypes.FLAME, rnd);
+				for (int i = 0; i < 6; i++) world.addParticle(ParticleTypes.POOF, p.x + rnd.nextGaussian() * 0.2,
+						p.y + rnd.nextDouble() * 1.6, p.z + rnd.nextGaussian() * 0.2, 0, 0.02, 0);
+			}
 			case "vine" -> {
 				for (int i = 0; i < 4; i++) world.addParticle(i < 3 ? VINE : LEAF, p.x + rnd.nextGaussian() * 0.15,
 						p.y + 0.05 + rnd.nextDouble() * 0.2, p.z + rnd.nextGaussian() * 0.15, 0, 0, 0);
@@ -117,9 +124,31 @@ public final class ClientEffects {
 					return true;
 				});
 			}
+			case "boulder" -> {
+				for (int i = 0; i < 14; i++) world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, p.x + rnd.nextGaussian() * 0.8,
+						p.y + rnd.nextDouble(), p.z + rnd.nextGaussian() * 0.8, rnd.nextGaussian() * 0.02, 0.03, rnd.nextGaussian() * 0.02);
+				ring(world, p.add(0, 0.15, 0), 1.6, 22, DUSTWAVE);
+			}
+			case "raise_dead" -> {
+				net.minecraft.block.BlockState g = world.getBlockState(net.minecraft.util.math.BlockPos.ofFloored(p).down());
+				if (g.isAir()) g = net.minecraft.block.Blocks.DIRT.getDefaultState();
+				ParticleEffect deb = new net.minecraft.particle.BlockStateParticleEffect(ParticleTypes.BLOCK, g);
+				for (int i = 0; i < 14; i++) world.addParticle(deb, p.x + rnd.nextGaussian() * 0.3, p.y + 0.1,
+						p.z + rnd.nextGaussian() * 0.3, 0, 0.15 + rnd.nextDouble() * 0.15, 0);
+				spiral(world, p, 0.4, 1.8, 2, 14, SOUL_DUST, ParticleTypes.SOUL, rnd);
+			}
 			default -> {}
 		}
 	}
+
+	private static final DustParticleEffect SOUL_DUST = new DustParticleEffect(new Vector3f(0.45f, 0.78f, 0.8f), 1.0f);
+	private static final DustParticleEffect STONE_DUST = new DustParticleEffect(new Vector3f(0.62f, 0.6f, 0.57f), 1.2f);
+	private static final DustParticleEffect CRIMSON = new DustParticleEffect(new Vector3f(0.75f, 0.1f, 0.22f), 1.0f);
+	private static final DustParticleEffect FEATHER = new DustParticleEffect(new Vector3f(0.95f, 0.9f, 0.84f), 0.8f);
+	private static final DustParticleEffect WILD = new DustParticleEffect(new Vector3f(0.55f, 0.72f, 0.4f), 0.8f);
+
+	private static final DustParticleEffect FROST = new DustParticleEffect(new Vector3f(0.82f, 0.93f, 1.0f), 1.0f);
+	private static final DustParticleEffect EMBER_SOFT = new DustParticleEffect(new Vector3f(1.0f, 0.58f, 0.22f), 1.0f);
 
 	private static final DustParticleEffect DUSTWAVE = new DustParticleEffect(new Vector3f(0.82f, 0.76f, 0.66f), 1.6f);
 
@@ -151,6 +180,64 @@ public final class ClientEffects {
 				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.CLOUD, b.x + rnd.nextGaussian() * 0.25, b.y + 0.1,
 						b.z + rnd.nextGaussian() * 0.25, rnd.nextGaussian() * 0.03, 0.02, rnd.nextGaussian() * 0.03);
 				ring(world, b.add(0, 0.05, 0), 0.6, 14, LEAF);
+			}
+			case "fox" -> {
+				boolean snow = (param & 2) != 0;
+				spiral(world, e.getPos(), 0.5, 1.2, 2, 18, snow ? FROST : EMBER_SOFT, snow ? ParticleTypes.SNOWFLAKE : ParticleTypes.SMALL_FLAME, rnd);
+				for (int i = 0; i < 8; i++) world.addParticle(ParticleTypes.POOF, e.getX() + rnd.nextGaussian() * 0.25,
+						e.getY() + 0.3 + rnd.nextDouble() * 0.6, e.getZ() + rnd.nextGaussian() * 0.25, 0, 0.02, 0);
+			}
+			case "goat_jump" -> {
+				Vec3d b = e.getPos();
+				int n = 8 + param / 8;
+				for (int i = 0; i < n; i++) world.addParticle(ParticleTypes.CLOUD, b.x + rnd.nextGaussian() * 0.3, b.y + 0.1,
+						b.z + rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.04, 0.03, rnd.nextGaussian() * 0.04);
+				if (param > 60) ring(world, b.add(0, 0.05, 0), 0.9, 18, ParticleTypes.SNOWFLAKE);
+			}
+			case "stone_guard" -> {
+				Vec3d c = e.getPos().add(0, e.getHeight() * 0.55, 0);
+				ring(world, c, 0.7, 18, STONE_DUST);
+				for (int i = 0; i < 6; i++) world.addParticle(ParticleTypes.ENCHANTED_HIT, c.x + rnd.nextGaussian() * 0.3,
+						c.y + rnd.nextGaussian() * 0.3, c.z + rnd.nextGaussian() * 0.3, 0, 0, 0);
+			}
+			case "meteor" -> {
+				stomp(world, e, param / 10.0, rnd);
+				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, e.getX() + rnd.nextGaussian() * 0.8,
+						e.getY() + 0.2, e.getZ() + rnd.nextGaussian() * 0.8, 0, 0.03, 0);
+			}
+			case "charm" -> {
+				Entity t = world.getEntityById(param);
+				if (t != null) {
+					Vec3d from = e.getPos().add(0, e.getHeight() * 0.75, 0), to = t.getPos().add(0, t.getHeight() * 0.6, 0);
+					for (int i = 0; i <= 12; i++) {
+						Vec3d q = from.lerp(to, i / 12.0).add(0, Math.sin(i / 12.0 * Math.PI) * 0.4, 0);
+						world.addParticle(CRIMSON, q.x, q.y, q.z, 0, 0, 0);
+					}
+					ring(world, to.add(0, 0.4, 0), 0.45, 12, CRIMSON);
+					world.addParticle(ParticleTypes.HEART, to.x, to.y + 0.5, to.z, 0, 0.05, 0);
+				}
+			}
+			case "soul_take" -> {
+				Entity k = world.getEntityById(param);
+				if (k != null) {
+					Vec3d from = e.getPos().add(0, e.getHeight() * 0.5, 0), to = k.getPos().add(0, k.getHeight() * 0.6, 0);
+					for (int i = 0; i <= 8; i++) {
+						Vec3d q = from.lerp(to, i / 8.0);
+						world.addParticle(ParticleTypes.SOUL, q.x, q.y, q.z, 0, 0.01, 0);
+					}
+				}
+			}
+			case "morph" -> {
+				spiral(world, e.getPos(), 0.55, 1.6, 2, 18, CRIMSON, ParticleTypes.SMOKE, rnd);
+				for (int i = 0; i < 8; i++) world.addParticle(ParticleTypes.LARGE_SMOKE, e.getX() + rnd.nextGaussian() * 0.3,
+						e.getY() + 0.3 + rnd.nextDouble() * 0.8, e.getZ() + rnd.nextGaussian() * 0.3, 0, 0.02, 0);
+			}
+			case "feathers" -> ring(world, e.getPos().add(0, e.getHeight() * 0.6, 0), 0.6, 16, FEATHER);
+			case "prowl", "hunt" -> {
+				Vec3d b = e.getPos();
+				for (int i = 0; i < 8; i++) world.addParticle(ParticleTypes.POOF, b.x + rnd.nextGaussian() * 0.25, b.y + 0.15,
+						b.z + rnd.nextGaussian() * 0.25, 0, 0.02, 0);
+				ring(world, b.add(0, 0.05, 0), 0.6, 14, name.equals("hunt") ? CRIMSON : WILD);
 			}
 			case "keen" -> {
 				if (MinecraftClient.getInstance().player != null && entityId == MinecraftClient.getInstance().player.getId()) {
@@ -308,6 +395,42 @@ public final class ClientEffects {
 			if (p < 0f) continue;
 			if (p < 0.12f) inhale(world, le, rnd);
 			else if (p <= 0.9f) breath(world, le, rnd, p);
+		}
+
+		for (var pl : world.getPlayers()) {
+			if (pl.squaredDistanceTo(cam) > MAX_DIST_SQ) continue;
+			var flags = com.dakura.origins.power.EntityFlags.CLIENT.get(pl.getId());
+			if (flags == null) continue;
+			// Minotauro em fúria: bufadas de fumaça branca pelas narinas
+			if (flags.contains("berserk") && pl.age % 12 == 0) {
+				Vec3d look = pl.getRotationVec(1f), eye = pl.getEyePos().add(look.multiply(0.35)).add(0, -0.12, 0);
+				for (int i = 0; i < 4; i++) world.addParticle(ParticleTypes.CLOUD, eye.x, eye.y, eye.z,
+						look.x * 0.06 + rnd.nextGaussian() * 0.01, -0.01, look.z * 0.06 + rnd.nextGaussian() * 0.01);
+			}
+			// Gárgula despencando: rastro de poeira de pedra
+			if (flags.contains("meteor") && pl.getVelocity().y < -0.5) {
+				world.addParticle(STONE_DUST, pl.getX() + rnd.nextGaussian() * 0.2, pl.getY() + 1.0, pl.getZ() + rnd.nextGaussian() * 0.2, 0, 0, 0);
+				world.addParticle(ParticleTypes.SMOKE, pl.getX(), pl.getY() + 1.4, pl.getZ(), 0, 0.05, 0);
+			}
+			// Vastaya: corrida da felina / caçada do cão
+			if ((flags.contains("prowl") || flags.contains("hunt")) && rnd.nextInt(3) == 0) {
+				double dx = pl.getX() - pl.prevX, dz = pl.getZ() - pl.prevZ;
+				if (dx * dx + dz * dz > 0.004) world.addParticle(flags.contains("hunt") ? CRIMSON : WILD,
+						pl.getX() - dx * 2 + rnd.nextGaussian() * 0.15, pl.getY() + 0.15, pl.getZ() - dz * 2 + rnd.nextGaussian() * 0.15, 0, 0, 0);
+			}
+		}
+
+		// rastro da forma de raposa (fogo ou gelo), só enquanto anda
+		for (var pl : world.getPlayers()) {
+			if (!com.dakura.origins.power.ability.FoxFormAbility.isFox(pl) || pl.squaredDistanceTo(cam) > MAX_DIST_SQ) continue;
+			double dx = pl.getX() - pl.prevX, dz = pl.getZ() - pl.prevZ;
+			if (dx * dx + dz * dz < 0.0025) continue;
+			boolean snow = com.dakura.origins.power.EntityFlags.clientHas(pl, com.dakura.origins.power.ability.FoxFormAbility.SNOW_FLAG);
+			double bx = pl.getX() - dx * 2, bz = pl.getZ() - dz * 2;
+			world.addParticle(snow ? FROST : EMBER_SOFT, bx + rnd.nextGaussian() * 0.12, pl.getY() + 0.1, bz + rnd.nextGaussian() * 0.12, 0, 0, 0);
+			if (rnd.nextInt(2) == 0) world.addParticle(snow ? ParticleTypes.SNOWFLAKE : ParticleTypes.SMALL_FLAME,
+					bx, pl.getY() + 0.12, bz, 0, 0.01, 0);
+			if (!snow && rnd.nextInt(6) == 0) world.addParticle(ParticleTypes.SMOKE, bx, pl.getY() + 0.2, bz, 0, 0.02, 0);
 		}
 
 		for (Integer id : new ArrayList<>(AbilityAnimations.active("solar"))) {

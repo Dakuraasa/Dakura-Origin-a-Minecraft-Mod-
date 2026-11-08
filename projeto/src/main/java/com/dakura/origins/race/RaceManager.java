@@ -134,7 +134,9 @@ public final class RaceManager {
 
 	// ------------------------------------------------------------ habilidades
 
-	public static void useAbility(ServerPlayerEntity player, int slot) {
+	/** raw = slot | modo << 8 | ticks segurados << 12 (modo 0 = apertou, 1 = começou a segurar, 2 = soltou). */
+	public static void useAbility(ServerPlayerEntity player, int raw) {
+		int slot = raw & 0xFF, mode = (raw >> 8) & 0xF, held = raw >>> 12;
 		if (!player.isAlive() || (player.isSpectator() && !com.dakura.origins.power.ability.PhaseAbility.isPhased(player))) return;
 		Optional<Race> race = getRace(player);
 		if (race.isEmpty() || slot < 0 || slot >= race.get().abilities().size()) return;
@@ -143,7 +145,7 @@ public final class RaceManager {
 		long[] ready = COOLDOWNS.computeIfAbsent(player.getUuid(), u -> new long[2]);
 		if (slot < ready.length && serverTicks < ready[slot]) {
 			long secs = (ready[slot] - serverTicks + 19) / 20;
-			player.sendMessage(Text.translatable("dakura_origins.message.cooldown", info.nameText(), secs)
+			if (mode != 2) player.sendMessage(Text.translatable("dakura_origins.message.cooldown", info.nameText(), secs)
 					.formatted(Formatting.GRAY), true);
 			return;
 		}
@@ -152,7 +154,13 @@ public final class RaceManager {
 					.formatted(Formatting.GRAY), true);
 			return;
 		}
-		if (info.ability().activate(player) && slot < ready.length) {
+		boolean used;
+		if (mode == 1) {
+			info.ability().holdStart(player);
+			used = false;
+		} else if (mode == 2) used = info.ability().release(player, held);
+		else used = info.ability().activate(player);
+		if (used && slot < ready.length) {
 			ready[slot] = serverTicks + info.cooldownTicks();
 			if (info.cooldownTicks() > 0) {
 				sendCooldown(player, new CooldownPayload(slot, info.cooldownTicks(), info.cooldownTicks()));

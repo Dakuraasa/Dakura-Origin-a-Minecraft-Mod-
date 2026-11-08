@@ -29,7 +29,7 @@ public class FlowerCrownFeature extends FeatureRenderer<AbstractClientPlayerEnti
 	@Override
 	public void render(MatrixStack m, VertexConsumerProvider vcp, int light, AbstractClientPlayerEntity e, float limbAngle,
 					   float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-		if (e.isInvisible() || !EntityFlags.clientHas(e, FlowerCrownPower.FLAG)) return;
+		if (e.isInvisible() || !com.dakura.origins.client.config.DakuraConfig.cosmetic(e, FlowerCrownPower.FLAG)) return;
 		var items = MinecraftClient.getInstance().getItemRenderer();
 		m.push();
 		getContextModel().getHead().rotate(m);

@@ -34,18 +34,28 @@ public final class RaceRegistry {
 	public static final String DEFAULT_RACE = "humano";
 	private static final Map<String, Race> RACES = new LinkedHashMap<>();
 	private static List<Race> sorted = List.of();
+	/** variante → raça base ("variant_of" no JSON). Variantes dividem a página da base. */
+	private static final Map<String, String> VARIANT_OF = new java.util.HashMap<>();
+	private static List<Race> pages = List.of();
+	/** Perfil da raça ("tag" no JSON): combat, exploration, casual, support, mixed. Variantes herdam da base. */
+	private static final Map<String, String> TAGS = new java.util.HashMap<>();
 
 	private RaceRegistry() {}
 
 	public static void load() {
 		RACES.clear();
+		VARIANT_OF.clear();
+		TAGS.clear();
 		for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
 			Optional<Path> dir = mod.findPath("dakura_races");
 			if (dir.isEmpty() || !Files.isDirectory(dir.get())) continue;
 			try (Stream<Path> files = Files.list(dir.get())) {
 				for (Path file : files.filter(p -> p.toString().endsWith(".json")).sorted().toList()) {
 					try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
-						Race race = parse(JsonParser.parseReader(reader).getAsJsonObject());
+						JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+						Race race = parse(json);
+						if (json.has("variant_of")) VARIANT_OF.put(race.id(), json.get("variant_of").getAsString());
+						if (json.has("tag")) TAGS.put(race.id(), json.get("tag").getAsString());
 						if (RACES.containsKey(race.id())) {
 							DakuraOrigins.LOGGER.warn("Raça '{}' redefinida pelo mod {}", race.id(), mod.getMetadata().getId());
 						}
@@ -61,6 +71,39 @@ public final class RaceRegistry {
 		List<Race> list = new ArrayList<>(RACES.values());
 		list.sort(Comparator.comparingInt(Race::order).thenComparing(Race::id));
 		sorted = Collections.unmodifiableList(list);
+		pages = list.stream().filter(r -> !VARIANT_OF.containsKey(r.id())).toList();
+	}
+
+	/** Raças com página própria no livro (sem as variantes). */
+	public static List<Race> pages() {
+		return pages;
+	}
+
+	/** Primeira variante desta raça (ex.: Huli Jing → das Neves), se houver. */
+	public static Optional<Race> variantOf(String baseId) {
+		return sorted.stream().filter(r -> baseId.equals(VARIANT_OF.get(r.id()))).findFirst();
+	}
+
+	/** Todas as variantes desta raça, na ordem do livro. */
+	public static List<Race> variantsOf(String baseId) {
+		return sorted.stream().filter(r -> baseId.equals(VARIANT_OF.get(r.id()))).toList();
+	}
+
+	/** A base seguida das variantes (as "formas" que dividem a mesma página). */
+	public static List<Race> forms(Race base) {
+		List<Race> out = new ArrayList<>();
+		out.add(base);
+		out.addAll(variantsOf(base.id()));
+		return out;
+	}
+
+	public static String tagOf(String id) {
+		return TAGS.getOrDefault(id, TAGS.getOrDefault(baseOf(id), ""));
+	}
+
+	/** Base de uma variante (ou a própria raça). */
+	public static String baseOf(String id) {
+		return VARIANT_OF.getOrDefault(id, id);
 	}
 
 	public static List<Race> all() {
