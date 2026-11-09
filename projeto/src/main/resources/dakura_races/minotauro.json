@@ -35,6 +35,10 @@
 			"text": "Quebra blocos bem mais rápido, e a fome cai devagar."
 		},
 		{
+			"type": "vantagem",
+			"text": "Pisada firme: quase impossível de empurrar."
+		},
+		{
 			"type": "desvantagem",
 			"text": "Ataques mais lentos e passos pesados."
 		},
@@ -49,6 +53,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Não consegue usar capacete por causa dos chifres."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Quedas pesadas: dano de queda dobrado."
 		}
 	],
 	"powers": [
@@ -152,6 +160,22 @@
 			"release": 12,
 			"strength": 1,
 			"regen": 1
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.knockback_resistance",
+			"operation": "add_value",
+			"amount": 0.3
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fall",
+			"multiplier": 2.0
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#FF5A3A",
+			"when": "low_health"
 		}
 	],
 	"abilities": [
@@ -168,8 +192,8 @@
 			"cooldown": 400,
 			"windup": 14,
 			"speed": 1.25,
-			"power": 2.2,
-			"damage": 6,
+			"power": 2.8,
+			"damage": 10,
 			"size": 1.4
 		}
 	]

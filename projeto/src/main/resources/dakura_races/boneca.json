@@ -1,0 +1,148 @@
+{
+	"id": "boneca",
+	"order": 17,
+	"tag": "combat",
+	"name": "Boneca",
+	"epithet": "A Marionete Amaldiçoada",
+	"icon": "dakura_origins:textures/race/boneca.png",
+	"icon_size": [
+		93,
+		93
+	],
+	"palette": {
+		"ink": [
+			"#0A0912",
+			"#1B1830",
+			"#33305C",
+			"#5E5AA8",
+			"#B9B4F0",
+			"#F4F2FF"
+		],
+		"sky": "#05040A",
+		"glow": "#EEEAFF",
+		"text": "#123524",
+		"accent": "#4B3FB0",
+		"muted": "#5E806B"
+	},
+	"description": "Uma boneca de porcelana e engrenagens, construída para os palcos e as grandes apresentações. Mas algo amaldiçoado se prendeu à corda que move seu coração: quando dança, cada passo vira um corte, e os fios que antes a guiavam agora prendem quem estiver no caminho.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Corpo de porcelana e engrenagens: não come, não respira e não sente veneno."
+		},
+		{
+			"type": "vantagem",
+			"text": "Graça de palco: mais rápida e cai de alturas maiores sem se ferir."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Fios do Teatro: a cada 5 golpes seguidos, o próximo libera um corte de energia amaldiçoada."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Corpo falso: só 8 corações."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O fogo derrete a porcelana: dano de fogo dobrado."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Não aguenta armaduras pesadas (só couro, cota de malha ou ouro)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "A água enferruja as engrenagens: lenta na água."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "doll_key"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.15
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.safe_fall_distance",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:no_hunger"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_type": "minecraft:drown"
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"effects": [
+				"minecraft:poison"
+			]
+		},
+		{
+			"type": "dakura_origins:cursed_rhythm",
+			"hits": 5,
+			"bonus": 4
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fire",
+			"multiplier": 2.0
+		},
+		{
+			"type": "dakura_origins:no_armor",
+			"heavy_only": true,
+			"message": "dakura_origins.message.doll_armor"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.3,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#3A2C9A",
+			"when": "low_health"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:cursed_threads",
+			"name": "Fios da Marionete",
+			"cooldown": 240,
+			"range": 12,
+			"targets": 3,
+			"damage": 3,
+			"bind": 40,
+			"description": "Fios de energia amaldiçoada saem dos dedos e prendem até 3 inimigos à frente: puxa todos para perto e os deixa presos por um instante."
+		},
+		{
+			"type": "dakura_origins:waterfowl_dance",
+			"name": "Dança das Aves Aquáticas",
+			"cooldown": 700,
+			"duration": 44,
+			"radius": 4.5,
+			"damage": 1.4,
+			"interval": 3,
+			"description": "Salta e gira numa dança veloz, pairando no ar, e avança só duas vezes enquanto uma chuva de cortes amaldiçoados rasga tudo em volta. Os cortes quebram blocos frágeis."
+		}
+	]
+}

@@ -1,0 +1,139 @@
+{
+	"id": "lilac",
+	"order": 16,
+	"tag": "casual",
+	"name": "Lilac",
+	"epithet": "A Gênia da Própria Ganância",
+	"icon": "dakura_origins:textures/race/lilac.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#0E0B05",
+			"#251D0B",
+			"#4D3B12",
+			"#9A7420",
+			"#E8C25A",
+			"#FFF4CF"
+		],
+		"sky": "#070502",
+		"glow": "#FFF3C2",
+		"text": "#123524",
+		"accent": "#A87A12",
+		"muted": "#5E806B"
+	},
+	"description": "Uma gênia da lâmpada que só realiza os próprios desejos. Cercada de ouro, viciada em apostas, ela sente o cheiro de minério de longe e transforma cada golpe numa aposta. Quando a sorte sorri, o punho dourado acerta o Jackpot.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Bem mais forte e resistente que um humano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Sorte de garimpeira: minérios às vezes rendem o dobro e dão mais experiência."
+		},
+		{
+			"type": "vantagem",
+			"text": "Ganha 30% mais experiência."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Toque de Midas: monstros derrotados às vezes deixam pepitas de ouro."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só usa ferramentas e armas de ouro, diamante ou netherita."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Sem ouro no inventário, perde força e velocidade."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Ouro molhado: lenta na água."
+		},
+		{
+			"type": "neutro",
+			"text": "Viciada em apostas."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:greed",
+			"ore_chance": 0.25,
+			"midas_chance": 0.3
+		},
+		{
+			"type": "dakura_origins:xp_multiplier",
+			"factor": 1.3
+		},
+		{
+			"type": "dakura_origins:noble_tools"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -3.0,
+			"when": "no_gold"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.1,
+			"when": "no_gold"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.25,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#FFC83A",
+			"when": "always"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:golden_fist",
+			"name": "Punho de Ouro",
+			"description": "Um soco pesado com o punho coberto de ouro. Com uma chance pequena acerta o JACKPOT: dano triplo e festa de cassino.",
+			"cooldown": 160,
+			"range": 4,
+			"damage": 7,
+			"jackpot_chance": 0.08,
+			"jackpot_mult": 3
+		},
+		{
+			"type": "dakura_origins:casino",
+			"name": "Cassino",
+			"description": "Aposta o item da mão numa roda da sorte: pode perder tudo, empatar ou multiplicar por 2, 3 ou até 5. Quanto mais raro o item, mais difícil ganhar.",
+			"cooldown": 6000,
+			"spin": 70
+		}
+	]
+}

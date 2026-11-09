@@ -124,21 +124,27 @@ public final class SolarBeamAbility implements Ability {
 		BlockHitResult hit = w.raycast(new RaycastContext(eye, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, p));
 		if (hit.getType() == HitResult.Type.BLOCK) end = hit.getPos();
 		if (t % damageInterval == 0) {
-			Box box = new Box(eye, end).expand(1.0);
+			Box box = new Box(eye, end).expand(1.8);
 			for (Entity e : w.getOtherEntities(p, box)) {
 				if (!(e instanceof LivingEntity le) || !le.isAlive()) continue;
-				if (e.getBoundingBox().expand(0.4).raycast(eye, end).isEmpty()) continue;
+				if (e.getBoundingBox().expand(1.1).raycast(eye, end).isEmpty()) continue;
 				le.damage(p.getDamageSources().indirectMagic(p, p), damage);
 				le.setOnFireFor(3f);
+				le.addVelocity(look.x * 0.25, 0.04, look.z * 0.25);
+				le.velocityModified = true;
 			}
 		}
 		if (t % breakInterval == 0 && hit.getType() == HitResult.Type.BLOCK
 				&& w.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
-			BlockPos bp = hit.getBlockPos();
-			BlockState st = w.getBlockState(bp);
-			float h = st.getHardness(w, bp);
-			if (h >= 0 && h <= maxHardness && p.canModifyBlocks() && w.canPlayerModifyAt(p, bp)) {
-				w.breakBlock(bp, true, p);
+			// feixe largo: abre um túnel de 3×3 onde bate
+			BlockPos center = hit.getBlockPos();
+			for (BlockPos bp : BlockPos.iterate(center.add(-1, -1, -1), center.add(1, 1, 1))) {
+				BlockState st = w.getBlockState(bp);
+				if (st.isAir()) continue;
+				float h = st.getHardness(w, bp);
+				if (h >= 0 && h <= maxHardness && p.canModifyBlocks() && w.canPlayerModifyAt(p, bp)) {
+					w.breakBlock(bp.toImmutable(), w.random.nextInt(3) == 0, p);
+				}
 			}
 		}
 		if (t % 6 == 0) {

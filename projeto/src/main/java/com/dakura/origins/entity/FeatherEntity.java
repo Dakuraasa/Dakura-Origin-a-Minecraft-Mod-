@@ -49,7 +49,7 @@ public class FeatherEntity extends PersistentProjectileEntity {
 		long[] st = STACKS.get(e.getUuid());
 		if (st == null || st[1] < now) st = new long[]{0, 0};
 		double v = Math.max(0.1, getVelocity().length());
-		double dmg = 1.0 + st[0] / 3;
+		double dmg = 2.0 + st[0] / 3;
 		setDamage((dmg - 0.02) / v);
 		e.timeUntilRegen = 0;
 		super.onEntityHit(hit);

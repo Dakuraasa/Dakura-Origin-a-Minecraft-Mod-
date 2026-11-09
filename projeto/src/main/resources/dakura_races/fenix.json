@@ -1,0 +1,133 @@
+{
+	"id": "fenix",
+	"order": 23,
+	"tag": "mixed",
+	"name": "Fênix",
+	"epithet": "A Chama que Nunca se Apaga",
+	"icon": "dakura_origins:textures/race/fenix.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#120502",
+			"#2E0E04",
+			"#6A2208",
+			"#D65A10",
+			"#FFC24A",
+			"#FFF4D6"
+		],
+		"sky": "#0A0301",
+		"glow": "#FFF0C8",
+		"text": "#123524",
+		"accent": "#E0661A",
+		"muted": "#5E806B"
+	},
+	"description": "Uma ave de fogo eterna em forma humana, com asas de chamas douradas e uma crista ardente. Voa como o sol nascente e mergulha como um cometa. Quando a morte chega, ela vira um ovo de chamas e renasce das próprias cinzas, mais forte. Seu fogo sagrado queima os inimigos e cura os amigos.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Asas de fogo: voa."
+		},
+		{
+			"type": "vantagem",
+			"text": "Corpo de chama: imune a fogo e lava, e seus golpes incendeiam."
+		},
+		{
+			"type": "vantagem",
+			"text": "Não sofre dano de queda."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Renascimento: ao morrer, vira um ovo de chamas e renasce com a vida cheia, explodindo em fogo (a cada 15 minutos)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "A água e a chuva apagam sua chama: sofre dano molhada."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O frio a enfraquece: dano de congelamento dobrado."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Corpo leve de ave: só 8 corações."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "phoenix_wings"
+		},
+		{
+			"type": "dakura_origins:flight",
+			"speed": 0.045,
+			"exhaustion": 0.01
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "fire",
+			"seconds": 4
+		},
+		{
+			"type": "dakura_origins:rebirth",
+			"cooldown": 18000,
+			"radius": 6,
+			"damage": 8
+		},
+		{
+			"type": "dakura_origins:environment_damage",
+			"when": "water",
+			"interval": 20,
+			"damage": 1.0
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"multiplier": 2.0,
+			"damage_types": [
+				"minecraft:freeze"
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -4.0
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#FFB347",
+			"when": "always"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:solar_dive",
+			"name": "Mergulho Solar",
+			"cooldown": 400,
+			"radius": 5,
+			"damage": 9,
+			"rise": 1.3,
+			"description": "Sobe num jorro de chamas, para no alto com um sol se acendendo atrás das costas e mergulha como um cometa na direção da mira. O impacto abre um anel de sol no chão: dano, fogo e arremesso (não quebra blocos)."
+		},
+		{
+			"type": "dakura_origins:dawn_wings",
+			"name": "Asas da Aurora",
+			"cooldown": 900,
+			"radius": 9,
+			"heal": 6,
+			"damage": 5,
+			"pulses": 4,
+			"description": "Abre asas de fogo gigantes e solta um anel de penas em chamas. O fogo sagrado reconhece amigos: aliados se curam, se limpam e ficam imunes ao fogo, e os inimigos queimam. Um pequeno sol continua pulsando por 4 segundos."
+		}
+	]
+}

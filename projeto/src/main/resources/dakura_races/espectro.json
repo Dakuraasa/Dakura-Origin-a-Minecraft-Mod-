@@ -47,6 +47,10 @@
 			"text": "Segunda Chance (passiva): ao morrer, continua de pé com 1 coração e uma leve regeneração. Recarga de 5 minutos."
 		},
 		{
+			"type": "vantagem",
+			"text": "Leve como névoa: não toma dano de queda."
+		},
+		{
 			"type": "desvantagem",
 			"text": "Água o dissolve: chuva e oceanos causam dano alto."
 		},
@@ -57,6 +61,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Poções de cura e efeitos positivos o ferem; efeitos negativos lhe dão força."
+		},
+		{
+			"type": "desvantagem",
+			"text": "A luz do dia o deixa mais fraco."
 		}
 	],
 	"powers": [
@@ -105,6 +113,22 @@
 			"type": "dakura_origins:second_chance",
 			"cooldown": 6000,
 			"regen_seconds": 5
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#5CFF9A",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -1.0,
+			"when": "day"
 		}
 	],
 	"abilities": [

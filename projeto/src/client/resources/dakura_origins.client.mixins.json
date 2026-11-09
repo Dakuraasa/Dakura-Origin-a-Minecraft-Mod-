@@ -10,7 +10,9 @@
 		"HeldItemRendererMixin",
 		"InGameHudMixin",
 		"LivingEntityRendererMixin",
-		"MinecraftClientMixin"
+		"MinecraftClientMixin",
+		"MouseMixin",
+		"PlayerEntityModelMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

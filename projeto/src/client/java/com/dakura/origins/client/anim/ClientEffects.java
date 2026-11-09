@@ -40,8 +40,8 @@ public final class ClientEffects {
 	private static final Vector3f VIOLET = new Vector3f(0.62f, 0.32f, 0.95f);
 	private static final Vector3f DEEP_VIOLET = new Vector3f(0.36f, 0.14f, 0.62f);
 
-	private static final DustParticleEffect CORE = new DustParticleEffect(new Vector3f(1.0f, 0.95f, 0.7f), 1.9f);
-	private static final DustParticleEffect CORE_SMALL = new DustParticleEffect(new Vector3f(1.0f, 0.88f, 0.5f), 1.2f);
+	static final DustParticleEffect CORE = new DustParticleEffect(new Vector3f(1.0f, 0.95f, 0.7f), 1.9f);
+	static final DustParticleEffect CORE_SMALL = new DustParticleEffect(new Vector3f(1.0f, 0.88f, 0.5f), 1.2f);
 	/** Brasa que nasce laranja e esfria até o violeta da raça. */
 	private static final DustColorTransitionParticleEffect EMBER = new DustColorTransitionParticleEffect(ORANGE, VIOLET, 1.1f);
 	private static final DustColorTransitionParticleEffect EMBER_BIG = new DustColorTransitionParticleEffect(GOLD, DEEP_VIOLET, 1.7f);
@@ -60,7 +60,7 @@ public final class ClientEffects {
 	private static final Map<Integer, Ball> BALLS = new HashMap<>();
 
 	/** Efeitos curtos que duram alguns ticks (onda do pisão, pilar de almas). */
-	private interface Timed {
+	interface Timed {
 		/** @return false quando acabou */
 		boolean tick(ClientWorld world, Random rnd, int age);
 	}
@@ -68,19 +68,19 @@ public final class ClientEffects {
 	private static final java.util.List<Timed> TIMED = new ArrayList<>();
 	private static final java.util.List<Integer> TIMED_AGE = new ArrayList<>();
 
-	private static void schedule(Timed t) {
+	static void schedule(Timed t) {
 		TIMED.add(t);
 		TIMED_AGE.add(0);
 	}
 
-	private static final DustParticleEffect BLOOD = new DustParticleEffect(new Vector3f(0.62f, 0.03f, 0.08f), 0.9f);
-	private static final DustParticleEffect BLOOD_DARK = new DustParticleEffect(new Vector3f(0.35f, 0.0f, 0.05f), 1.2f);
-	private static final DustParticleEffect NIGHT = new DustParticleEffect(new Vector3f(0.28f, 0.12f, 0.36f), 1.3f);
-	private static final DustParticleEffect GHOST = new DustParticleEffect(new Vector3f(0.78f, 0.9f, 1.0f), 1.0f);
-	private static final DustParticleEffect LEAF = new DustParticleEffect(new Vector3f(0.42f, 0.72f, 0.36f), 1.0f);
-	private static final DustParticleEffect VINE = new DustParticleEffect(new Vector3f(0.22f, 0.55f, 0.2f), 1.3f);
-	private static final DustParticleEffect SUN = new DustParticleEffect(new Vector3f(1.0f, 0.9f, 0.45f), 1.2f);
-	private static final DustParticleEffect SUN_CORE = new DustParticleEffect(new Vector3f(1.0f, 0.98f, 0.85f), 1.8f);
+	static final DustParticleEffect BLOOD = new DustParticleEffect(new Vector3f(0.62f, 0.03f, 0.08f), 0.9f);
+	static final DustParticleEffect BLOOD_DARK = new DustParticleEffect(new Vector3f(0.35f, 0.0f, 0.05f), 1.2f);
+	static final DustParticleEffect NIGHT = new DustParticleEffect(new Vector3f(0.28f, 0.12f, 0.36f), 1.3f);
+	static final DustParticleEffect GHOST = new DustParticleEffect(new Vector3f(0.78f, 0.9f, 1.0f), 1.0f);
+	static final DustParticleEffect LEAF = new DustParticleEffect(new Vector3f(0.42f, 0.72f, 0.36f), 1.0f);
+	static final DustParticleEffect VINE = new DustParticleEffect(new Vector3f(0.22f, 0.55f, 0.2f), 1.3f);
+	static final DustParticleEffect SUN = new DustParticleEffect(new Vector3f(1.0f, 0.9f, 0.45f), 1.2f);
+	static final DustParticleEffect SUN_CORE = new DustParticleEffect(new Vector3f(1.0f, 0.98f, 0.85f), 1.8f);
 
 	/** Olhar Aguçado (Elfo): até quando e em que raio² os contornos aparecem. */
 	public static long KEEN_UNTIL = 0;
@@ -90,7 +90,7 @@ public final class ClientEffects {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		return System.currentTimeMillis() < KEEN_UNTIL && mc.player != null && e != mc.player
 				&& e instanceof LivingEntity && e.squaredDistanceTo(mc.player) < KEEN_RADIUS_SQ
-				&& !com.dakura.origins.power.types.ForestStealthPower.camouflaged(e);
+				&& !com.dakura.origins.power.types.ForestStealthPower.camouflaged(e) && !e.isInvisible();
 	}
 
 	/** Efeitos em pontos do mundo (FxPayload). */
@@ -137,20 +137,20 @@ public final class ClientEffects {
 						p.z + rnd.nextGaussian() * 0.3, 0, 0.15 + rnd.nextDouble() * 0.15, 0);
 				spiral(world, p, 0.4, 1.8, 2, 14, SOUL_DUST, ParticleTypes.SOUL, rnd);
 			}
-			default -> {}
+			default -> ExtraEffects.fxAt(world, name, p, a, b, c, rnd);
 		}
 	}
 
-	private static final DustParticleEffect SOUL_DUST = new DustParticleEffect(new Vector3f(0.45f, 0.78f, 0.8f), 1.0f);
-	private static final DustParticleEffect STONE_DUST = new DustParticleEffect(new Vector3f(0.62f, 0.6f, 0.57f), 1.2f);
-	private static final DustParticleEffect CRIMSON = new DustParticleEffect(new Vector3f(0.75f, 0.1f, 0.22f), 1.0f);
-	private static final DustParticleEffect FEATHER = new DustParticleEffect(new Vector3f(0.95f, 0.9f, 0.84f), 0.8f);
-	private static final DustParticleEffect WILD = new DustParticleEffect(new Vector3f(0.55f, 0.72f, 0.4f), 0.8f);
+	static final DustParticleEffect SOUL_DUST = new DustParticleEffect(new Vector3f(0.45f, 0.78f, 0.8f), 1.0f);
+	static final DustParticleEffect STONE_DUST = new DustParticleEffect(new Vector3f(0.62f, 0.6f, 0.57f), 1.2f);
+	static final DustParticleEffect CRIMSON = new DustParticleEffect(new Vector3f(0.75f, 0.1f, 0.22f), 1.0f);
+	static final DustParticleEffect FEATHER = new DustParticleEffect(new Vector3f(0.95f, 0.9f, 0.84f), 0.8f);
+	static final DustParticleEffect WILD = new DustParticleEffect(new Vector3f(0.55f, 0.72f, 0.4f), 0.8f);
 
-	private static final DustParticleEffect FROST = new DustParticleEffect(new Vector3f(0.82f, 0.93f, 1.0f), 1.0f);
-	private static final DustParticleEffect EMBER_SOFT = new DustParticleEffect(new Vector3f(1.0f, 0.58f, 0.22f), 1.0f);
+	static final DustParticleEffect FROST = new DustParticleEffect(new Vector3f(0.82f, 0.93f, 1.0f), 1.0f);
+	static final DustParticleEffect EMBER_SOFT = new DustParticleEffect(new Vector3f(1.0f, 0.58f, 0.22f), 1.0f);
 
-	private static final DustParticleEffect DUSTWAVE = new DustParticleEffect(new Vector3f(0.82f, 0.76f, 0.66f), 1.6f);
+	static final DustParticleEffect DUSTWAVE = new DustParticleEffect(new Vector3f(0.82f, 0.76f, 0.66f), 1.6f);
 
 	/**
 	 * Efeitos disparados pelo servidor via AnimPayload "fx:nome" (um pacote, partículas locais).
@@ -180,12 +180,6 @@ public final class ClientEffects {
 				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.CLOUD, b.x + rnd.nextGaussian() * 0.25, b.y + 0.1,
 						b.z + rnd.nextGaussian() * 0.25, rnd.nextGaussian() * 0.03, 0.02, rnd.nextGaussian() * 0.03);
 				ring(world, b.add(0, 0.05, 0), 0.6, 14, LEAF);
-			}
-			case "fox" -> {
-				boolean snow = (param & 2) != 0;
-				spiral(world, e.getPos(), 0.5, 1.2, 2, 18, snow ? FROST : EMBER_SOFT, snow ? ParticleTypes.SNOWFLAKE : ParticleTypes.SMALL_FLAME, rnd);
-				for (int i = 0; i < 8; i++) world.addParticle(ParticleTypes.POOF, e.getX() + rnd.nextGaussian() * 0.25,
-						e.getY() + 0.3 + rnd.nextDouble() * 0.6, e.getZ() + rnd.nextGaussian() * 0.25, 0, 0.02, 0);
 			}
 			case "goat_jump" -> {
 				Vec3d b = e.getPos();
@@ -245,11 +239,11 @@ public final class ClientEffects {
 					KEEN_RADIUS_SQ = (param % 1000) * (param % 1000);
 				}
 			}
-			default -> {}
+			default -> ExtraEffects.fx(world, name, e, param, rnd);
 		}
 	}
 
-	private static void ring(ClientWorld world, Vec3d c, double r, int n, ParticleEffect fx) {
+	static void ring(ClientWorld world, Vec3d c, double r, int n, ParticleEffect fx) {
 		for (int i = 0; i < n; i++) {
 			double a = i * Math.PI * 2 / n;
 			world.addParticle(fx, c.x + Math.cos(a) * r, c.y, c.z + Math.sin(a) * r, 0, 0, 0);
@@ -266,7 +260,7 @@ public final class ClientEffects {
 	}
 
 	/** Duas ou três hélices subindo em volta do corpo. */
-	private static void spiral(ClientWorld world, Vec3d base, double r, double h, int arms, int steps,
+	static void spiral(ClientWorld world, Vec3d base, double r, double h, int arms, int steps,
 							   ParticleEffect fx, ParticleEffect extra, Random rnd) {
 		for (int s = 0; s < steps; s++) {
 			double t = s / (double) steps;
@@ -283,7 +277,7 @@ public final class ClientEffects {
 	}
 
 	/** Pisão: estilhaços do chão, onda de poeira que se abre e um tremor no centro. */
-	private static void stomp(ClientWorld world, Entity e, double radius, Random rnd) {
+	static void stomp(ClientWorld world, Entity e, double radius, Random rnd) {
 		Vec3d c = e.getPos();
 		net.minecraft.block.BlockState ground = world.getBlockState(e.getBlockPos().down());
 		if (ground.isAir()) ground = net.minecraft.block.Blocks.DIRT.getDefaultState();
@@ -420,18 +414,7 @@ public final class ClientEffects {
 			}
 		}
 
-		// rastro da forma de raposa (fogo ou gelo), só enquanto anda
-		for (var pl : world.getPlayers()) {
-			if (!com.dakura.origins.power.ability.FoxFormAbility.isFox(pl) || pl.squaredDistanceTo(cam) > MAX_DIST_SQ) continue;
-			double dx = pl.getX() - pl.prevX, dz = pl.getZ() - pl.prevZ;
-			if (dx * dx + dz * dz < 0.0025) continue;
-			boolean snow = com.dakura.origins.power.EntityFlags.clientHas(pl, com.dakura.origins.power.ability.FoxFormAbility.SNOW_FLAG);
-			double bx = pl.getX() - dx * 2, bz = pl.getZ() - dz * 2;
-			world.addParticle(snow ? FROST : EMBER_SOFT, bx + rnd.nextGaussian() * 0.12, pl.getY() + 0.1, bz + rnd.nextGaussian() * 0.12, 0, 0, 0);
-			if (rnd.nextInt(2) == 0) world.addParticle(snow ? ParticleTypes.SNOWFLAKE : ParticleTypes.SMALL_FLAME,
-					bx, pl.getY() + 0.12, bz, 0, 0.01, 0);
-			if (!snow && rnd.nextInt(6) == 0) world.addParticle(ParticleTypes.SMOKE, bx, pl.getY() + 0.2, bz, 0, 0.02, 0);
-		}
+		ExtraEffects.tick(client, world, cam, rnd);
 
 		for (Integer id : new ArrayList<>(AbilityAnimations.active("solar"))) {
 			Entity e = world.getEntityById(id);
@@ -635,48 +618,89 @@ public final class ClientEffects {
 
 	// ================================================================== Raio Solar (Dríade)
 
-	/** Carga: grãos de luz descem do céu numa coluna fina até as mãos erguidas. */
-	private static void solarCharge(ClientWorld world, LivingEntity e, Random rnd, float t) {
-		Vec3d top = e.getPos().add(0, e.getHeight() + 0.3, 0);
-		for (int i = 0; i < 3; i++) {
-			double y = 6 + rnd.nextDouble() * 10 * (1 - t);
-			world.addParticle(SUN, top.x + rnd.nextGaussian() * 0.08, top.y + y, top.z + rnd.nextGaussian() * 0.08, 0, -0.6, 0);
-		}
-		if (rnd.nextInt(2) == 0) world.addParticle(ParticleTypes.END_ROD, top.x, top.y + 3 + rnd.nextDouble() * 6, top.z, 0, -0.35, 0);
-		world.addParticle(SUN_CORE, top.x, top.y, top.z, 0, 0, 0);
-		if (rnd.nextInt(3) == 0) {
-			double a = rnd.nextDouble() * Math.PI * 2;
-			world.addParticle(SUN, top.x + Math.cos(a) * 0.5, top.y, top.z + Math.sin(a) * 0.5, -Math.cos(a) * 0.04, 0, -Math.sin(a) * 0.04);
-		}
+	/** Mão erguida da Dríade (braço direito). */
+	private static Vec3d sunHand(LivingEntity e) {
+		Vec3d l = e.getRotationVec(1f), f = new Vec3d(l.x, 0, l.z);
+		f = f.lengthSquared() < 1e-4 ? new Vec3d(0, 0, 1) : f.normalize();
+		Vec3d right = new Vec3d(-f.z, 0, f.x);
+		return e.getPos().add(0, e.getHeight() + 0.45, 0).add(right.multiply(0.4)).add(f.multiply(0.1));
 	}
 
-	/** Raio: núcleo branco-dourado contínuo + faíscas e um brilho onde ele bate. */
+	/** Carga: uma esfera de luz solar cresce na mão erguida, sugando faíscas e raios de luz em volta. */
+	private static void solarCharge(ClientWorld world, LivingEntity e, Random rnd, float t) {
+		Vec3d c = sunHand(e);
+		double r = 0.15 + 0.5 * t;
+		for (int i = 0; i < 8 + (int) (t * 10); i++) {
+			double u = rnd.nextDouble() * 2 - 1, a = rnd.nextDouble() * Math.PI * 2, s = Math.sqrt(1 - u * u);
+			world.addParticle(i % 3 == 0 ? SUN_CORE : SUN, c.x + s * Math.cos(a) * r, c.y + u * r, c.z + s * Math.sin(a) * r, 0, 0, 0);
+		}
+		world.addParticle(CORE, c.x, c.y, c.z, 0, 0, 0);
+		// faíscas atraídas de longe para a esfera
+		for (int i = 0; i < 3; i++) {
+			double u = rnd.nextDouble() * 2 - 1, a = rnd.nextDouble() * Math.PI * 2, s = Math.sqrt(1 - u * u), d = 2.2 + rnd.nextDouble();
+			Vec3d from = c.add(s * Math.cos(a) * d, u * d, s * Math.sin(a) * d);
+			Vec3d v = c.subtract(from).multiply(0.12);
+			world.addParticle(ParticleTypes.END_ROD, from.x, from.y, from.z, v.x, v.y, v.z);
+		}
+		// anel girando em volta da esfera
+		double rot = e.age * 0.35;
+		for (int i = 0; i < 8; i++) {
+			double a = rot + i * Math.PI / 4;
+			world.addParticle(SUN, c.x + Math.cos(a) * (r + 0.35), c.y + Math.sin(a * 2) * 0.08, c.z + Math.sin(a) * (r + 0.35), 0, 0, 0);
+		}
+		if (rnd.nextInt(2) == 0) world.addParticle(ParticleTypes.END_ROD, c.x, c.y + 4 + rnd.nextDouble() * 6, c.z, 0, -0.45, 0);
+	}
+
+	/** Raio: um canhão de luz largo (núcleo branco, duas hélices douradas, casca de brilho) e uma explosão onde bate. */
 	private static void solarBeam(ClientWorld world, LivingEntity e, Random rnd) {
 		Vec3d eye = e.getEyePos(), look = e.getRotationVec(1f);
-		Vec3d from = eye.add(look.multiply(0.6)).add(0, -0.25, 0);
+		Vec3d from = sunHand(e).lerp(eye.add(look.multiply(0.9)), 0.7);
 		Vec3d end = eye.add(look.multiply(24));
 		BlockHitResult hit = world.raycast(new RaycastContext(eye, end, RaycastContext.ShapeType.COLLIDER,
 				RaycastContext.FluidHandling.NONE, e));
 		if (hit.getType() == HitResult.Type.BLOCK) end = hit.getPos();
-		double len = from.distanceTo(end);
-		int n = (int) Math.min(48, len * 2.2);
+		Vec3d dir = end.subtract(from);
+		double len = dir.length();
+		if (len < 0.1) return;
+		dir = dir.normalize();
+		Vec3d[] b = basis(dir);
+		int n = (int) Math.min(64, len * 2.6);
+		double spin = e.age * 0.7;
 		for (int i = 0; i < n; i++) {
-			Vec3d q = from.lerp(end, i / (double) n);
-			world.addParticle(i % 2 == 0 ? SUN_CORE : SUN, q.x, q.y, q.z, 0, 0, 0);
+			double k = i / (double) n, d = k * len;
+			Vec3d q = from.add(dir.multiply(d));
+			world.addParticle(i % 2 == 0 ? CORE : SUN_CORE, q.x, q.y, q.z, 0, 0, 0);
+			for (int h = 0; h < 2; h++) {
+				double a = spin + d * 1.4 + h * Math.PI;
+				Vec3d hq = q.add(b[0].multiply(Math.cos(a) * 0.38)).add(b[1].multiply(Math.sin(a) * 0.38));
+				world.addParticle(SUN, hq.x, hq.y, hq.z, 0, 0, 0);
+			}
 		}
-		Vec3d q = from.lerp(end, rnd.nextDouble());
-		world.addParticle(ParticleTypes.END_ROD, q.x, q.y, q.z, rnd.nextGaussian() * 0.02, 0.02, rnd.nextGaussian() * 0.02);
+		for (int i = 0; i < 6; i++) {
+			double d = rnd.nextDouble() * len, a = rnd.nextDouble() * Math.PI * 2;
+			Vec3d q = from.add(dir.multiply(d)).add(b[0].multiply(Math.cos(a) * 0.65)).add(b[1].multiply(Math.sin(a) * 0.65));
+			world.addParticle(SUN_CORE, q.x, q.y, q.z, 0, 0, 0);
+		}
+		// anel de disparo na boca do canhão
+		for (int i = 0; i < 12; i++) {
+			double a = i * Math.PI / 6 + spin;
+			Vec3d q = from.add(b[0].multiply(Math.cos(a) * 0.55)).add(b[1].multiply(Math.sin(a) * 0.55));
+			world.addParticle(SUN, q.x, q.y, q.z, 0, 0, 0);
+		}
 		if (hit.getType() == HitResult.Type.BLOCK) {
-			for (int i = 0; i < 3; i++) world.addParticle(ParticleTypes.SMALL_FLAME, end.x, end.y, end.z,
-					rnd.nextGaussian() * 0.06, 0.05, rnd.nextGaussian() * 0.06);
-			if (rnd.nextInt(2) == 0) world.addParticle(ParticleTypes.SMOKE, end.x, end.y, end.z, 0, 0.04, 0);
+			for (int i = 0; i < 6; i++) world.addParticle(ParticleTypes.END_ROD, end.x, end.y, end.z,
+					rnd.nextGaussian() * 0.15, rnd.nextGaussian() * 0.15, rnd.nextGaussian() * 0.15);
+			for (int i = 0; i < 3; i++) world.addParticle(ParticleTypes.FLAME, end.x, end.y, end.z,
+					rnd.nextGaussian() * 0.1, 0.06, rnd.nextGaussian() * 0.1);
+			if (rnd.nextInt(2) == 0) world.addParticle(ParticleTypes.LARGE_SMOKE, end.x, end.y, end.z, 0, 0.05, 0);
+			if (rnd.nextInt(5) == 0) world.addParticle(ParticleTypes.FLASH, end.x, end.y, end.z, 0, 0, 0);
 		}
 	}
 
 	// ================================================================== util
 
 	/** Dois vetores perpendiculares a dir (e entre si). */
-	private static Vec3d[] basis(Vec3d dir) {
+	static Vec3d[] basis(Vec3d dir) {
 		Vec3d side = dir.crossProduct(new Vec3d(0, 1, 0));
 		if (side.lengthSquared() < 1e-4) side = new Vec3d(1, 0, 0);
 		side = side.normalize();

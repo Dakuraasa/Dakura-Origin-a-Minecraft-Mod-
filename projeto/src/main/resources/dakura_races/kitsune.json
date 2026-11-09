@@ -1,0 +1,165 @@
+{
+	"id": "kitsune",
+	"order": 18,
+	"tag": "mixed",
+	"name": "Kitsune",
+	"epithet": "A Raposa Celestial de Nove Caudas",
+	"icon": "dakura_origins:textures/race/kitsune.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#07090F",
+			"#121A2B",
+			"#24375A",
+			"#4A73B0",
+			"#A9D2FF",
+			"#F2F9FF"
+		],
+		"sky": "#04060B",
+		"glow": "#EEF7FF",
+		"text": "#123524",
+		"accent": "#3E6FB8",
+		"muted": "#5E806B"
+	},
+	"description": "Uma raposa que viveu mil anos e ganhou nove caudas brancas como a neve. Mensageira dos santuários, guarda uma pérola estelar que a traz de volta da morte. Suas chamas-fantasma curam quem ela protege e queimam quem ela caça, e quando as nove caudas se abrem, o próprio espírito da raposa celestial desce para lutar ao seu lado.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Nove caudas: mais vida, mais força e mais velocidade."
+		},
+		{
+			"type": "vantagem",
+			"text": "Fogo de raposa: cada golpe incendeia o inimigo."
+		},
+		{
+			"type": "vantagem",
+			"text": "Olhos de raposa: visão noturna, e a sorte sempre a acompanha."
+		},
+		{
+			"type": "vantagem",
+			"text": "Não toma dano de queda."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Pérola Estelar: ao morrer, volta de pé com 1 coração (a cada 10 minutos)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Caudas encharcadas: lenta na água."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Explosões causam 50% mais dano."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Criatura da noite: um pouco mais fraca de dia."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "kitsune_tails"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "fox_ears_snow"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.1
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "fire",
+			"seconds": 3
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:luck"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:second_chance",
+			"cooldown": 12000,
+			"regen_seconds": 6
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.3,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_explosion",
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -1.0,
+			"when": "day"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#BDE7FF",
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:fox_friend"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:foxfire",
+			"name": "Kitsunebi",
+			"cooldown": 500,
+			"wisps": 9,
+			"duration": 240,
+			"range": 10,
+			"damage": 3.5,
+			"heal": 1,
+			"description": "Nove chamas-fantasma azuis giram em volta dela. A cada segundo, uma voa até o inimigo mais próximo (dano, fogo e marca brilhante); enquanto houver chamas, os aliados por perto se curam."
+		},
+		{
+			"type": "dakura_origins:nine_tails",
+			"name": "Bênção das Nove Caudas",
+			"cooldown": 900,
+			"radius": 10,
+			"damage": 6,
+			"duration": 200,
+			"description": "As caudas se abrem em leque e o espírito da raposa celestial desce num redemoinho de chamas: aliados ganham regeneração, velocidade e escudo; monstros são lançados ao ar, queimados e ficam tontos."
+		}
+	]
+}

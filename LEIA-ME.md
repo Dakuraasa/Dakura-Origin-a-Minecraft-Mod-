@@ -95,6 +95,9 @@ Tipos novos desta versão: `marker` (`kind`), `food_multiplier`, `sleep_altitude
 `statue`, `damage_cap`, `desperate_regeneration`, `enchanted_weakness`, `forest_stealth`, além de
 `conditional_attribute` com `"when": "desert" | "nether"`, `no_armor` com `slots` e `damage_multiplier` com `damage_types`.
 
+Segunda leva: `flag` (aura `"aura#RRGGBB"`, `fireproof`...; `when`: `night`/`day`/`low_health`), `xp_multiplier`, `glide`,
+`ally_aura`, `noble_tools`, `greed`, `cursed_rhythm` (`hits`, `bonus`), `pacifist`, `dodge` (`chance`, `boosted`, `boost_flag`), `aquatic` (`dry_seconds`), `soul_guide` (`heal`, `absorption_ticks`), `rebirth` (`cooldown`, `radius`, `damage`), `rabbit_frenzy` (`max`, `finisher`); `no_armor` com `heavy_only`; e `conditional_attribute` com `day`, `water`, `high`, `no_gold`.
+
 Todos aceitam `"requires_food": true`, que desliga o poder quando a fome chega a zero.
 
 ### Tipos de habilidade (`abilities`)
@@ -108,13 +111,22 @@ Todos aceitam `"requires_food": true`, que desliga o poder quando a fome chega a
 
 Também: `passive`, `charged_jump` (segurar e soltar), `headbutt`, `boulder`, `meteor`, `summon_undead`,
 `charm`, `morph` (toque/segurar), `feather_barrage`, `buff_mode`, `stomp`, `phase`, `vine_snare`, `solar_beam`,
-`dash`, `keen_sight`, `fox_form` e `fox_clones`.
+`dash`, `keen_sight`, `fox_form`, `fox_clones`, `tether`, `mirror_shield`, `shadow_orb`, `shadow_step`, `drain_kiss`,
+`mimic`, `war_cry`, `brutal_charge`, `fairy_perch`, `fairy_dust`, `golden_fist`, `casino`, `cursed_threads`, `waterfowl_dance`, `foxfire`, `nine_tails`,
+`seraph_blessing`, `celestial_altar`, `compass_needle`, `tidal_song`, `tsunami`, `heart_weighing`, `duat_sands`,
+`solar_dive`, `dawn_wings`, `rabbit_rush` e `moon_leap` (segurar e soltar).
 
 `fireball` e `breath` aceitam `maturity_damage`: o multiplicador do dano em cada estágio de
 maturidade (ex.: `[1.0, 1.4, 1.8]`).
 
 Quem não pode ser mordido fica na tag `data/dakura_origins/tags/entity_type/bite_immune.json`.
 Os blocos que o Sopro queima ficam na tag `data/dakura_origins/tags/block/breath_breakable.json`.
+
+### Diretriz visual do projeto
+
+Embelezar tudo ao máximo: efeitos especiais, golpes e animações fortes e chamativos, mesmo fugindo do
+estilo do Minecraft, com formas arredondadas e caricatas (caudas fofas com física, asas, pentagramas,
+cortes em arco, chamas-fantasma). Toda habilidade nova segue esse padrão, com som próprio.
 
 ### Mecânica nova (Java)
 

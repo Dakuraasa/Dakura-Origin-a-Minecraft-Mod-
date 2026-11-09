@@ -1,0 +1,131 @@
+{
+	"id": "elfo_noturno",
+	"order": 6,
+	"variant_of": "elfo",
+	"name": "Elfo Noturno",
+	"epithet": "Filho da Lua Escura",
+	"icon": "dakura_origins:textures/race/elfo_noturno.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#08060E",
+			"#171126",
+			"#2E2148",
+			"#5C3F8C",
+			"#A98CE0",
+			"#F0E8FF"
+		],
+		"sky": "#040308",
+		"glow": "#EDE4FF",
+		"text": "#123524",
+		"accent": "#5C3F8C",
+		"muted": "#5E806B"
+	},
+	"description": "Elfos que trocaram o sol pelas sombras. Caçam em silêncio quando a lua sobe, enxergam no escuro e somem entre as trevas. Sua magia é feita de sombra pura: uma esfera que apaga a visão do inimigo e um passo que atravessa a escuridão.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Visão noturna permanente."
+		},
+		{
+			"type": "vantagem",
+			"text": "À noite fica muito mais forte e mais rápido."
+		},
+		{
+			"type": "vantagem",
+			"text": "Passos silenciosos, de dia e de noite."
+		},
+		{
+			"type": "vantagem",
+			"text": "Cai de alturas maiores sem se ferir."
+		},
+		{
+			"type": "desvantagem",
+			"text": "A luz do dia o enfraquece."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Corpo esguio: 9 corações."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O fogo causa 50% mais dano."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 3.0,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.15,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "silent_steps",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.safe_fall_distance",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -2.0,
+			"when": "day"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -2.0
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fire",
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#9B5CFF",
+			"when": "night"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:shadow_orb",
+			"name": "Orbe Sombria",
+			"description": "Dispara uma esfera de sombra ondulante: quem for atingido leva dano e fica cego por muito tempo.",
+			"cooldown": 400,
+			"speed": 0.9,
+			"damage": 5,
+			"blind": 200
+		},
+		{
+			"type": "dakura_origins:shadow_step",
+			"name": "Passo Sombrio",
+			"description": "Dissolve-se em sombra e reaparece até 10 blocos à frente, invisível por um instante.",
+			"cooldown": 160,
+			"range": 10,
+			"invis": 60
+		}
+	]
+}

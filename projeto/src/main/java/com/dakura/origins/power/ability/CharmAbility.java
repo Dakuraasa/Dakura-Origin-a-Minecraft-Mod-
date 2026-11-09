@@ -159,6 +159,17 @@ public final class CharmAbility implements Ability {
 		CHARMED.values().removeIf(c -> c.owner.equals(p.getUuid()));
 	}
 
+	public static boolean charmedBy(Entity e, PlayerEntity p) {
+		Charm c = CHARMED.get(e.getUuid());
+		return c != null && c.until != -2 && c.owner.equals(p.getUuid());
+	}
+
+	/** Encanta direto (sem mirar): usado pelo Beijo Drenante da Succubus. */
+	public static void charmDirect(ServerPlayerEntity p, LivingEntity t, int shortTicks) {
+		CHARMED.put(t.getUuid(), new Charm(p.getUuid(), t, longCharm(t) ? -1 : ticks + shortTicks));
+		if (t instanceof MobEntity m && m.getTarget() == p) m.setTarget(null);
+	}
+
 	/** Ninguém deve ficar encantado por quem já saiu (o tick já cuida disso). */
 	public static boolean charmed(Entity e) {
 		return CHARMED.containsKey(e.getUuid());

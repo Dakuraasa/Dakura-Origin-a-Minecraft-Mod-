@@ -46,6 +46,10 @@
 			"text": "As raposas não fogem dela e até a seguem por um tempo."
 		},
 		{
+			"type": "vantagem",
+			"text": "Olhos de raposa: visão noturna."
+		},
+		{
 			"type": "desvantagem",
 			"text": "Nenhum efeito funciona nela, bom ou ruim (nem a maçã dourada)."
 		},
@@ -56,6 +60,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Não sabe nadar: a água não a fere, mas ela afunda."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Explosões causam 50% mais dano."
 		}
 	],
 	"powers": [
@@ -112,25 +120,34 @@
 		},
 		{
 			"type": "dakura_origins:no_swim"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_explosion",
+			"multiplier": 1.5
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:fox_form",
 			"name": "Forma de Raposa",
-			"description": "Vira uma raposa da neve, sem limite de tempo: mais rápida, pula mais alto, regenera e deixa um rastro de gelo. Aperte de novo para voltar.",
+			"description": "Vira uma raposa veloz que dá saltos enormes. Nessa forma os inimigos a ignoram e ela não ataca: o botão de ataque libera uma explosão de gelo que quebra blocos e devolve a forma humana.",
 			"cooldown": 20,
 			"snow": true,
 			"speed": 0.35,
-			"jump": 0.3
+			"jump": 0.9
 		},
 		{
 			"type": "dakura_origins:fox_clones",
 			"name": "Ilusões de Raposa",
-			"description": "Invoca 3 ilusões de si mesma, com sua arma e armadura, que caçam o inimigo mais próximo ou quem ela acertar, com golpes de gelo. Duram 7 segundos.",
+			"description": "Cria três ilusões de raposa que lutam ao seu lado, sem limite de tempo (novas ilusões substituem as antigas).",
 			"cooldown": 900,
 			"count": 3,
-			"duration": 140,
+			"duration": 0,
 			"snow": true
 		}
 	],

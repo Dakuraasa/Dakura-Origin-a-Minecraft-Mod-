@@ -33,7 +33,7 @@ public final class MeteorAbility implements Ability {
 	public static final String FLAG = "meteor";
 	private static final Map<UUID, int[]> ACTIVE = new HashMap<>(); // fase, idade
 	private static final Map<UUID, MeteorAbility> OWNERS = new HashMap<>();
-	private final double launch, fall, radius;
+	private final double launch, fall, radius, push;
 	private final float damage;
 
 	public MeteorAbility(JsonObject json) {
@@ -41,6 +41,7 @@ public final class MeteorAbility implements Ability {
 		this.fall = JsonParams.num(json, "fall", 2.6f);
 		this.radius = JsonParams.num(json, "radius", 4.5f);
 		this.damage = JsonParams.num(json, "damage", 12f);
+		this.push = JsonParams.num(json, "push", 0f);
 	}
 
 	public static void bootstrap() {
@@ -120,6 +121,13 @@ public final class MeteorAbility implements Ability {
 				double d = Math.sqrt(e.squaredDistanceTo(at));
 				if (d > radius) continue;
 				t.damage(p.getDamageSources().playerAttack(p), damage * (float) (1.0 - 0.5 * d / radius));
+				if (push > 0) {
+					Vec3d away = e.getPos().subtract(at).multiply(1, 0, 1);
+					away = away.lengthSquared() < 1e-4 ? new Vec3d(1, 0, 0) : away.normalize();
+					double f = push * (1.0 - 0.4 * d / radius);
+					t.setVelocity(away.x * f, 0.35 + 0.15 * f, away.z * f);
+					t.velocityModified = true;
+				}
 			}
 		}
 		ModNetworking.sendAround(new AnimPayload(p.getId(), "fx:meteor", (int) Math.round(radius * 10)), p);

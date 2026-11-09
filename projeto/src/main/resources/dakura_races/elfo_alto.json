@@ -1,0 +1,156 @@
+{
+	"id": "elfo_alto",
+	"order": 6,
+	"variant_of": "elfo",
+	"name": "Alto Elfo",
+	"epithet": "Sangue Real",
+	"icon": "dakura_origins:textures/race/elfo_alto.png",
+	"icon_size": [
+		89,
+		89
+	],
+	"palette": {
+		"ink": [
+			"#0E0D0A",
+			"#24211A",
+			"#4A4330",
+			"#8E7E4E",
+			"#D9C27A",
+			"#FFF6D6"
+		],
+		"sky": "#070604",
+		"glow": "#FFF4C9",
+		"text": "#123524",
+		"accent": "#9A7B22",
+		"muted": "#5E806B"
+	},
+	"description": "Elfos da linhagem real, criados entre ouro, honra e magia antiga. Mais fortes que os elfos comuns, carregam uma presença que protege os aliados por perto. Com um gesto, prendem o inimigo num laço de luz dourada ou erguem um selo que devolve cada golpe a quem o desferiu.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Mais forte e mais rápido que um elfo comum."
+		},
+		{
+			"type": "vantagem",
+			"text": "Educação real: ganha 50% mais experiência."
+		},
+		{
+			"type": "vantagem",
+			"text": "Encantar itens custa só 1 nível."
+		},
+		{
+			"type": "vantagem",
+			"text": "Passos leves: cai de alturas maiores sem se ferir."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Presença Real: jogadores por perto recebem regeneração e sorte."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Nobre e frágil: 9 corações."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Ouvidos sensíveis: explosões causam o dobro de dano."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Paladar real: recusa carne podre, olho de aranha e batata venenosa."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Luxo custa caro: a fome cai mais rápido."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.15
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.safe_fall_distance",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -2.0
+		},
+		{
+			"type": "dakura_origins:xp_multiplier",
+			"factor": 1.5
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "cheap_enchant"
+		},
+		{
+			"type": "dakura_origins:ally_aura",
+			"radius": 8,
+			"color": "#FFD45E",
+			"effects": [
+				{
+					"effect": "minecraft:regeneration",
+					"amplifier": 0
+				},
+				{
+					"effect": "minecraft:luck",
+					"amplifier": 0
+				}
+			]
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_explosion",
+			"multiplier": 2.0
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"forbidden": [
+				"minecraft:rotten_flesh",
+				"minecraft:spider_eye",
+				"minecraft:poisonous_potato"
+			],
+			"message": "dakura_origins.message.refined_palate"
+		},
+		{
+			"type": "dakura_origins:slow_hunger",
+			"factor": 1.35
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#FFD45E",
+			"when": "always"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:tether",
+			"name": "Laço Áureo",
+			"description": "Prende a criatura na mira num feixe de luz dourada por 3 segundos: arraste-a com o olhar, use a rodinha do mouse para aproximar ou afastar e solte para arremessá-la. Enquanto segura, anda devagar e não faz mais nada.",
+			"cooldown": 900,
+			"range": 20,
+			"duration": 60
+		},
+		{
+			"type": "dakura_origins:mirror_shield",
+			"name": "Égide Espelhada",
+			"description": "Estende a mão e abre um selo dourado que, por 3 segundos, absorve os golpes dos inimigos e os devolve como um espelho. Enquanto isso, anda devagar e não faz mais nada.",
+			"cooldown": 600,
+			"duration": 60,
+			"reflect": 1.0
+		}
+	]
+}

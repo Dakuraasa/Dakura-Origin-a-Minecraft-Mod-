@@ -15,7 +15,8 @@ public abstract class MobEntityMixin {
 	private void dakura$monsterTruce(LivingEntity target, CallbackInfo ci) {
 		if (target != null && (MonsterTrucePower.blocks((MobEntity) (Object) this, target)
 				|| target instanceof net.minecraft.entity.player.PlayerEntity p && (com.dakura.origins.power.types.StealthPower.hidden(p)
-						|| com.dakura.origins.power.types.ForestStealthPower.blocks((MobEntity) (Object) this, p))
+						|| com.dakura.origins.power.types.ForestStealthPower.blocks((MobEntity) (Object) this, p)
+						|| com.dakura.origins.power.ability.FoxFormAbility.isFox(p))
 				|| com.dakura.origins.power.ability.CharmAbility.blocks((MobEntity) (Object) this, target))) {
 			((MobEntity) (Object) this).setTarget(null);
 			ci.cancel();

@@ -1,0 +1,129 @@
+{
+	"id": "fada",
+	"order": 15,
+	"tag": "support",
+	"name": "Fada",
+	"epithet": "A Luz Entre as Folhas",
+	"icon": "dakura_origins:textures/race/fada.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#0B0E07",
+			"#1E2612",
+			"#3E5222",
+			"#7FA048",
+			"#D8EA9A",
+			"#FFFDE6"
+		],
+		"sky": "#060704",
+		"glow": "#FFFBE0",
+		"text": "#123524",
+		"accent": "#6B8E2E",
+		"muted": "#5E806B"
+	},
+	"description": "Pequenas, brilhantes e travessas, as fadas nasceram do orvalho das florestas. Voam com asas translúcidas, fazem as plantas crescerem e preferem ajudar a lutar: pousam no ombro dos amigos e espalham um pó encantado que cura e confunde os inimigos.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Voa de verdade com asas translúcidas (dois pulos para levantar voo)."
+		},
+		{
+			"type": "vantagem",
+			"text": "Minúscula: difícil de acertar."
+		},
+		{
+			"type": "vantagem",
+			"text": "Regenera aos poucos e faz as plantas por perto crescerem."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Muito frágil: só 6 corações."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Golpes fracos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "As asas não deixam vestir peitoral nem calças."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "fairy_wings"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fairy",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.scale",
+			"operation": "add_value",
+			"amount": -0.6
+		},
+		{
+			"type": "dakura_origins:flight",
+			"speed": 0.045,
+			"exhaustion": 0.01
+		},
+		{
+			"type": "dakura_origins:regeneration",
+			"interval": 60,
+			"amount": 1.0
+		},
+		{
+			"type": "dakura_origins:growth_aura",
+			"radius": 5,
+			"interval": 20,
+			"attempts": 4,
+			"chance": 0.25
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -8.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -1.5
+		},
+		{
+			"type": "dakura_origins:no_armor",
+			"slots": [
+				"chest",
+				"legs"
+			],
+			"message": "dakura_origins.message.fairy_armor"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#C8FFB0",
+			"when": "always"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:fairy_perch",
+			"name": "Pouso no Ombro",
+			"description": "Pousa no ombro do jogador mais próximo: enquanto estiver lá, ele regenera e ganha o dobro de experiência. Use de novo (ou agache) para sair.",
+			"cooldown": 40
+		},
+		{
+			"type": "dakura_origins:fairy_dust",
+			"name": "Pó Encantado",
+			"description": "Espalha uma chuva de brilho: jogadores por perto são curados, ganham um escudo e perdem efeitos ruins; monstros flutuam sem controle e ficam marcados.",
+			"cooldown": 600,
+			"radius": 6,
+			"heal": 6
+		}
+	]
+}

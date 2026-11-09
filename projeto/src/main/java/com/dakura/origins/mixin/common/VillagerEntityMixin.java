@@ -14,10 +14,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class VillagerEntityMixin {
 	@Inject(method = "prepareOffersFor", at = @At("TAIL"), require = 0)
 	private void dakura$demonDeal(PlayerEntity player, CallbackInfo ci) {
-		if (!MarkerPower.has(player, "villager_discount")) return;
 		VillagerEntity v = (VillagerEntity) (Object) this;
-		int rep = v.getReputation(player);
-		double frac = 0.5 * Math.max(0.0, Math.min(1.0, 1.0 + rep / 60.0));
+		if (MarkerPower.has(player, "villager_markup")) {
+			// Orc: os aldeões cobram mais caro
+			for (TradeOffer offer : v.getOffers()) offer.increaseSpecialPrice(Math.max(1, offer.getOriginalFirstBuyItem().getCount() / 4));
+			return;
+		}
+		double frac;
+		if (MarkerPower.has(player, "charm_discount")) {
+			// Succubus: o desconto vem do encanto, não da violência
+			frac = com.dakura.origins.power.ability.CharmAbility.charmedBy(v, player) ? 0.6 : 0.0;
+		} else {
+			if (!MarkerPower.has(player, "villager_discount")) return;
+			int rep = v.getReputation(player);
+			frac = 0.5 * Math.max(0.0, Math.min(1.0, 1.0 + rep / 60.0));
+		}
 		if (frac <= 0) return;
 		for (TradeOffer offer : v.getOffers()) {
 			int cut = (int) Math.floor(frac * offer.getOriginalFirstBuyItem().getCount());

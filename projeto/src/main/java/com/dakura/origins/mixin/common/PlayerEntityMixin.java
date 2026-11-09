@@ -27,6 +27,20 @@ public abstract class PlayerEntityMixin {
 		}
 	}
 
+	/** Experiência multiplicada (Humano, Alto Elfo, Lilac...) e em dobro para quem carrega uma Fada. */
+	@org.spongepowered.asm.mixin.injection.ModifyVariable(method = "addExperience", at = @At("HEAD"), argsOnly = true, require = 0)
+	private int dakura$xp(int amount) {
+		if (amount <= 0) return amount;
+		float f = com.dakura.origins.power.types.XpMultiplierPower.factor((PlayerEntity) (Object) this);
+		return f == 1f ? amount : Math.max(1, Math.round(amount * f));
+	}
+
+	/** Alto Elfo: encantar custa só 1 nível. */
+	@org.spongepowered.asm.mixin.injection.ModifyVariable(method = "applyEnchantmentCosts", at = @At("HEAD"), argsOnly = true, require = 0)
+	private int dakura$cheapEnchant(int levels) {
+		return levels > 1 && com.dakura.origins.power.types.MarkerPower.has((PlayerEntity) (Object) this, "cheap_enchant") ? 1 : levels;
+	}
+
 	@org.spongepowered.asm.mixin.Unique
 	private int dakura$foodBefore;
 	@org.spongepowered.asm.mixin.Unique

@@ -63,7 +63,7 @@ public class HuliCloneEntity extends PathAwareEntity {
 	public void setup(PlayerEntity owner, boolean snow, int lifeTicks) {
 		dataTracker.set(OWNER, Optional.of(owner.getUuid()));
 		dataTracker.set(SNOW, snow);
-		this.life = lifeTicks;
+		this.life = lifeTicks <= 0 ? -2 : lifeTicks; // 0 = sem limite de tempo
 		getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(owner.getMaxHealth());
 		setHealth(owner.getMaxHealth());
 		getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(owner.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
@@ -97,7 +97,7 @@ public class HuliCloneEntity extends PathAwareEntity {
 			return;
 		}
 		PlayerEntity owner = owner();
-		if (--life <= 0 || owner == null || !owner.isAlive()) {
+		if ((life >= 0 && --life <= 0) || owner == null || !owner.isAlive()) {
 			vanish();
 			return;
 		}

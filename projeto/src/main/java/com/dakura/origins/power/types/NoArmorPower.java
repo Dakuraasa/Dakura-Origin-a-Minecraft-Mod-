@@ -22,6 +22,7 @@ import net.minecraft.util.Formatting;
 public final class NoArmorPower implements RacePower {
 	private static final EquipmentSlot[] SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 	private final Text message;
+	private boolean heavyOnly;
 	private final java.util.EnumSet<EquipmentSlot> slots = java.util.EnumSet.noneOf(EquipmentSlot.class);
 
 	public NoArmorPower(JsonObject json) {
@@ -37,11 +38,19 @@ public final class NoArmorPower implements RacePower {
 			}
 		}
 		if (slots.isEmpty()) slots.addAll(java.util.List.of(SLOTS));
+		this.heavyOnly = JsonParams.bool(json, "heavy_only", false);
 	}
 
 	@Override
 	public Text useRejection(PlayerEntity player, ItemStack stack) {
-		return stack.getItem() instanceof ArmorItem a && slots.contains(a.getSlotType()) ? message : null;
+		return stack.getItem() instanceof ArmorItem a && slots.contains(a.getSlotType()) && (!heavyOnly || heavy(a)) ? message : null;
+	}
+
+	/** Armaduras pesadas: tudo que não for couro, cota de malha, ouro ou casco de tartaruga. */
+	private static boolean heavy(ArmorItem a) {
+		var m = a.getMaterial();
+		return m != net.minecraft.item.ArmorMaterials.LEATHER && m != net.minecraft.item.ArmorMaterials.CHAIN
+				&& m != net.minecraft.item.ArmorMaterials.GOLD && m != net.minecraft.item.ArmorMaterials.TURTLE;
 	}
 
 	@Override
@@ -59,7 +68,7 @@ public final class NoArmorPower implements RacePower {
 		boolean removed = false;
 		for (EquipmentSlot slot : slots) {
 			ItemStack stack = player.getEquippedStack(slot);
-			if (!stack.isEmpty() && stack.getItem() instanceof ArmorItem) {
+			if (!stack.isEmpty() && stack.getItem() instanceof ArmorItem a && (!heavyOnly || heavy(a))) {
 				player.equipStack(slot, ItemStack.EMPTY);
 				player.getInventory().offerOrDrop(stack);
 				removed = true;

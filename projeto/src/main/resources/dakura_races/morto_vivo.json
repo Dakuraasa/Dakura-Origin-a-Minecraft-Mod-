@@ -43,6 +43,10 @@
 			"text": "Matar monstros fortalece seus zumbis, em 4 níveis (no lugar da experiência)."
 		},
 		{
+			"type": "vantagem",
+			"text": "Corpo sem vida: imune a veneno e fome."
+		},
+		{
 			"type": "desvantagem",
 			"text": "O fogo causa o dobro de dano."
 		},
@@ -53,6 +57,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Poções e poderes de cura o machucam."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O sol o deixa lento."
 		}
 	],
 	"powers": [
@@ -86,9 +94,9 @@
 		{
 			"type": "dakura_origins:maturity",
 			"thresholds": [
-				150,
 				450,
-				1000
+				1350,
+				3000
 			],
 			"points_per_health": 0.5,
 			"only_monsters": true,
@@ -100,6 +108,25 @@
 			],
 			"grow_message": "dakura_origins.message.undead_grow",
 			"style": "undead"
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"effects": [
+				"minecraft:poison",
+				"minecraft:hunger"
+			]
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.1,
+			"when": "day"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#7CFF6B",
+			"when": "night"
 		}
 	],
 	"abilities": [

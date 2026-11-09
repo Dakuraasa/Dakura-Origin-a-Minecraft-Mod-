@@ -1,0 +1,139 @@
+{
+	"id": "vastaya_coelho",
+	"order": 13,
+	"tag": "combat",
+	"name": "Vastaya Coelho",
+	"epithet": "A Lebre da Lua Cheia",
+	"icon": "dakura_origins:textures/race/vastaya_coelho.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#0C0B10",
+			"#1E1C2A",
+			"#3A3858",
+			"#8C88C8",
+			"#DCD8FF",
+			"#FFFFFF"
+		],
+		"sky": "#06050A",
+		"glow": "#F4F2FF",
+		"text": "#123524",
+		"accent": "#E879A8",
+		"muted": "#5E806B"
+	},
+	"description": "Uma vastaya-coelho de orelhas longas e pernas que parecem molas. Não usa armas nem magia: luta só com as mãos e os pés, rápida demais para ser acompanhada. Cada golpe seguido a deixa mais veloz, até que um chute em meia-lua manda o inimigo para o céu. Dizem que treinou sob a lua cheia até conseguir saltar até ela.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Pernas de mola: muito rápida e pula altíssimo, e cai de grandes alturas sem se ferir."
+		},
+		{
+			"type": "vantagem",
+			"text": "Mestra da luta: +4 de dano e ataques bem mais rápidos."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Frenesi da Lebre: cada golpe seguido acumula pressa e velocidade; no sexto, um Chute Lunar arremessa o inimigo."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Não come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Projéteis causam 50% mais dano."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Corpo pequeno: só 9 corações."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "bunny_ears"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.3
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_speed",
+			"operation": "add_value",
+			"amount": 1.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.jump_strength",
+			"operation": "add_value",
+			"amount": 0.18
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.safe_fall_distance",
+			"operation": "add_value",
+			"amount": 10.0
+		},
+		{
+			"type": "dakura_origins:rabbit_frenzy",
+			"max": 5,
+			"finisher": 6
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"forbidden": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.no_meat"
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"multiplier": 1.5,
+			"damage_tag": "minecraft:is_projectile"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -2.0
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:rabbit_rush",
+			"name": "Chuva de Chutes",
+			"cooldown": 300,
+			"range": 12,
+			"kicks": 8,
+			"damage": 2.5,
+			"finisher": 8,
+			"description": "Salta no alvo da mira e solta 8 chutes no ar, cada um com um estalo de estrela, fechando com uma meia-lua que manda o alvo para o alto."
+		},
+		{
+			"type": "dakura_origins:moon_leap",
+			"name": "Salto Lunar",
+			"cooldown": 400,
+			"max_charge": 40,
+			"damage": 12,
+			"radius": 6,
+			"description": "Segure para agachar e carregar (a lua cresce aos seus pés); solte para um salto gigantesco. Ao cair, uma cratera de luar explode em volta, com dano e arremesso conforme a carga."
+		}
+	],
+	"variant_of": "vastaya"
+}

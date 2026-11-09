@@ -1,0 +1,140 @@
+{
+	"id": "orc",
+	"order": 14,
+	"tag": "combat",
+	"name": "Orc",
+	"epithet": "O Punho da Horda",
+	"icon": "dakura_origins:textures/race/orc.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#0B0D07",
+			"#1C2312",
+			"#36452A",
+			"#62784A",
+			"#A9BD82",
+			"#EEF4DC"
+		],
+		"sky": "#050604",
+		"glow": "#F0F6DD",
+		"text": "#123524",
+		"accent": "#4E6B2E",
+		"muted": "#5E806B"
+	},
+	"description": "Guerreiros da horda, de pele verde e presas à mostra, criados entre cicatrizes e fogueiras de guerra. Não são sutis nem espertos, mas ninguém aguenta uma investida deles. Quando um orc ruge, os aliados se erguem e os inimigos tremem.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Brutamontes: 13 corações e golpes pesados."
+		},
+		{
+			"type": "vantagem",
+			"text": "Couro grosso: armadura natural e quase não é empurrado."
+		},
+		{
+			"type": "vantagem",
+			"text": "Estômago de ferro: imune a veneno e fome."
+		},
+		{
+			"type": "vantagem",
+			"text": "Um pouco maior que um humano."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Mente simples: ganha 25% menos experiência."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Malvisto: os aldeões cobram mais caro."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Pesado: um pouco mais lento."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "orc_tusks"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 6.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.knockback_resistance",
+			"operation": "add_value",
+			"amount": 0.3
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.scale",
+			"operation": "add_value",
+			"amount": 0.15
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"effects": [
+				"minecraft:poison",
+				"minecraft:hunger"
+			]
+		},
+		{
+			"type": "dakura_origins:xp_multiplier",
+			"factor": 0.75
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "villager_markup"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.05
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#FF6A2A",
+			"when": "low_health"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:war_cry",
+			"name": "Grito de Guerra",
+			"description": "Um rugido que estremece o chão: aliados por perto ganham força e resistência; monstros são empurrados, enfraquecidos e ficam lentos.",
+			"cooldown": 900,
+			"radius": 10,
+			"duration": 160
+		},
+		{
+			"type": "dakura_origins:brutal_charge",
+			"name": "Investida Brutal",
+			"description": "Dispara em linha reta atropelando e arremessando tudo no caminho, e termina com uma pancada no chão.",
+			"cooldown": 300,
+			"ticks": 14,
+			"speed": 0.95,
+			"damage": 7,
+			"slam": 4
+		}
+	]
+}

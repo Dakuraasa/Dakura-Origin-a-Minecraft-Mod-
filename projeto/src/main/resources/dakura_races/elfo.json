@@ -39,8 +39,12 @@
 			"text": "Longevo: a fome cai na metade do ritmo."
 		},
 		{
+			"type": "vantagem",
+			"text": "Olhos élficos: visão noturna."
+		},
+		{
 			"type": "desvantagem",
-			"text": "Corpo frágil: 9 corações e golpes mais fracos."
+			"text": "Corpo frágil: 9 corações."
 		},
 		{
 			"type": "desvantagem",
@@ -49,6 +53,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Paladar refinado: recusa carne podre, olho de aranha e batata venenosa."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O calor do Nether o enfraquece."
 		}
 	],
 	"powers": [
@@ -71,12 +79,6 @@
 			"amount": -2.0
 		},
 		{
-			"type": "dakura_origins:attribute",
-			"attribute": "minecraft:generic.attack_damage",
-			"operation": "add_value",
-			"amount": -0.5
-		},
-		{
 			"type": "dakura_origins:archery",
 			"multiplier": 1.5
 		},
@@ -97,6 +99,17 @@
 				"minecraft:poisonous_potato"
 			],
 			"message": "dakura_origins.message.elf_food"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -1.5,
+			"when": "nether"
 		}
 	],
 	"abilities": [

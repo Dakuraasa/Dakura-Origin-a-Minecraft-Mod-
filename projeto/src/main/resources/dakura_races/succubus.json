@@ -1,0 +1,201 @@
+{
+	"id": "succubus",
+	"order": 12,
+	"variant_of": "demonio",
+	"name": "Succubus",
+	"epithet": "O Encanto que Cobra Tudo",
+	"icon": "dakura_origins:textures/race/succubus.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#10050C",
+			"#2A0A1E",
+			"#561539",
+			"#A3285F",
+			"#F07AAE",
+			"#FFE0EE"
+		],
+		"sky": "#080306",
+		"glow": "#FFE6F1",
+		"text": "#123524",
+		"accent": "#A3285F",
+		"muted": "#5E806B"
+	},
+	"description": "A face mais doce das trevas. Tem a força de um demônio, mas prefere vencer pelo charme: um beijo que rouba vida, armadura e lembranças, e um disfarce perfeito na pele de qualquer um. À luz do dia, porém, o encanto se apaga e os chifres somem.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Mesma força, velocidade e resistências de um Demônio."
+		},
+		{
+			"type": "vantagem",
+			"text": "O desconto com aldeões vem do encanto: aldeões encantados fazem preços baixíssimos."
+		},
+		{
+			"type": "vantagem",
+			"text": "Os monstros não o atacam, a menos que ele ataque primeiro."
+		},
+		{
+			"type": "vantagem",
+			"text": "Quanto mais perto da morte, mais regenera."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune ao fogo."
+		},
+		{
+			"type": "vantagem",
+			"text": "Olhos das trevas: visão noturna."
+		},
+		{
+			"type": "desvantagem",
+			"text": "De dia perde toda a força e os chifres."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Armas encantadas causam muito mais dano nele, e ele não pode usar nem vestir nada encantado."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Veneno, fome e decomposição o machucam mais."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "A água o enfraquece."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "succubus_horns"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "charm_discount"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.1
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"amount": 2.0,
+			"when": "nether"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.armor",
+			"amount": 3.0,
+			"when": "nether"
+		},
+		{
+			"type": "dakura_origins:monster_truce"
+		},
+		{
+			"type": "dakura_origins:desperate_regeneration",
+			"max": 1.5,
+			"interval": 20
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:enchanted_weakness",
+			"multiplier": 1.75
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_types": [
+				"minecraft:magic",
+				"minecraft:wither",
+				"minecraft:starve"
+			],
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"allowed": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.meat_only"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fireproof",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -2.0,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -4.0,
+			"when": "day"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.1,
+			"when": "day"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#FF5FA2",
+			"when": "night"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:drain_kiss",
+			"name": "Beijo Drenante",
+			"description": "Prende o alvo num beijo que drena tudo: vida (que você absorve), armadura e experiência. Ao fim, ele fica encantado por você.",
+			"cooldown": 400,
+			"range": 4.5,
+			"duration": 50,
+			"pulses": 5,
+			"damage": 2.0,
+			"armor": 2.0,
+			"armor_ticks": 600
+		},
+		{
+			"type": "dakura_origins:mimic",
+			"name": "Metamorfose",
+			"description": "Copia a aparência de um jogador na mira e rouba fisicamente os atributos dele (vida, armadura vestida, força, tamanho...), mas não as habilidades. Dura 1 minuto; use de novo para desfazer.",
+			"cooldown": 100,
+			"range": 24,
+			"duration": 1200
+		}
+	]
+}

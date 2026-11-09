@@ -39,6 +39,10 @@
 			"text": "Regeneração acelerada das próprias feridas."
 		},
 		{
+			"type": "vantagem",
+			"text": "O sangue não apodrece: imune a veneno."
+		},
+		{
 			"type": "desvantagem",
 			"text": "A luz do sol queima a carne. Chuva, água e sombra protegem."
 		},
@@ -49,6 +53,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Com a fome zerada, perde todos os dons da raça."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O fogo a consome mais rápido: 50% a mais de dano."
 		}
 	],
 	"powers": [
@@ -89,6 +97,22 @@
 			"type": "dakura_origins:restricted_diet",
 			"allowed": [],
 			"message": "dakura_origins.message.blood_only"
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"effects": [
+				"minecraft:poison"
+			]
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fire",
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#B3122E",
+			"when": "night"
 		}
 	],
 	"abilities": [
@@ -98,11 +122,11 @@
 			"description": "Agarra a presa à sua frente num abraço predatório e bebe sua vida por 1,5 s, curando-se e saciando a fome. Sangue de monstro é podre: envenena.",
 			"cooldown": 160,
 			"range": 3.0,
-			"duration": 30,
-			"hits": 5,
-			"damage_per_hit": 1.2,
-			"heal_ratio": 1.0,
-			"food_ratio": 1.0,
+			"duration": 40,
+			"hits": 7,
+			"damage_per_hit": 1.8,
+			"heal_ratio": 1.3,
+			"food_ratio": 1.2,
 			"saturation_ratio": 0.4,
 			"monster_effects": [
 				{

@@ -1,0 +1,120 @@
+{
+	"id": "sereia",
+	"order": 21,
+	"tag": "support",
+	"name": "Sereia",
+	"epithet": "A Voz das Marés",
+	"icon": "dakura_origins:textures/race/sereia.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#04101A",
+			"#0A2638",
+			"#14506E",
+			"#2E94B8",
+			"#9BE6F2",
+			"#F0FCFF"
+		],
+		"sky": "#020A10",
+		"glow": "#E8FBFF",
+		"text": "#123524",
+		"accent": "#2A8DB3",
+		"muted": "#5E806B"
+	},
+	"description": "Filha do mar profundo, com escamas de pérola e uma voz que acalma tempestades. Em terra anda como qualquer um, mas basta tocar a água para as pernas virarem uma cauda reluzente. Seu canto enfeitiça monstros e protege os amigos, e quando se irrita, o próprio oceano se ergue numa onda gigante para obedecê-la.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Respira debaixo d'água e nada como um golfinho: na água ganha a graça do golfinho e o poder do conduíte."
+		},
+		{
+			"type": "vantagem",
+			"text": "Na água, golpes muito mais fortes."
+		},
+		{
+			"type": "vantagem",
+			"text": "Brilho do mar: uma aura azul à noite."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Cauda de Sereia: dentro d'água as pernas viram uma cauda de escamas."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Escamas secas: fora da água e sem chuva por 90 s, fica lenta e fraca até se molhar."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só 9 corações."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O fogo resseca as escamas: 50% mais dano de fogo."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "mermaid_tail"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:aquatic",
+			"dry_seconds": 90
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_drowning"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 3.0,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -2.0
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"multiplier": 1.5,
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#6FE3FF",
+			"when": "night"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:tidal_song",
+			"name": "Canto das Marés",
+			"cooldown": 700,
+			"radius": 10,
+			"duration": 160,
+			"heal": 1,
+			"description": "Canta uma melodia hipnótica em ondas de notas e bolhas. Monstros por perto esquecem o alvo e são puxados devagar, encantados. Aliados se curam e ganham respiração aquática."
+		},
+		{
+			"type": "dakura_origins:tsunami",
+			"name": "Maremoto",
+			"cooldown": 500,
+			"length": 18,
+			"width": 7,
+			"damage": 7,
+			"speed": 0.7,
+			"description": "Ergue uma onda gigante e enrolada que avança pela frente, arrastando e afogando os inimigos e apagando o fogo. A Sereia surfa na crista."
+		}
+	]
+}

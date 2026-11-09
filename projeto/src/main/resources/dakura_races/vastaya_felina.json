@@ -38,8 +38,16 @@
 			"text": "Nas florestas: passos silenciosos, sem nome sobre a cabeça, fora dos radares, e os monstros não o atacam a menos que ataque primeiro."
 		},
 		{
+			"type": "vantagem",
+			"text": "Salto selvagem: pula mais alto."
+		},
+		{
 			"type": "neutro",
 			"text": "Orelhas de gato."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Longe da natureza: mais fraca no Nether."
 		}
 	],
 	"powers": [
@@ -81,6 +89,19 @@
 		{
 			"type": "dakura_origins:fox_friend",
 			"follow": false
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.jump_strength",
+			"operation": "add_value",
+			"amount": 0.08
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -1.5,
+			"when": "nether"
 		}
 	],
 	"abilities": [

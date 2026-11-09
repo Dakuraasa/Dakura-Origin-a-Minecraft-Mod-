@@ -43,6 +43,10 @@
 			"text": "Força bruta superior. Vida, couraça, força e o dano das habilidades aumentam a cada estágio."
 		},
 		{
+			"type": "vantagem",
+			"text": "Coração de fornalha: imune a lentidão."
+		},
+		{
 			"type": "desvantagem",
 			"text": "Só come carne."
 		},
@@ -57,14 +61,18 @@
 		{
 			"type": "desvantagem",
 			"text": "Não usa experiência: a barra mostra sua maturidade."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Corpo pesado: bem mais lento dentro da água."
 		}
 	],
 	"powers": [
 		{
 			"type": "dakura_origins:maturity",
 			"thresholds": [
-				500,
-				1500
+				1500,
+				4500
 			],
 			"points_per_health": 0.5,
 			"only_monsters": true,
@@ -183,6 +191,24 @@
 			"clearance": 6,
 			"slowness": 0,
 			"exhaustion_per_second": 0.25
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fireproof",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"effects": [
+				"minecraft:slowness"
+			]
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.35,
+			"when": "water"
 		}
 	],
 	"abilities": [
@@ -190,13 +216,13 @@
 			"type": "dakura_origins:fireball",
 			"name": "Bola de Fogo",
 			"description": "Dispara uma esfera de fogo dracônico que explode com a força de uma TNT e incendeia o local.",
-			"cooldown": 100,
+			"cooldown": 200,
 			"speed": 1.6,
 			"life": 50,
 			"explosion_power": 4.0,
 			"block_power": 1.5,
-			"fire_count": 10,
-			"fire_radius": 3,
+			"fire_count": 0,
+			"fire_radius": 0,
 			"maturity_damage": [
 				1.0,
 				1.4,

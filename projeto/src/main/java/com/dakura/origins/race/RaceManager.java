@@ -137,6 +137,14 @@ public final class RaceManager {
 	/** raw = slot | modo << 8 | ticks segurados << 12 (modo 0 = apertou, 1 = começou a segurar, 2 = soltou). */
 	public static void useAbility(ServerPlayerEntity player, int raw) {
 		int slot = raw & 0xFF, mode = (raw >> 8) & 0xF, held = raw >>> 12;
+		if (mode == 3 || mode == 4 || mode == 5) {
+			var r = RaceAccess.getRace(player);
+			if (r.isEmpty() || slot >= r.get().abilities().size() || r.get().abilities().get(slot).ability() == null) return;
+			if (mode == 3) r.get().abilities().get(slot).ability().scroll(player, held - 8);
+			else if (mode == 4) r.get().abilities().get(slot).ability().attackKey(player);
+			else r.get().abilities().get(slot).ability().choose(player, held - 8);
+			return;
+		}
 		if (!player.isAlive() || (player.isSpectator() && !com.dakura.origins.power.ability.PhaseAbility.isPhased(player))) return;
 		Optional<Race> race = getRace(player);
 		if (race.isEmpty() || slot < 0 || slot >= race.get().abilities().size()) return;
@@ -160,6 +168,12 @@ public final class RaceManager {
 			used = false;
 		} else if (mode == 2) used = info.ability().release(player, held);
 		else used = info.ability().activate(player);
+		if (used) {
+			Race rc = RaceAccess.getRace(player).orElse(null);
+			int glow = rc == null ? 0xFFFFFF : rc.palette().glow() & 0xFFFFFF;
+			com.dakura.origins.network.ModNetworking.sendAround(
+					new com.dakura.origins.network.AnimPayload(player.getId(), "fx:flourish", glow), player);
+		}
 		if (used && slot < ready.length) {
 			ready[slot] = serverTicks + info.cooldownTicks();
 			if (info.cooldownTicks() > 0) {

@@ -28,4 +28,13 @@ public interface Ability {
 	default boolean release(ServerPlayerEntity player, int heldTicks) {
 		return activate(player);
 	}
+
+	/** Rodinha do mouse enquanto a habilidade está ativa (delta = +1 / -1). Ignora a recarga. */
+	default void scroll(ServerPlayerEntity player, int delta) {}
+
+	/** Botão de ataque apertado enquanto esta habilidade "segura" o ataque (ex.: forma de raposa). Ignora a recarga. */
+	default void attackKey(ServerPlayerEntity player) {}
+
+	/** Escolha feita numa tela da habilidade (ex.: Altar Celestial do Serafim). Ignora a recarga. */
+	default void choose(ServerPlayerEntity player, int option) {}
 }

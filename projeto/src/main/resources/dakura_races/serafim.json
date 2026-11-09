@@ -1,0 +1,130 @@
+{
+	"id": "serafim",
+	"order": 19,
+	"tag": "support",
+	"name": "Serafim",
+	"epithet": "O Coro das Seis Asas",
+	"icon": "dakura_origins:textures/race/serafim.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#0F0E0A",
+			"#26231A",
+			"#4D4632",
+			"#9C8D5E",
+			"#EAD9A2",
+			"#FFFDF4"
+		],
+		"sky": "#08070A",
+		"glow": "#FFFFFF",
+		"text": "#123524",
+		"accent": "#B08A2E",
+		"muted": "#5E806B"
+	},
+	"description": "Um anjo da mais alta ordem, envolto em luz branca, com seis asas que se fecham sobre o corpo em descanso e se abrem como um coro quando ele voa. Não ergue a mão contra criatura alguma, e nenhuma criatura ousa feri-lo. Seu dom é cuidar: cura, protege e abençoa as armas e ferramentas dos amigos num altar celestial.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Voa com seis asas: dobradas no chão, abertas como um coro no ar."
+		},
+		{
+			"type": "vantagem",
+			"text": "Nenhum mob o ataca."
+		},
+		{
+			"type": "vantagem",
+			"text": "Aura sagrada: jogadores por perto regeneram e resistem a dano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune a fogo e a quedas."
+		},
+		{
+			"type": "vantagem",
+			"text": "Luz própria: visão noturna."
+		},
+		{
+			"type": "neutro",
+			"text": "Completamente pacífico: não ataca nem fere nenhuma criatura."
+		},
+		{
+			"type": "neutro",
+			"text": "Aura branca permanente e auréola de luz."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "seraph_wings"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#FFFFFF",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "seraph",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:pacifist"
+		},
+		{
+			"type": "dakura_origins:monster_truce"
+		},
+		{
+			"type": "dakura_origins:flight",
+			"speed": 0.04,
+			"exhaustion": 0.005
+		},
+		{
+			"type": "dakura_origins:ally_aura",
+			"radius": 10,
+			"color": "#FFF8E0",
+			"effects": [
+				{
+					"effect": "minecraft:regeneration",
+					"amplifier": 0
+				},
+				{
+					"effect": "minecraft:resistance",
+					"amplifier": 0
+				}
+			]
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:seraph_blessing",
+			"name": "Coro Celestial",
+			"cooldown": 600,
+			"radius": 12,
+			"heal": 10,
+			"duration": 200,
+			"description": "Junta as mãos em prece e uma coluna de luz cai sobre os aliados: cura grande, remove efeitos ruins e dá resistência e regeneração."
+		},
+		{
+			"type": "dakura_origins:celestial_altar",
+			"name": "Altar Celestial",
+			"cooldown": 3600,
+			"options": 3,
+			"description": "Ergue o item da mão diante de um altar alado: escolha uma entre três bênçãos sorteadas (encantamentos aleatórios, em níveis aleatórios). Demora 3 minutos para voltar."
+		}
+	]
+}

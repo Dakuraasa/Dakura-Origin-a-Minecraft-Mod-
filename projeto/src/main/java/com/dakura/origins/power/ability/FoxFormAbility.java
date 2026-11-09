@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -62,6 +63,41 @@ public final class FoxFormAbility implements Ability {
 		UseItemCallback.EVENT.register((p, w, h) -> isFox(p)
 				? TypedActionResult.fail(p.getStackInHand(h)) : TypedActionResult.pass(p.getStackInHand(h)));
 		UseBlockCallback.EVENT.register((p, w, h, hit) -> isFox(p) ? ActionResult.FAIL : ActionResult.PASS);
+		net.fabricmc.fabric.api.event.player.AttackEntityCallback.EVENT.register((p, w, h, e, hit) -> isFox(p) ? ActionResult.FAIL : ActionResult.PASS);
+		net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents.ALLOW_DAMAGE.register((e, src, amt) ->
+				!(BURSTING != null && e == BURSTING));
+	}
+
+	private static Entity BURSTING;
+
+	/** Na forma de raposa, o botão de ataque vira uma explosão de fogo (ou gelo) que quebra blocos e devolve a forma humana. */
+	@Override
+	public void attackKey(ServerPlayerEntity p) {
+		if (!EntityFlags.has(p, FLAG)) return;
+		var w = p.getServerWorld();
+		double x = p.getX(), y = p.getY() + 0.4, z = p.getZ();
+		BURSTING = p;
+		try {
+			w.createExplosion(p, x, y, z, 2.6f, !snow, net.minecraft.world.World.ExplosionSourceType.TNT);
+		} finally {
+			BURSTING = null;
+		}
+		if (snow) {
+			for (Entity e : w.getOtherEntities(p, p.getBoundingBox().expand(4.5))) {
+				if (e instanceof net.minecraft.entity.LivingEntity le) {
+					le.setFrozenTicks(Math.max(le.getFrozenTicks(), 260));
+					le.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 80, 2));
+				}
+			}
+			w.spawnParticles(net.minecraft.particle.ParticleTypes.SNOWFLAKE, x, y, z, 80, 1.8, 0.9, 1.8, 0.15);
+			w.playSound(null, x, y, z, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 1.0f, 0.6f);
+			w.playSound(null, x, y, z, SoundEvents.ENTITY_PLAYER_HURT_FREEZE, SoundCategory.PLAYERS, 1.0f, 0.8f);
+		} else {
+			w.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, x, y, z, 60, 1.6, 0.8, 1.6, 0.12);
+		}
+		ModNetworking.sendAround(new AnimPayload(p.getId(), "fx:fox_burst", snow ? 1 : 0), p);
+		Box standing = new Box(p.getX() - 0.3, p.getY(), p.getZ() - 0.3, p.getX() + 0.3, p.getY() + p.getScale() * 1.8, p.getZ() + 0.3);
+		if (p.getWorld().isSpaceEmpty(p, standing)) setForm(p, false);
 	}
 
 	@Override
@@ -94,7 +130,6 @@ public final class FoxFormAbility implements Ability {
 			if (r != null && r.isAmbient()) p.removeStatusEffect(StatusEffects.REGENERATION);
 		}
 		p.calculateDimensions();
-		ModNetworking.sendAround(new AnimPayload(p.getId(), "fx:fox", (snow ? 2 : 0) + (on ? 1 : 0)), p);
 		p.getWorld().playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.ENTITY_ILLUSIONER_MIRROR_MOVE, SoundCategory.PLAYERS, 0.45f, on ? 1.2f : 0.9f);
 		p.getWorld().playSound(null, p.getX(), p.getY(), p.getZ(), on ? SoundEvents.ENTITY_FOX_AMBIENT : SoundEvents.ENTITY_FOX_SNIFF,
 				SoundCategory.PLAYERS, 0.8f, 1.1f);

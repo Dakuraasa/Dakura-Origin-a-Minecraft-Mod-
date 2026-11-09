@@ -1,0 +1,129 @@
+{
+	"id": "oni",
+	"order": 20,
+	"tag": "combat",
+	"name": "Oni",
+	"epithet": "O Punho da Lua Superior",
+	"icon": "dakura_origins:textures/race/oni.png",
+	"icon_size": [
+		96,
+		96
+	],
+	"palette": {
+		"ink": [
+			"#0E0508",
+			"#250A12",
+			"#4E1424",
+			"#9C2A44",
+			"#F07A92",
+			"#FFE2E8"
+		],
+		"sky": "#070204",
+		"glow": "#FFE4EA",
+		"text": "#123524",
+		"accent": "#B0213E",
+		"muted": "#5E806B"
+	},
+	"description": "Um demônio guerreiro que trocou a humanidade por força e só vive para lutar. Seu corpo se regenera de qualquer ferida e seus reflexos fazem os golpes passarem de raspão. Quando pisa no chão e abre o pentagrama da sua técnica de sangue, sente a presença de cada inimigo ao redor e se torna quase impossível de parar. Mas o sol, inimigo de todo oni, ainda queima sua pele.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Corpo de oni: força e velocidade sobre-humanas e 12 corações."
+		},
+		{
+			"type": "vantagem",
+			"text": "Regeneração demoníaca constante."
+		},
+		{
+			"type": "vantagem",
+			"text": "Olhos de demônio: visão noturna."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Desvio: chance de desviar dos golpes deslizando para o lado (muito maior durante a técnica)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O sol o queima."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Glicínia: veneno e magia o ferem o dobro."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "oni_horns"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.15
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:regeneration",
+			"interval": 20,
+			"amount": 1.0
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:dodge",
+			"chance": 0.15,
+			"boosted": 0.45,
+			"boost_flag": "bloodlust"
+		},
+		{
+			"type": "dakura_origins:sunlight_damage",
+			"interval": 20,
+			"damage": 1.5,
+			"fire_seconds": 3,
+			"helmet_protects": false
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"allowed": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.meat_only"
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_types": [
+				"minecraft:magic",
+				"minecraft:indirect_magic"
+			],
+			"multiplier": 2.0
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:compass_needle",
+			"name": "Técnica de Sangue: Agulha da Bússola",
+			"cooldown": 4800,
+			"duration": 300,
+			"radius": 48,
+			"description": "Ergue o joelho e pisa: um pentagrama vermelho brilhante se abre sob seus pés. Por 15 segundos ganha força, velocidade, resistência e regeneração absurdas, a chance de desvio dispara e ele sente a posição de todos os inimigos e jogadores em volta (menos os protegidos). Demora 4 minutos para voltar."
+		}
+	]
+}

@@ -27,17 +27,31 @@
 	"description": "Antes das escamas, das asas e dos pactos com a noite, havia apenas o Humano. Nascido do barro e da teimosia, ele não carrega bênção nem maldição: apenas as próprias mãos, uma picareta e a vontade de moldar o mundo bloco a bloco. Onde outras raças dependem do sangue, o Humano depende da escolha. É o ponto de partida de toda lenda, o andarilho que acende a primeira tocha na escuridão e, contra todas as probabilidades, sobrevive à primeira noite.",
 	"traits": [
 		{
-			"type": "neutro",
-			"text": "Nenhuma vantagem, nenhuma desvantagem: você é exatamente como o mundo te criou."
+			"type": "vantagem",
+			"text": "Adaptável: aprende rápido e ganha 20% mais experiência."
 		},
 		{
-			"type": "neutro",
-			"text": "Livre de fraquezas: nenhum bioma, alimento ou criatura te trata diferente."
+			"type": "desvantagem",
+			"text": "Sem dom sobrenatural: magia e veneno ferem um pouco mais."
 		},
 		{
 			"type": "neutro",
 			"text": "A experiência clássica do Minecraft, sem atalhos e sem amarras."
 		}
 	],
-	"abilities": []
+	"abilities": [],
+	"powers": [
+		{
+			"type": "dakura_origins:xp_multiplier",
+			"factor": 1.2
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_types": [
+				"minecraft:magic",
+				"minecraft:indirect_magic"
+			],
+			"multiplier": 1.25
+		}
+	]
 }

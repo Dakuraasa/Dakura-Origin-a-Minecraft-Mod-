@@ -47,6 +47,10 @@
 			"text": "A lã protege do frio e do calor: imune a congelar, e o fogo fere menos."
 		},
 		{
+			"type": "vantagem",
+			"text": "Filha das alturas: mais forte acima da altura 100."
+		},
+		{
 			"type": "desvantagem",
 			"text": "Fica lento em desertos."
 		},
@@ -57,6 +61,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Só consegue dormir no alto (acima da altura 100)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Lã encharcada: lenta dentro da água."
 		}
 	],
 	"powers": [
@@ -131,6 +139,20 @@
 		{
 			"type": "dakura_origins:sleep_altitude",
 			"min_y": 100
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0,
+			"when": "high"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.3,
+			"when": "water"
 		}
 	],
 	"abilities": [
@@ -150,7 +172,7 @@
 			"description": "Investe com os chifres e arremessa para bem longe o primeiro alvo à frente.",
 			"cooldown": 140,
 			"range": 3.5,
-			"damage": 4,
+			"damage": 2,
 			"knockback": 2.6,
 			"lunge": 0.7
 		}

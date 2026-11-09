@@ -47,6 +47,10 @@
 			"text": "Imune ao fogo."
 		},
 		{
+			"type": "vantagem",
+			"text": "Olhos das trevas: visão noturna."
+		},
+		{
 			"type": "desvantagem",
 			"text": "Armas encantadas causam muito mais dano nele, e ele não pode usar nem vestir nada encantado."
 		},
@@ -57,6 +61,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Só come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "A água o enfraquece."
 		}
 	],
 	"powers": [
@@ -123,6 +131,27 @@
 				"#minecraft:meat"
 			],
 			"message": "dakura_origins.message.meat_only"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fireproof",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -2.0,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#FF2A3A",
+			"when": "low_health"
 		}
 	],
 	"abilities": [

@@ -116,10 +116,52 @@ A experiência clássica do Minecraft, sem vantagens nem fraquezas.
 - **Encanto:** o alvo passa a te seguir.
 - **Metamorfose:** vira a última criatura que matou (segure para liberar).
 
-### Vastaya (ave, felina e cão)
+### Vastaya (ave, felina, cão e coelho)
 - **Vantagens:** mais rápida e forte, quedas leves, os animais não fogem; nas florestas é silenciosa, sem nome, fora dos radares e ignorada pelos monstros.
 - **Sentidos Aguçados:** radar de monstros e jogadores.
 - **Ave:** Rajada de Penas · **Felina:** Corrida Felina · **Cão:** Caçada.
+
+### Alto Elfo e Elfo Noturno (variantes do Elfo)
+- **Alto Elfo:** mais forte e rápido, +50% de experiência, encantar custa 1 nível, Presença Real (aliados regeneram). **Laço Áureo** prende e arremessa o alvo; **Égide Espelhada** devolve os golpes.
+- **Elfo Noturno:** visão noturna, mais forte à noite, passos silenciosos. **Orbe Sombria** cega; **Passo Sombrio** teleporta pelas sombras.
+
+### Succubus (variante do Demônio)
+- Força de demônio, kit de charme: **Beijo Drenante** (vida, armadura e experiência) e **Metamorfose** (copia a aparência e os atributos de um jogador). De dia perde a força e os chifres.
+
+### Orc
+- 13 corações, couro grosso, imune a veneno e fome. **Grito de Guerra** e **Investida Brutal**.
+
+### Fada
+- Minúscula, voa, regenera e faz plantas crescerem. **Pouso no Ombro** (o jogador regenera e ganha o dobro de experiência) e **Pó Encantado**.
+
+### Lilac
+- Gênia da ganância: muito forte, sorte nos minérios, Toque de Midas. **Punho de Ouro** (chance de JACKPOT com dano triplo) e **Cassino** (aposta o item da mão numa roda da sorte).
+
+### Boneca
+- Marionete de porcelana com energia amaldiçoada. Não usa armadura pesada e sofre com fogo. Passiva **Fios do Teatro** (combo de 5 golpes solta um corte amaldiçoado). **Fios da Marionete** e **Dança das Aves Aquáticas** (dança de cortes no ar, avança duas vezes e quebra blocos frágeis).
+
+### Kitsune
+- Raposa celestial de nove caudas brancas, enormes e com física. Passiva **Pérola Estelar** (volta da morte). **Kitsunebi** (chamas-fantasma que curam aliados e caçam inimigos) e **Bênção das Nove Caudas**.
+
+### Serafim
+- Seis asas (dobradas no chão, abertas no voo), aura branca e auréola. Totalmente pacífico: não ataca e nenhum mob o ataca. **Coro Celestial** (cura em área) e **Altar Celestial** (escolhe um entre três encantamentos sorteados para o item da mão; recarga de 3 min).
+
+### Oni
+- Guerreiro demônio inspirado em Akaza. Passiva **Desvio** (desliza para o lado e evita o golpe). **Técnica de Sangue: Agulha da Bússola**: pisa e abre um pentagrama vermelho; 15 s de buffs absurdos, sede de sangue e todos os inimigos revelados (recarga de 4 min).
+
+### Sereia
+- Respira e nada como um golfinho; dentro d'água as pernas viram uma cauda de escamas. Seca fora da água. **Canto das Marés** (encanta monstros e cura aliados) e **Maremoto** (onda gigante que arrasta inimigos, com a Sereia surfando na crista).
+
+### Anúbis
+- Guia das almas: cada inimigo derrotado o cura. Mortos-vivos não o atacam. **Pesagem do Coração** (balança de Maat sobre o alvo; abaixo de 35% da vida, julgamento) e **Areias do Duat** (redemoinho de areia com chacais espectrais).
+
+### Fênix
+- Asas e crista de fogo, voa e é imune a fogo. Passiva **Renascimento** (renasce das cinzas com a vida cheia). **Mergulho Solar** (cometa que abre um anel de sol no chão) e **Asas da Aurora** (fogo sagrado que cura aliados e queima inimigos).
+
+### Vastaya Coelho (variante do Vastaya)
+- Pura luta corpo a corpo: muito rápida, pula altíssimo e bate forte. Passiva **Frenesi da Lebre**. **Chuva de Chutes** e **Salto Lunar** (segurar para carregar, cratera de luar ao cair).
+
+Todas as raças ganharam uma vantagem e uma fraqueza a mais, auras em certas ocasiões e um floreio visual em cada habilidade.
 
 ## Criar raças novas
 
@@ -138,6 +180,7 @@ Requer o **JDK 21**. No Windows, rode `COMPILAR.bat`. O `.jar` sai na pasta `bui
 
 - Ícone da Vampírica: arte de **EV GANIN**.
 - Ícone do Elfo: arte de **PIKAT.io**.
+- Alguns ícones foram feitos a partir de artes enviadas pelo autor do mod, convertidas em pixel art.
 - Fontes: EB Garamond e Cormorant Garamond (licença OFL).
 
 ---

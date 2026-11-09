@@ -81,12 +81,15 @@ public class DakuraOriginsClient implements ClientModInitializer {
 
 		// HUD: teclas das habilidades + livro da página da raça (canto inferior esquerdo)
 		HudRenderCallback.EVENT.register(AbilityHud::render);
+		HudRenderCallback.EVENT.register(com.dakura.origins.client.hud.CasinoHud::render);
+		net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.AFTER_ENTITIES.register(com.dakura.origins.client.anim.FloatingText::render);
 		net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
 				(type, renderer, helper, context) -> {
 					if (renderer instanceof net.minecraft.client.render.entity.PlayerEntityRenderer pr) {
 						helper.register(new com.dakura.origins.client.render.FlowerCrownFeature(pr));
 						helper.register(new com.dakura.origins.client.render.FoxEarsFeature(pr));
 						helper.register(new com.dakura.origins.client.render.RaceFeatureRenderer(pr));
+						helper.register(new com.dakura.origins.client.render.LegendFeatureRenderer(pr));
 					}
 				});
 		HudRenderCallback.EVENT.register(com.dakura.origins.client.hud.SecondChanceOverlay::render);
@@ -251,6 +254,21 @@ public class DakuraOriginsClient implements ClientModInitializer {
 		if (!mustChoose && ClientPlayNetworking.canSend(UseAbilityPayload.ID)) {
 			ClientPlayNetworking.send(new UseAbilityPayload(slot));
 		}
+	}
+
+	/** Envia um modo especial (3 = rodinha, 4 = ataque) para a habilidade deste tipo na raça do jogador. */
+	public static boolean sendSpecial(Class<?> abilityType, int mode, int value) {
+		MinecraftClient client = MinecraftClient.getInstance();
+		if (client.player == null) return false;
+		var race = RaceAccess.getRace(client.player).orElse(null);
+		if (race == null) return false;
+		for (int i = 0; i < race.abilities().size(); i++) {
+			if (abilityType.isInstance(race.abilities().get(i).ability())) {
+				sendAbility(i | mode << 8 | (value + 8) << 12);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Ticks que cada tecla está segurada (-1 = solta), para habilidades de carregar/segurar. */

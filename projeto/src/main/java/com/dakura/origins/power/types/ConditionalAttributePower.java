@@ -18,6 +18,16 @@ import net.minecraft.util.Identifier;
  * { "attribute": "minecraft:generic.attack_damage", "amount": 2.0, "when": "forest" | "night" }
  */
 public final class ConditionalAttributePower implements RacePower {
+	private static boolean hasGold(ServerPlayerEntity p) {
+		var inv = p.getInventory();
+		for (int i = 0; i < inv.size(); i++) {
+			var it = inv.getStack(i).getItem();
+			if (it == net.minecraft.item.Items.GOLD_INGOT || it == net.minecraft.item.Items.GOLD_NUGGET
+					|| it == net.minecraft.item.Items.GOLD_BLOCK || it == net.minecraft.item.Items.RAW_GOLD) return true;
+		}
+		return false;
+	}
+
 	private static final net.minecraft.registry.tag.TagKey<net.minecraft.world.biome.Biome> DESERT =
 			net.minecraft.registry.tag.TagKey.of(net.minecraft.registry.RegistryKeys.BIOME, Identifier.of("c", "is_desert"));
 	private final RegistryEntry<EntityAttribute> attribute;
@@ -42,6 +52,10 @@ public final class ConditionalAttributePower implements RacePower {
 	private boolean active(ServerPlayerEntity p) {
 		return switch (when) {
 			case "night" -> !p.getWorld().isDay() && p.getWorld().getDimension().hasSkyLight();
+			case "day" -> p.getWorld().isDay() && p.getWorld().getDimension().hasSkyLight();
+			case "water" -> p.isTouchingWater();
+			case "high" -> p.getY() >= 100;
+			case "no_gold" -> !hasGold(p);
 			case "nether" -> p.getWorld().getRegistryKey() == net.minecraft.world.World.NETHER;
 			case "desert" -> p.getWorld().getBiome(p.getBlockPos()).isIn(DESERT) || p.getWorld().getBiome(p.getBlockPos()).isIn(BiomeTags.IS_BADLANDS);
 			default -> p.getWorld().getBiome(p.getBlockPos()).isIn(BiomeTags.IS_FOREST);

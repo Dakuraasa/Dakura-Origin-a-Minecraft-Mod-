@@ -43,12 +43,24 @@
 			"text": "Imune a empurrões e ao fogo, e não se afoga."
 		},
 		{
+			"type": "vantagem",
+			"text": "Pele de Pedra (passiva): golpes de mais de 5 corações perdem 3 corações de dano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Guardiã da noite: mais forte depois que o sol se põe."
+		},
+		{
 			"type": "desvantagem",
 			"text": "Não consegue comer nada (em compensação, a fome cai devagar)."
 		},
 		{
 			"type": "desvantagem",
 			"text": "Afunda na água e não sabe nadar."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Sob o sol, a pedra pesa: mais lenta de dia."
 		}
 	],
 	"powers": [
@@ -116,24 +128,33 @@
 		{
 			"type": "dakura_origins:slow_hunger",
 			"factor": 0.4
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.1,
+			"when": "day"
 		}
 	],
 	"abilities": [
 		{
-			"type": "dakura_origins:passive",
-			"name": "Pele de Pedra",
-			"description": "Passiva: golpes de mais de 5 corações perdem 3 corações de dano.",
-			"cooldown": 0
-		},
-		{
 			"type": "dakura_origins:meteor",
 			"name": "Meteoro",
-			"description": "Salta altíssimo, vira pedra e despenca: o impacto fere tudo em volta, sem arremessar ninguém. Sem dano de queda.",
+			"description": "Salta altíssimo, vira pedra e despenca: o impacto fere tudo em volta e arremessa os inimigos para longe. Sem dano de queda.",
 			"cooldown": 500,
 			"launch": 1.9,
 			"fall": 2.6,
 			"radius": 4.5,
-			"damage": 12
+			"damage": 16,
+			"push": 2.6
 		}
 	]
 }
