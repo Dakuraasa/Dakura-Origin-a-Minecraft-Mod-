@@ -79,6 +79,7 @@
 		{
 			"type": "dakura_origins:flight",
 			"speed": 0.04,
+			"lean": "sprint",
 			"exhaustion": 0.005
 		},
 		{

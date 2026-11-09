@@ -112,6 +112,23 @@ public abstract class BipedEntityModelMixin {
 		if (kh >= 0f) poseKickHigh(kh);
 		float leap = AbilityAnimations.progress(entity, "leap", animationProgress);
 		if (leap >= 0f) poseLeap(leap);
+
+		// ---- voo deitado (Fênix / Serafim no sprint): pose de Elytra
+		if (entity instanceof net.minecraft.client.network.AbstractClientPlayerEntity) {
+			float lean = com.dakura.origins.client.render.FlightLean.amount(entity, animationProgress);
+			if (lean > 0.01f) poseFlightLean(lean);
+		}
+	}
+
+	/** Voo deitado: cabeça levantada para olhar à frente, braços colados ao corpo e pernas esticadas para trás. */
+	private void poseFlightLean(float l) {
+		head.pitch = MathHelper.lerp(l, head.pitch, -0.75f);
+		rightArm.pitch = MathHelper.lerp(l, rightArm.pitch, 0.15f);
+		leftArm.pitch = MathHelper.lerp(l, leftArm.pitch, 0.15f);
+		rightArm.roll = MathHelper.lerp(l, rightArm.roll, 0.12f);
+		leftArm.roll = MathHelper.lerp(l, leftArm.roll, -0.12f);
+		rightLeg.pitch = MathHelper.lerp(l, rightLeg.pitch, 0.10f);
+		leftLeg.pitch = MathHelper.lerp(l, leftLeg.pitch, -0.04f);
 	}
 
 	// ------------------------------------------------------------------ leva lendária

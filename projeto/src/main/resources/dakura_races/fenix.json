@@ -62,7 +62,11 @@
 		},
 		{
 			"type": "dakura_origins:flight",
-			"speed": 0.045,
+			"speed": 0.006,
+			"style": "elytra",
+			"lean": "always",
+			"cruise": 0.55,
+			"fast": 1.0,
 			"exhaustion": 0.01
 		},
 		{
