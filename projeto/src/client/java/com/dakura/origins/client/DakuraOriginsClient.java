@@ -90,6 +90,7 @@ public class DakuraOriginsClient implements ClientModInitializer {
 						helper.register(new com.dakura.origins.client.render.FoxEarsFeature(pr));
 						helper.register(new com.dakura.origins.client.render.RaceFeatureRenderer(pr));
 						helper.register(new com.dakura.origins.client.render.LegendFeatureRenderer(pr));
+						helper.register(new com.dakura.origins.client.render.WingFeatureRenderer(pr));
 					}
 				});
 		HudRenderCallback.EVENT.register(com.dakura.origins.client.hud.SecondChanceOverlay::render);

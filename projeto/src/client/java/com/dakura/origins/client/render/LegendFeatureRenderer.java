@@ -1,7 +1,6 @@
 package com.dakura.origins.client.render;
 
 import com.dakura.origins.DakuraOrigins;
-import com.dakura.origins.client.anim.AbilityAnimations;
 import com.dakura.origins.client.config.DakuraConfig;
 import com.dakura.origins.power.EntityFlags;
 import net.minecraft.client.model.ModelData;
@@ -27,17 +26,15 @@ import java.util.Map;
 
 /**
  * Traços da última leva, num atlas próprio (race_features2.png, regiões de 32×32):
- * cauda de sereia (só dentro d'água), orelhas e diadema de Anúbis, asas e crista de fogo da Fênix
- * e orelhas de coelho com física. Formas arredondadas e caricatas.
+ * cauda de sereia (só dentro d'água), orelhas e diadema de Anúbis e orelhas de coelho com física.
+ * (As asas da Fênix agora são sprites 2D em WingFeatureRenderer; a crista de penas na cabeça foi removida.)
  */
 public class LegendFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
 	private static final Identifier TEX = DakuraOrigins.id("textures/entity/race_features2.png");
 	private static final int[] SCALE = {0, 0}, SCALE_DK = {32, 0}, FIN = {64, 0}, PEARL = {96, 0},
 			JACKAL = {0, 32}, JACKAL_IN = {32, 32}, GOLD = {64, 32}, LAPIS = {96, 32},
-			FLAME = {0, 64}, FLAME_HOT = {32, 64}, FLAME_RED = {64, 64}, EMBER = {96, 64},
 			BUNNY = {0, 96}, BUNNY_IN = {32, 96}, BUNNY_SH = {64, 96};
-	private static final ModelPart MERMAID = mermaidTail(), ANUBIS = anubisEars(), FIRE_WING = fireWing(), CREST = crest(),
-			BUNNY_EARS = bunnyEars();
+	private static final ModelPart MERMAID = mermaidTail(), ANUBIS = anubisEars(), BUNNY_EARS = bunnyEars();
 	/** Física das orelhas de coelho: {ângulo, velocidade, lado, velocidade lateral}. */
 	private static final Map<Integer, float[]> EAR_PHYS = new HashMap<>();
 
@@ -104,33 +101,6 @@ public class LegendFeatureRenderer extends FeatureRenderer<AbstractClientPlayerE
 		return build(md);
 	}
 
-	/** Asa de fogo: um osso e um leque de nove penas que crescem até a ponta. */
-	private static ModelPart fireWing() {
-		ModelData md = new ModelData();
-		ModelPartData w = md.getRoot().addChild("w", box(FLAME_HOT, -0.7f, -0.7f, -0.7f, 9f, 1.4f, 1.4f), ModelTransform.NONE);
-		for (int i = 0; i < 9; i++) {
-			float len = 6.5f + i * 1.1f - (i > 6 ? (i - 6) * 1.6f : 0);
-			int[] uv = i < 3 ? FLAME_HOT : (i < 7 ? FLAME : FLAME_RED);
-			ModelPartData f = w.addChild("f" + i, box(uv, -0.9f, 0, -0.25f, 1.8f, len, 0.5f),
-					ModelTransform.of(0.4f + i * 1.05f, 0.4f, 0, 0, 0, -0.35f + i * 0.1f));
-			f.addChild("r", box(uv == FLAME_HOT ? FLAME : FLAME_RED, -0.6f, len - 0.3f, -0.25f, 1.2f, 1.4f, 0.5f), ModelTransform.NONE);
-		}
-		return build(md);
-	}
-
-	/** Crista de fogo na cabeça: três plumas para trás. */
-	private static ModelPart crest() {
-		ModelData md = new ModelData();
-		ModelPartData root = md.getRoot();
-		for (int i = 0; i < 3; i++) {
-			float len = 5.5f - Math.abs(i - 1) * 1.5f;
-			ModelPartData f = root.addChild("p" + i, box(i == 1 ? FLAME : FLAME_HOT, -0.7f, -len, -0.35f, 1.4f, len, 0.7f),
-					ModelTransform.of((i - 1) * 1.6f, -7.6f, 2.5f, -0.75f, 0, (i - 1) * 0.35f));
-			f.addChild("t", box(FLAME_RED, -0.45f, -len - 1.1f, -0.3f, 0.9f, 1.3f, 0.6f), ModelTransform.NONE);
-		}
-		return build(md);
-	}
-
 	/** Orelhas de coelho: dois gomos cada (a de cima dobra), parte de dentro rosa, pontas arredondadas. */
 	private static ModelPart bunnyEars() {
 		ModelData md = new ModelData();
@@ -167,40 +137,6 @@ public class LegendFeatureRenderer extends FeatureRenderer<AbstractClientPlayerE
 		getContextModel().body.rotate(m);
 		m.translate(0, 11.5f / 16f, 0);
 		MERMAID.render(m, vc, light, OverlayTexture.DEFAULT_UV);
-		m.pop();
-	}
-
-	private void renderPhoenix(MatrixStack m, VertexConsumer vc, AbstractClientPlayerEntity e, float t) {
-		boolean air = !e.isOnGround() && !e.isTouchingWater();
-		boolean show = air || EntityFlags.clientHas(e, "solar_dive") || EntityFlags.clientHas(e, "reborn")
-				|| AbilityAnimations.active("wings_spread").contains(e.getId());
-		float open = show ? 1f : 0f;
-		float flap = show ? MathHelper.sin(t * (air ? 0.4f : 0.6f)) * 0.4f : MathHelper.sin(t * 0.06f) * 0.04f;
-		ModelPart w = FIRE_WING.getChild("w");
-		m.push();
-		getContextModel().body.rotate(m);
-		for (int s = -1; s <= 1; s += 2) {
-			// fechadas: dobradas para baixo nas costas; abertas: estendidas e batendo, bem largas
-			w.roll = MathHelper.lerp(open, s < 0 ? -1.1f : -1.1f, -0.15f) + flap;
-			w.yaw = MathHelper.lerp(open, 1.1f, 0.3f);
-			w.pitch = MathHelper.lerp(open, 0.25f, 0f);
-			for (int i = 0; i < 9; i++) {
-				ModelPart f = w.getChild("f" + i);
-				f.roll = MathHelper.lerp(open, -0.1f + i * 0.04f, -0.35f + i * 0.13f) + MathHelper.sin(t * 0.3f + i) * 0.03f;
-			}
-			m.push();
-			m.translate(s * 1.5f / 16f, 2.5f / 16f, 2.4f / 16f);
-			float sc = 1.25f;
-			m.scale(sc, sc, sc);
-			if (s < 0) m.scale(-1, 1, 1);
-			w.render(m, vc, 0xF000F0, OverlayTexture.DEFAULT_UV);
-			m.pop();
-		}
-		m.pop();
-		m.push();
-		getContextModel().getHead().rotate(m);
-		for (int i = 0; i < 3; i++) CREST.getChild("p" + i).pitch = -0.75f + MathHelper.sin(t * 0.2f + i) * 0.08f;
-		CREST.render(m, vc, 0xF000F0, OverlayTexture.DEFAULT_UV);
 		m.pop();
 	}
 
@@ -246,9 +182,8 @@ public class LegendFeatureRenderer extends FeatureRenderer<AbstractClientPlayerE
 		if (e.isInvisible()) return;
 		boolean mermaid = DakuraConfig.cosmetic(e, "mermaid_tail") && e.isTouchingWater();
 		boolean anubis = DakuraConfig.cosmetic(e, "anubis_ears");
-		boolean phoenix = DakuraConfig.cosmetic(e, "phoenix_wings");
 		boolean bunny = DakuraConfig.cosmetic(e, "bunny_ears");
-		if (!mermaid && !anubis && !phoenix && !bunny) return;
+		if (!mermaid && !anubis && !bunny) return;
 		VertexConsumer vc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(TEX));
 		if (mermaid) renderMermaid(m, vc, light, e, animationProgress);
 		if (anubis) {
@@ -260,7 +195,6 @@ public class LegendFeatureRenderer extends FeatureRenderer<AbstractClientPlayerE
 			ANUBIS.render(m, vc, light, OverlayTexture.DEFAULT_UV);
 			m.pop();
 		}
-		if (phoenix) renderPhoenix(m, vc, e, animationProgress);
 		if (bunny) renderBunny(m, vc, light, e, animationProgress);
 	}
 }
