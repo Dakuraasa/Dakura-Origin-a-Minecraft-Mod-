@@ -76,7 +76,8 @@ public final class DragonFire {
 			e.addVelocity(push.x * 0.9 * k, 0.45 * k + 0.2, push.z * 0.9 * k);
 			e.velocityModified = true;
 		}
-		if (zoneTicks > 0) AreaZones.create(w, c, zoneRadius, 6, zoneTicks, AreaZones.Kind.GREEN_FIRE, owner, 1.5f, null);
+		// fogo de verdade espalhado de forma irregular (sem área 3D desenhada)
+		if (zoneTicks > 0) igniteGround(w, c, Math.max(2, Math.round(zoneRadius)), 10 + Math.round(zoneRadius * 3));
 		LegendKit.fxAt(w, "boom_green", c, radius, 0, 0);
 		LegendKit.fxAt(w, "debris", c, (int) (radius * 5), radius, 0);
 		ModSounds.play(w, c, ModSounds.MAGMA_EXPLODE, 1.4f, 0.9f + w.random.nextFloat() * 0.2f);

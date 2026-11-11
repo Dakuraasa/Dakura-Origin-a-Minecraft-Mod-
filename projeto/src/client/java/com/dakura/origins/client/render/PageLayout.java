@@ -31,7 +31,7 @@ public final class PageLayout {
 	private static final int LINE_H = 11;
 	private static final int TEXT_INDENT = 13;
 	/** Caixa padrão de todos os ícones de raça (em pixels de interface). */
-	public static final int ICON_BOX_W = 88, ICON_BOX_H = 96;
+	public static final int ICON_BOX_W = 110, ICON_BOX_H = 120; // olhos ~25% maiores
 
 	/**
 	 * Dados extras da página de consulta (só na tela "sua raça").
@@ -94,7 +94,7 @@ public final class PageLayout {
 		MutableText num = DakuraFonts.heading(roman(race.order()));
 		ops.add(new TextOp(num, 0, -2, Role.MUTED, 1.6f));
 
-		int boxW = ICON_BOX_W + 16, boxH = ICON_BOX_H + 8;
+		int boxW = Math.min(ICON_BOX_W + 16, innerW), boxH = ICON_BOX_H + 8;
 		float fit = Math.min(boxW / (float) race.iconWidth(), boxH / (float) race.iconHeight());
 		if (fit >= 1f) fit = (float) Math.floor(fit);
 		int drawW = Math.max(1, Math.round(race.iconWidth() * fit));
@@ -155,7 +155,8 @@ public final class PageLayout {
 
 	private int composeHeader(Race race) {
 		// ícone: encaixado na caixa padrão, centralizado nela
-		int boxW = innerW >= 180 ? ICON_BOX_W : ICON_BOX_W / 2;
+		// nunca passa de ~45% da largura da página (não invade o nome nem o texto ao lado)
+		int boxW = Math.min(innerW >= 180 ? ICON_BOX_W : ICON_BOX_W / 2, Math.round(innerW * 0.45f));
 		int boxH = innerW >= 180 ? ICON_BOX_H : ICON_BOX_H / 2;
 		float fit = Math.min(boxW / (float) race.iconWidth(), boxH / (float) race.iconHeight());
 		if (fit >= 1f) fit = (float) Math.floor(fit);

@@ -152,6 +152,10 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#FF2A3A",
 			"when": "low_health"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "curse_immune"
 		}
 	],
 	"abilities": [

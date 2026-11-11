@@ -63,6 +63,7 @@ public final class FireballAbility implements Ability {
 		this.fireCount = JsonParams.integer(json, "fire_count", 10);
 		this.fireRadius = JsonParams.integer(json, "fire_radius", 3);
 		this.maturityDamage = JsonParams.floats(json, "maturity_damage");
+		this.green = "green".equals(JsonParams.str(json, "palette", "red"));
 	}
 
 	private static final class Shot {
@@ -86,6 +87,8 @@ public final class FireballAbility implements Ability {
 
 	private static final List<Shot> SHOTS = new ArrayList<>();
 	private static int nextId = 1;
+	/** Paleta verde/azul (Dragão Marrom): o id vai negativo e o cliente troca as cores. */
+	private final boolean green;
 
 	public static void bootstrap() {
 		ServerTickEvents.END_SERVER_TICK.register(FireballAbility::tickAll);
@@ -99,7 +102,7 @@ public final class FireballAbility implements Ability {
 		Vec3d look = player.getRotationVec(1f);
 		Vec3d start = player.getEyePos().add(look.multiply(0.6 + player.getWidth() * 0.5));
 		Vec3d vel = look.multiply(speed);
-		Shot shot = new Shot(nextId++, this, player, world, start, vel);
+		Shot shot = new Shot(green ? -(nextId++) : nextId++, this, player, world, start, vel);
 		SHOTS.add(shot);
 
 		ModNetworking.sendNear(world, start, 128,
@@ -186,7 +189,7 @@ public final class FireballAbility implements Ability {
 			e.addVelocity(dir.x * 0.75 * k, 0.12 + 0.22 * k, dir.z * 0.75 * k);
 			e.velocityModified = true;
 		}
-		LegendKit.fxAt(world, "fire_field", at, (float) r * 0.8f, 80, 0);
+		// fogo no chão: blocos de fogo de verdade (DragonFire.igniteGround), sem o círculo 3D
 
 		// 5) o impacto visual (onda de choque, coluna de fogo, brasas) é desenhado pelos clientes
 		world.playSound(null, at.x, at.y, at.z, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1.0f, 0.5f);

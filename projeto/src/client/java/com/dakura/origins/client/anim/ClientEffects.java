@@ -50,10 +50,12 @@ public final class ClientEffects {
 		Vec3d pos;
 		final Vec3d vel;
 		int age;
+		boolean green;
 
 		Ball(Vec3d pos, Vec3d vel) {
 			this.pos = pos;
 			this.vel = vel;
+			this.green = ClientEffects.green;
 		}
 	}
 
@@ -331,15 +333,19 @@ public final class ClientEffects {
 
 	public static void fireball(int id, Vec3d pos, Vec3d vel, int state) {
 		ClientWorld world = MinecraftClient.getInstance().world;
+		green = id < 0;
 		if (state == FireballPayload.FLYING) {
 			BALLS.put(id, new Ball(pos, vel));
 			if (world != null && near(pos)) muzzle(world, pos, vel, world.random);
+			green = false;
 			return;
 		}
 		BALLS.remove(id);
-		if (world == null || !near(pos)) return;
-		if (state == FireballPayload.EXPLODED) impact(world, pos, world.random);
-		else fizzle(world, pos, world.random);
+		if (world != null && near(pos)) {
+			if (state == FireballPayload.EXPLODED) impact(world, pos, world.random);
+			else fizzle(world, pos, world.random);
+		}
+		green = false;
 	}
 
 	public static void clear() {
@@ -378,7 +384,9 @@ public final class ClientEffects {
 				Vec3d prev = b.pos;
 				b.pos = b.pos.add(b.vel);
 				if (b.pos.squaredDistanceTo(cam) > MAX_DIST_SQ) continue;
+				green = b.green;
 				trail(world, b, prev, rnd);
+				green = false;
 			}
 		}
 
@@ -395,6 +403,19 @@ public final class ClientEffects {
 			if (pl.squaredDistanceTo(cam) > MAX_DIST_SQ) continue;
 			var flags = com.dakura.origins.power.EntityFlags.CLIENT.get(pl.getId());
 			if (flags == null) continue;
+			// Kitsune com as Esferas Errantes prontas: as esferas orbitando ficam bem visíveis (faíscas e brilho)
+			if (flags.contains("mana_orbs")) {
+				int n = pl instanceof net.minecraft.client.network.AbstractClientPlayerEntity ap
+						? com.dakura.origins.client.render.GeoPartsRenderer.kitsuneTails(ap) : 3;
+				float tt = world.getTime();
+				for (int i = 0; i < n; i++) {
+					double a2 = tt * 0.15f + i * Math.PI * 2 / n;
+					double ox = Math.cos(a2) * 1.3, oz = Math.sin(a2) * 1.3, oy = pl.getHeight() * 0.55 + Math.sin(a2 * 2) * 0.15;
+					world.addParticle(i % 2 == 0 ? ParticleTypes.END_ROD : ParticleTypes.GLOW, pl.getX() + ox, pl.getY() + oy, pl.getZ() + oz, 0, 0.005, 0);
+					if (rnd.nextInt(3) == 0) world.addParticle(ParticleTypes.SNOWFLAKE, pl.getX() + ox, pl.getY() + oy, pl.getZ() + oz,
+							rnd.nextGaussian() * 0.01, 0, rnd.nextGaussian() * 0.01);
+				}
+			}
 			// Minotauro em fúria: bufadas de fumaça branca pelas narinas
 			if (flags.contains("berserk") && pl.age % 12 == 0) {
 				Vec3d look = pl.getRotationVec(1f), eye = pl.getEyePos().add(look.multiply(0.35)).add(0, -0.12, 0);
@@ -436,27 +457,27 @@ public final class ClientEffects {
 			double a = i * Math.PI * 2 / 12;
 			Vec3d r = basis[0].multiply(Math.cos(a)).add(basis[1].multiply(Math.sin(a)));
 			Vec3d v = r.multiply(0.13).add(dir.multiply(0.08));
-			world.addParticle(ParticleTypes.FLAME, pos.x, pos.y, pos.z, v.x, v.y, v.z);
+			add(world, ParticleTypes.FLAME, pos.x, pos.y, pos.z, v.x, v.y, v.z);
 		}
 		for (int i = 0; i < 6; i++) {
-			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.x, pos.y, pos.z,
+			add(world, ParticleTypes.DRAGON_BREATH, pos.x, pos.y, pos.z,
 					dir.x * 0.18 + rnd.nextGaussian() * 0.04, dir.y * 0.18 + rnd.nextGaussian() * 0.04,
 					dir.z * 0.18 + rnd.nextGaussian() * 0.04);
 		}
-		world.addParticle(CORE, pos.x, pos.y, pos.z, 0, 0, 0);
+		add(world, CORE, pos.x, pos.y, pos.z, 0, 0, 0);
 	}
 
 	private static void trail(ClientWorld world, Ball b, Vec3d prev, Random rnd) {
 		// núcleo incandescente contínuo (3 posições por tick)
 		for (int k = 0; k < 3; k++) {
 			Vec3d p = prev.lerp(b.pos, k / 3.0);
-			world.addParticle(k == 0 ? CORE : CORE_SMALL, p.x, p.y, p.z, 0, 0, 0);
-			world.addParticle(ParticleTypes.FLAME, p.x + rnd.nextGaussian() * 0.07, p.y + rnd.nextGaussian() * 0.07,
+			add(world, k == 0 ? CORE : CORE_SMALL, p.x, p.y, p.z, 0, 0, 0);
+			add(world, ParticleTypes.FLAME, p.x + rnd.nextGaussian() * 0.07, p.y + rnd.nextGaussian() * 0.07,
 					p.z + rnd.nextGaussian() * 0.07, 0, 0, 0);
 		}
 		// cauda de cometa: chamas escorrendo para trás
 		for (int k = 0; k < 2; k++) {
-			world.addParticle(ParticleTypes.FLAME, b.pos.x, b.pos.y, b.pos.z,
+			add(world, ParticleTypes.FLAME, b.pos.x, b.pos.y, b.pos.z,
 					-b.vel.x * 0.07 + rnd.nextGaussian() * 0.035,
 					-b.vel.y * 0.07 + rnd.nextGaussian() * 0.035,
 					-b.vel.z * 0.07 + rnd.nextGaussian() * 0.035);
@@ -468,61 +489,83 @@ public final class ClientEffects {
 		for (int h = 0; h < 2; h++) {
 			double a = ang + h * Math.PI;
 			Vec3d off = basis[0].multiply(Math.cos(a) * 0.34).add(basis[1].multiply(Math.sin(a) * 0.34));
-			if (h == 0) world.addParticle(EMBER, b.pos.x + off.x, b.pos.y + off.y, b.pos.z + off.z, 0, 0, 0);
-			else world.addParticle(ParticleTypes.DRAGON_BREATH, b.pos.x + off.x, b.pos.y + off.y, b.pos.z + off.z, 0, 0, 0);
+			if (h == 0) add(world, EMBER, b.pos.x + off.x, b.pos.y + off.y, b.pos.z + off.z, 0, 0, 0);
+			else add(world, ParticleTypes.DRAGON_BREATH, b.pos.x + off.x, b.pos.y + off.y, b.pos.z + off.z, 0, 0, 0);
 		}
 		// centelhas brancas soltas
 		if (rnd.nextInt(2) == 0) {
-			world.addParticle(ParticleTypes.END_ROD, b.pos.x, b.pos.y, b.pos.z,
+			add(world, ParticleTypes.END_ROD, b.pos.x, b.pos.y, b.pos.z,
 					rnd.nextGaussian() * 0.03, rnd.nextGaussian() * 0.03, rnd.nextGaussian() * 0.03);
 		}
-		if (b.age % 2 == 0) world.addParticle(ParticleTypes.SMOKE, prev.x, prev.y, prev.z, 0, 0.01, 0);
-		if (b.age % 3 == 0) world.addParticle(ParticleTypes.LARGE_SMOKE, prev.x, prev.y, prev.z, 0, 0.015, 0);
-		if (rnd.nextInt(4) == 0) world.addParticle(ParticleTypes.LAVA, b.pos.x, b.pos.y, b.pos.z, 0, 0, 0);
+		if (b.age % 2 == 0) add(world, ParticleTypes.SMOKE, prev.x, prev.y, prev.z, 0, 0.01, 0);
+		if (b.age % 3 == 0) add(world, ParticleTypes.LARGE_SMOKE, prev.x, prev.y, prev.z, 0, 0.015, 0);
+		if (rnd.nextInt(4) == 0) add(world, ParticleTypes.LAVA, b.pos.x, b.pos.y, b.pos.z, 0, 0, 0);
 	}
 
 	/** Impacto: clarão, onda de choque rasteira, coluna de fogo, chuva de brasas e fumaça. */
 	private static void impact(ClientWorld world, Vec3d at, Random rnd) {
-		world.addParticle(ParticleTypes.FLASH, at.x, at.y, at.z, 0, 0, 0);
+		add(world, ParticleTypes.FLASH, at.x, at.y, at.z, 0, 0, 0);
 		// onda de choque: fogo por fora, violeta por dentro
 		for (int i = 0; i < 32; i++) {
 			double a = i * Math.PI * 2 / 32 + rnd.nextDouble() * 0.1;
 			double sp = 0.42 + rnd.nextDouble() * 0.12;
-			world.addParticle(ParticleTypes.FLAME, at.x, at.y + 0.15, at.z, Math.cos(a) * sp, 0.015, Math.sin(a) * sp);
+			add(world, ParticleTypes.FLAME, at.x, at.y + 0.15, at.z, Math.cos(a) * sp, 0.015, Math.sin(a) * sp);
 		}
 		for (int i = 0; i < 20; i++) {
 			double a = i * Math.PI * 2 / 20;
-			world.addParticle(ParticleTypes.DRAGON_BREATH, at.x, at.y + 0.3, at.z, Math.cos(a) * 0.28, 0.02, Math.sin(a) * 0.28);
+			add(world, ParticleTypes.DRAGON_BREATH, at.x, at.y + 0.3, at.z, Math.cos(a) * 0.28, 0.02, Math.sin(a) * 0.28);
 		}
 		// coluna de fogo subindo
 		for (int i = 0; i < 16; i++) {
-			world.addParticle(ParticleTypes.FLAME, at.x + rnd.nextGaussian() * 0.35, at.y, at.z + rnd.nextGaussian() * 0.35,
+			add(world, ParticleTypes.FLAME, at.x + rnd.nextGaussian() * 0.35, at.y, at.z + rnd.nextGaussian() * 0.35,
 					rnd.nextGaussian() * 0.03, 0.14 + rnd.nextDouble() * 0.28, rnd.nextGaussian() * 0.03);
 		}
 		// brasas espalhadas que esfriam até o violeta
 		for (int i = 0; i < 26; i++) {
 			Vec3d p = at.add(rnd.nextGaussian() * 1.3, Math.abs(rnd.nextGaussian()) * 1.2, rnd.nextGaussian() * 1.3);
-			if (i % 3 == 0) world.addParticle(EMBER_BIG, p.x, p.y, p.z, 0, 0, 0);
-			else world.addParticle(EMBER, p.x, p.y, p.z, 0, 0, 0);
+			if (i % 3 == 0) add(world, EMBER_BIG, p.x, p.y, p.z, 0, 0, 0);
+			else add(world, EMBER, p.x, p.y, p.z, 0, 0, 0);
 		}
 		for (int i = 0; i < 12; i++) {
-			world.addParticle(ParticleTypes.LAVA, at.x, at.y + 0.2, at.z, 0, 0, 0);
+			add(world, ParticleTypes.LAVA, at.x, at.y + 0.2, at.z, 0, 0, 0);
 		}
 		for (int i = 0; i < 16; i++) {
-			world.addParticle(ParticleTypes.LARGE_SMOKE, at.x + rnd.nextGaussian() * 1.1, at.y + 0.4 + rnd.nextDouble(),
+			add(world, ParticleTypes.LARGE_SMOKE, at.x + rnd.nextGaussian() * 1.1, at.y + 0.4 + rnd.nextDouble(),
 					at.z + rnd.nextGaussian() * 1.1, 0, 0.04 + rnd.nextDouble() * 0.04, 0);
 		}
 	}
 
 	private static void fizzle(ClientWorld world, Vec3d at, Random rnd) {
 		for (int i = 0; i < 12; i++) {
-			world.addParticle(ParticleTypes.LARGE_SMOKE, at.x + rnd.nextGaussian() * 0.3, at.y + rnd.nextGaussian() * 0.3,
+			add(world, ParticleTypes.LARGE_SMOKE, at.x + rnd.nextGaussian() * 0.3, at.y + rnd.nextGaussian() * 0.3,
 					at.z + rnd.nextGaussian() * 0.3, 0, 0.03, 0);
 		}
 		for (int i = 0; i < 8; i++) {
-			world.addParticle(EMBER, at.x + rnd.nextGaussian() * 0.4, at.y + rnd.nextGaussian() * 0.4,
+			add(world, EMBER, at.x + rnd.nextGaussian() * 0.4, at.y + rnd.nextGaussian() * 0.4,
 					at.z + rnd.nextGaussian() * 0.4, 0, 0, 0);
 		}
+	}
+
+	/** Bola de fogo do Dragão Marrom (id negativo): mesmas partículas, paleta verde e azul. */
+	private static boolean green;
+	private static final DustParticleEffect G_CORE = new DustParticleEffect(new Vector3f(0.75f, 1.0f, 0.85f), 1.9f);
+	private static final DustParticleEffect G_SMALL = new DustParticleEffect(new Vector3f(0.4f, 1.0f, 0.6f), 1.2f);
+	private static final DustColorTransitionParticleEffect G_EMBER = new DustColorTransitionParticleEffect(
+			new Vector3f(0.3f, 1f, 0.45f), new Vector3f(0.15f, 0.45f, 1f), 1.1f);
+	private static final DustColorTransitionParticleEffect G_EMBER_BIG = new DustColorTransitionParticleEffect(
+			new Vector3f(0.6f, 1f, 0.4f), new Vector3f(0.1f, 0.3f, 0.9f), 1.7f);
+
+	private static void add(ClientWorld w, net.minecraft.particle.ParticleEffect fx, double x, double y, double z, double vx, double vy, double vz) {
+		if (green) {
+			if (fx == CORE) fx = G_CORE;
+			else if (fx == CORE_SMALL) fx = G_SMALL;
+			else if (fx == EMBER) fx = G_EMBER;
+			else if (fx == EMBER_BIG) fx = G_EMBER_BIG;
+			else if (fx == ParticleTypes.FLAME || fx == ParticleTypes.SMALL_FLAME) fx = ParticleTypes.SOUL_FIRE_FLAME;
+			else if (fx == ParticleTypes.LAVA) fx = ParticleTypes.GLOW;
+			else if (fx instanceof DustParticleEffect || fx instanceof DustColorTransitionParticleEffect) fx = G_SMALL;
+		}
+		w.addParticle(fx, x, y, z, vx, vy, vz);
 	}
 
 	// ================================================================== Sopro Dracônico

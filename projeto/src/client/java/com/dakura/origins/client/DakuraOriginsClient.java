@@ -208,6 +208,7 @@ public class DakuraOriginsClient implements ClientModInitializer {
 		});
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			com.dakura.origins.client.anim.FlightClient.tick(client);
 			if (mustChoose && client.player != null && client.currentScreen == null) {
 				client.setScreen(new RaceSelectionScreen(preselect));
 			}

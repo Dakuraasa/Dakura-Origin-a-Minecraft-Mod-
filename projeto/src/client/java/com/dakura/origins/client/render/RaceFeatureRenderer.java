@@ -204,7 +204,7 @@ public class RaceFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEnt
 			m.pop();
 		}
 
-		if (DakuraConfig.cosmetic(e, "bird_wing")) {
+		if (false && DakuraConfig.cosmetic(e, "bird_wing")) { // asa da Vastaya: agora sprite (GeoPartsRenderer)
 			com.dakura.origins.client.geo.GeoModel bird = com.dakura.origins.client.geo.GeoModel.get("bird_wing");
 			VertexConsumer bvc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(BIRD_TEX));
 			boolean glide = EntityFlags.clientHas(e, "gliding") || e.isFallFlying();
@@ -228,7 +228,8 @@ public class RaceFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEnt
 
 		// asas da Fada: agora sprite em pixel art (GeoPartsRenderer)
 
-		if (DakuraConfig.cosmetic(e, "stone_wings")) {
+		// Gárgula: no chão as asas somem; aparecem só no voo
+		if (DakuraConfig.cosmetic(e, "stone_wings") && !e.isOnGround() && !e.isTouchingWater() && !stone) {
 			if (vc == null) vc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(TEX));
 			boolean air = !e.isOnGround() && !e.isTouchingWater() && !stone;
 			float flap = air ? MathHelper.sin(animationProgress * 0.55f) * 0.55f : (stone ? 0f : MathHelper.sin(animationProgress * 0.07f) * 0.05f);

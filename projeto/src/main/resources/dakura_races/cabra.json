@@ -153,6 +153,10 @@
 			"operation": "add_multiplied_base",
 			"amount": -0.3,
 			"when": "water"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "goat_horns"
 		}
 	],
 	"abilities": [

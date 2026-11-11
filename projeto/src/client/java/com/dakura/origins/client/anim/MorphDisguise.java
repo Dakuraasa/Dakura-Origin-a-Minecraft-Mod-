@@ -23,6 +23,9 @@ public final class MorphDisguise {
 			Entity made = type.create(p.getWorld());
 			if (!(made instanceof LivingEntity le)) return null;
 			if (made instanceof MobEntity m) m.setAiDisabled(true);
+			made.setSilent(true);
+			made.setNoGravity(true);
+			made.noClip = true;
 			e = le;
 			CACHE.put(p.getId(), e);
 		}
@@ -42,7 +45,6 @@ public final class MorphDisguise {
 		e.headYaw = p.headYaw;
 		e.prevHeadYaw = p.prevHeadYaw;
 		e.hurtTime = p.hurtTime;
-		e.age = p.age;
 		e.handSwingProgress = p.handSwingProgress;
 		e.lastHandSwingProgress = p.lastHandSwingProgress;
 		e.handSwinging = p.handSwinging;
@@ -62,9 +64,22 @@ public final class MorphDisguise {
 				it.remove();
 				continue;
 			}
+			LivingEntity d = en.getValue();
+			// a criatura de fachada roda o próprio tick do cliente: é ele que liga os estados de animação
+			// (asas do morcego, abelha, papagaio, criaturas de outros mods...). Depois volta para o jogador.
+			d.setPos(p.getX(), p.getY(), p.getZ());
+			d.setVelocity(p.getVelocity());
+			d.setOnGround(p.isOnGround());
+			try {
+				d.tick();
+			} catch (Throwable ignored) {
+			}
+			d.setPos(p.getX(), p.getY(), p.getZ());
+			d.setVelocity(p.getVelocity());
+			if (d.isOnFire()) d.extinguish();
 			double dx = p.getX() - p.prevX, dz = p.getZ() - p.prevZ;
 			float speed = (float) Math.min(1.0, Math.sqrt(dx * dx + dz * dz) * 4.0);
-			en.getValue().limbAnimator.updateLimbs(speed, 0.4f);
+			d.limbAnimator.updateLimbs(speed, 0.4f);
 		}
 	}
 

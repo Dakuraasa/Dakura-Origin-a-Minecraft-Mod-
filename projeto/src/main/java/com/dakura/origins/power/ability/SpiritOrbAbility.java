@@ -91,11 +91,38 @@ public final class SpiritOrbAbility implements Ability {
 	}
 
 	/** Explosão de mana com dano real: o alvo atingido (se houver) e as criaturas hostis em volta. Nunca fere a Kitsune. */
+	/** Explosão que só quebra blocos (sem dano nem empurrão extra): respeita mobGriefing, proteções e resistência dos blocos. */
+	static void breakBlocks(ServerWorld w, net.minecraft.entity.Entity src, Vec3d c, float power) {
+		w.createExplosion(src, null, new net.minecraft.world.explosion.ExplosionBehavior() {
+			@Override
+			public boolean shouldDamage(net.minecraft.world.explosion.Explosion explosion, net.minecraft.entity.Entity entity) {
+				return false;
+			}
+
+			@Override
+			public float getKnockbackModifier(net.minecraft.entity.Entity entity) {
+				return 0f;
+			}
+		}, c.x, c.y, c.z, power, false, net.minecraft.world.World.ExplosionSourceType.MOB);
+	}
+
+	/** Congelamento de verdade: o gelo do pó de neve (lentidão, tela congelada, dano de frio) + Lentidão forte. */
+	static void freeze(LivingEntity t, int ticks) {
+		if (!t.canFreeze()) return;
+		t.setFrozenTicks(Math.max(t.getFrozenTicks(), t.getMinFreezeDamageTicks() + ticks));
+		t.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS, ticks, 3, false, true));
+	}
+
 	static void blast(ServerPlayerEntity p, ServerWorld w, Vec3d c, float r, float dmg, LivingEntity primary, float fx) {
-		if (primary != null) LegendKit.hurt(p, primary, dmg, false);
+		if (primary != null) {
+			LegendKit.hurt(p, primary, dmg, false);
+			freeze(primary, 60);
+		}
+		if (primary != null) breakBlocks(w, p, c, 1.6f); // a explosão de volta (junto da Kitsune) não cava o chão dela
 		for (LivingEntity e : LegendKit.enemies(p, c, r)) {
 			if (e == primary) continue;
 			LegendKit.hurt(p, e, dmg * 0.75f, false);
+			freeze(e, 40);
 			Vec3d push = LegendKit.flat(e.getPos().subtract(c)).multiply(0.4);
 			e.addVelocity(push.x, 0.2, push.z);
 			e.velocityModified = true;

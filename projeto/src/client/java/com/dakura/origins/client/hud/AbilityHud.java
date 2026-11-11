@@ -134,7 +134,9 @@ public final class AbilityHud {
 		if (COOLING[slot] && !cooling) FLASH_START[slot] = wall; // acabou de ficar pronta
 		COOLING[slot] = cooling;
 
-		boolean pressed = bind.isPressed() && mc.currentScreen == null;
+		// habilidade automática: não é botão (sem tecla, sem afundar); só mostra estado e recarga
+		boolean auto = info.type().equals("dakura_origins:passive");
+		boolean pressed = !auto && bind.isPressed() && mc.currentScreen == null;
 		boolean active = isActive(info, mc);
 		int border = active ? pulse(0xFFF2B33D, 0xFFFFF2C4, wall)
 				: cooling ? 0xFF3A3846
@@ -151,7 +153,14 @@ public final class AbilityHud {
 			int sw = tr.getWidth(secs);
 			ctx.drawText(tr, secs, fx + (fw - sw) / 2 + 1, fy + (fh - 8) / 2 + 1, 0xFFFFFFFF, true);
 			// tecla pequena no canto
-			drawLabel(ctx, tr, slot, bind, fx + fw, fy + fh, 0.5f, 0xFFB8B6C8, true);
+			if (!auto) drawLabel(ctx, tr, slot, bind, fx + fw, fy + fh, 0.5f, 0xFFB8B6C8, true);
+		} else if (auto) {
+			// "AUTO" pequeno no lugar da tecla
+			ctx.getMatrices().push();
+			ctx.getMatrices().translate(fx + fw / 2f, fy + fh / 2f - 2, 0);
+			ctx.getMatrices().scale(0.5f, 0.5f, 1f);
+			ctx.drawText(tr, "AUTO", -tr.getWidth("AUTO") / 2, 0, 0xFFB8B6C8, true);
+			ctx.getMatrices().pop();
 		} else {
 			drawLabel(ctx, tr, slot, bind, fx + fw / 2, fy + fh / 2, 1f, 0xFFFFFFFF, false);
 		}

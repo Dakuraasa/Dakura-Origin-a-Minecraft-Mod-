@@ -90,4 +90,11 @@ public abstract class PlayerEntityMixin {
 	private void dakura$blockLevels(int levels, CallbackInfo ci) {
 		if (MaturityPower.blocksExperience((PlayerEntity) (Object) this)) ci.cancel();
 	}
+
+	/** Demônios: a Maldição do Desaparecimento não apaga os itens na morte. */
+	@org.spongepowered.asm.mixin.injection.Inject(method = "vanishCursedItems", at = @org.spongepowered.asm.mixin.injection.At("HEAD"), cancellable = true, require = 0)
+	private void dakura$noVanish(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+		if ((Object) this instanceof net.minecraft.server.network.ServerPlayerEntity sp
+				&& com.dakura.origins.power.EntityFlags.has(sp, "curse_immune")) ci.cancel();
+	}
 }

@@ -80,7 +80,7 @@
 		},
 		{
 			"type": "dakura_origins:rebirth",
-			"cooldown": 18000,
+			"cooldown": 3600,
 			"radius": 6,
 			"damage": 8
 		},

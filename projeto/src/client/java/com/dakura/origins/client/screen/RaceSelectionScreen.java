@@ -121,7 +121,7 @@ public class RaceSelectionScreen extends Screen {
 		titleH = Math.round(titleW * TITLE_TH / (float) TITLE_TW);
 		titleX = (width - titleW) / 2;
 		titleY = 6;
-		int titleBottom = titleY + titleH + 4;
+		int titleBottom = 6; // título do mod removido das páginas
 
 		// livro fechado
 		closedScale = Math.max(1, Math.min(3, (height - titleBottom - 46) / BOOK_H));
@@ -131,7 +131,7 @@ public class RaceSelectionScreen extends Screen {
 		closedY = titleBottom + Math.max(6, (height - titleBottom - 30 - closedH) / 2);
 
 		// página aberta (o título só aparece junto se houver espaço)
-		titleWhenOpen = height >= 330;
+		titleWhenOpen = false;
 		pageY = titleWhenOpen ? titleBottom + 4 : 10;
 		pageH = height - pageY - 30;
 		// livro aberto: duas folhas lado a lado (pageX/pageW = as duas juntas)
@@ -229,6 +229,13 @@ public class RaceSelectionScreen extends Screen {
 			case OPENING -> renderOpening(ctx, mouseX, mouseY, pal, t, shown, now);
 			case OPEN -> renderOpen(ctx, mouseX, mouseY, pal, t, shown, shownToc, flipping ? flip : -1f, viewOnly ? pop(now) : 1f);
 		}
+		Text sig = Text.literal("Created by: Dakuraasa").formatted(net.minecraft.util.Formatting.BOLD);
+		float ss = 0.75f;
+		ctx.getMatrices().push();
+		ctx.getMatrices().translate(width - 4 - textRenderer.getWidth(sig) * ss, height - 4 - 8 * ss, 400);
+		ctx.getMatrices().scale(ss, ss, 1f);
+		ctx.drawText(textRenderer, sig, 0, 0, 0xCCFFFFFF, true);
+		ctx.getMatrices().pop();
 	}
 
 	/** Raça da página i, na forma base ou numa variante. */
@@ -250,7 +257,6 @@ public class RaceSelectionScreen extends Screen {
 	// ---------------------------------------------------------------- fechado
 
 	private void renderClosed(DrawContext ctx, int mouseX, int mouseY, Race.Palette pal, float t, float scale, float lift) {
-		drawTitle(ctx, t);
 
 		boolean hover = state == State.CLOSED && inside(mouseX, mouseY, closedX - 6, closedY - 6, closedW + 12, closedH + 12);
 		float bob = (float) Math.sin(t * 1.6f) * 4f - (hover ? 3f : 0f) - lift;
@@ -444,14 +450,7 @@ public class RaceSelectionScreen extends Screen {
 		int size = BOOK_W * Math.max(1, Math.min(2, (lw - PAD * 4) / BOOK_W));
 		int y = pageY + (pageH - size) / 2 - 16;
 		ctx.drawTexture(BOOK, lx + (lw - size) / 2, y, size, size, 0f, 0f, 43, 43, 43, 43);
-		MutableText name = DakuraFonts.heading(I18n.translate("dakura_origins.screen.title"));
-		float sc = 1.4f;
-		int w = Math.round(textRenderer.getWidth(name) * sc);
-		ctx.getMatrices().push();
-		ctx.getMatrices().translate(lx + (lw - w) / 2f, y + size + 10, 0f);
-		ctx.getMatrices().scale(sc, sc, 1f);
-		ctx.drawText(textRenderer, name, 0, 0, pal.accent() | 0xFF000000, false);
-		ctx.getMatrices().pop();
+		// nome do mod removido (fica só a assinatura no canto)
 	}
 
 	// ---------------------------------------------------------------- sumário

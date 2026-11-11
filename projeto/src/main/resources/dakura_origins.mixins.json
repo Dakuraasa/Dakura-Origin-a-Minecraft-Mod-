@@ -4,6 +4,7 @@
 	"package": "com.dakura.origins.mixin.common",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+		"ArmorSlotMixin",
 		"EntityMixin",
 		"FleeEntityGoalMixin",
 		"FoxEntityAccessor",

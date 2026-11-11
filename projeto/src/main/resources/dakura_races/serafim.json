@@ -11,18 +11,18 @@
 	],
 	"palette": {
 		"ink": [
-			"#0F0E0A",
-			"#26231A",
-			"#4D4632",
-			"#9C8D5E",
-			"#EAD9A2",
-			"#FFFDF4"
+			"#0C0C08",
+			"#201E16",
+			"#423C2B",
+			"#867950",
+			"#C9BA8B",
+			"#DBD9D1"
 		],
-		"sky": "#08070A",
-		"glow": "#FFFFFF",
+		"sky": "#060608",
+		"glow": "#DBDBDB",
 		"text": "#123524",
-		"accent": "#B08A2E",
-		"muted": "#5E806B"
+		"accent": "#977627",
+		"muted": "#506E5C"
 	},
 	"description": "Um anjo da mais alta ordem, envolto em luz branca, com seis asas que se fecham sobre o corpo em descanso e se abrem como um coro quando ele voa. Não ergue a mão contra criatura alguma, e nenhuma criatura ousa feri-lo. Seu dom é cuidar: cura, protege e abençoa as armas e ferramentas dos amigos num altar celestial.",
 	"traits": [
@@ -112,6 +112,11 @@
 			"type": "dakura_origins:flag",
 			"flag": "fireproof",
 			"when": "always"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:glowing",
+			"amplifier": 0
 		}
 	],
 	"abilities": [

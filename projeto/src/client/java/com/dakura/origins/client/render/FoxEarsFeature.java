@@ -90,6 +90,12 @@ public class FoxEarsFeature extends FeatureRenderer<AbstractClientPlayerEntity, 
 
 		m.push();
 		getContextModel().getHead().rotate(m);
+		if (!snow) {
+			// Raposa de Fogo: orelhas um pouco maiores, crescendo a partir do topo da cabeça
+			m.translate(0, -8f / 16f, 0);
+			m.scale(1.18f, 1.18f, 1.18f);
+			m.translate(0, 8f / 16f, 0);
+		}
 		model.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(dark ? DARK_TEX : snow ? SNOW_TEX : FIRE_TEX)), light, OverlayTexture.DEFAULT_UV);
 		m.pop();
 	}

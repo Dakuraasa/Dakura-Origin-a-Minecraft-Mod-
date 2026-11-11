@@ -75,7 +75,6 @@ public final class SolarDiveAbility implements Ability {
 			pl.velocityModified = true;
 			LegendKit.fx(pl, "solar_impact", (int) (radius * 10));
 			// o chão em volta do impacto pega fogo: chamas visuais, brasas e alguns focos de fogo de verdade
-			LegendKit.fxAt(pl.getServerWorld(), "fire_field", c, (float) radius, 120, 1);
 			DragonFire.igniteGround(pl.getServerWorld(), c, (int) radius, 7);
 			com.dakura.origins.sound.ModSounds.play(pl, com.dakura.origins.sound.ModSounds.FIRE_ROAR, 1.2f, 1f);
 			LegendKit.anim(pl, "land_pose", 12);

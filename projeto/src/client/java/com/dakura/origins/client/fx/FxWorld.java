@@ -90,9 +90,19 @@ public final class FxWorld {
 			case "zone_poison" -> SHAPES.add(new Shape(Kind.ZONE_POISON, p, a, (int) b, (int) c, null, rnd.nextFloat() * 100));
 			case "zone_greenfire" -> SHAPES.add(new Shape(Kind.ZONE_FIRE, p, a, (int) b, (int) c, null, rnd.nextFloat() * 100));
 			case "boom_green" -> SHAPES.add(new Shape(Kind.BOOM_GREEN, p, a, 16, 1, null, rnd.nextFloat() * 100));
-			case "boom_poison" -> SHAPES.add(new Shape(Kind.BOOM_POISON, p, a, 18, 1, null, rnd.nextFloat() * 100));
+			case "boom_poison" -> {
+				SHAPES.add(new Shape(Kind.BOOM_POISON, p, a, 18, 1, null, rnd.nextFloat() * 100));
+				w.addParticle(net.minecraft.particle.ParticleTypes.EXPLOSION_EMITTER, p.x, p.y, p.z, 0, 0, 0);
+				NativeFx.poison(w, p, Math.max(1.5f, a), (int) (40 + a * 12), rnd);
+				for (int i = 0; i < 30; i++) w.addParticle(i % 2 == 0 ? net.minecraft.particle.ParticleTypes.WITCH : NativeFx.POISON, p.x, p.y, p.z,
+						rnd.nextGaussian() * 0.35, rnd.nextDouble() * 0.4, rnd.nextGaussian() * 0.35);
+			}
+			case "poison_mist" -> NativeFx.poison(w, p, a, (int) (a * 6), rnd);
 			case "crater" -> SHAPES.add(new Shape(Kind.CRATER, p, a, (int) b, 4, null, rnd.nextFloat() * 100));
-			case "spores" -> SHAPES.add(new Shape(Kind.SPORES, p, a, (int) b, 1, null, rnd.nextFloat() * 100));
+			case "spores" -> {
+				SHAPES.add(new Shape(Kind.SPORES, p, a, (int) b, 1, null, rnd.nextFloat() * 100));
+				NativeFx.poison(w, p, a, (int) (a * 10), rnd);
+			}
 			case "debris" -> debris(w, p, (int) a, b, rnd);
 			case "boom_gold" -> SHAPES.add(new Shape(Kind.BOOM_GOLD, p, a, 14, 1, null, rnd.nextFloat() * 100));
 			case "boom_arcane" -> SHAPES.add(new Shape(Kind.BOOM_ARCANE, p, a, 16, 1, null, rnd.nextFloat() * 100));
@@ -106,11 +116,12 @@ public final class FxWorld {
 				SHAPES.add(sh);
 				if (fin) SHAPES.add(new Shape(Kind.DUST, p.add(0, -1, 0), 1.6f, 22, 1, null, rnd.nextFloat() * 100));
 			}
-			case "boom_mana" -> SHAPES.add(new Shape(Kind.BOOM_MANA, p, a, 16, 1, null, rnd.nextFloat() * 100));
+			case "boom_mana" -> {
+				SHAPES.add(new Shape(Kind.BOOM_MANA, p, a, 16, 1, null, rnd.nextFloat() * 100));
+				NativeFx.manaBurst(w, p, a, rnd);
+			}
 			case "fire_field" -> {
-				Shape sh = new Shape(Kind.FIRE_FIELD, p, a, (int) b, 10, null, rnd.nextFloat() * 100);
-				sh.param = c;
-				SHAPES.add(sh);
+				// círculo 3D de fogo removido: o fogo no chão agora é de blocos de verdade (servidor)
 			}
 			case "flower_circle" -> SHAPES.add(new Shape(Kind.FLOWER_CIRCLE, p, a, (int) b, 20, null, rnd.nextFloat() * 100));
 			default -> {
@@ -131,7 +142,13 @@ public final class FxWorld {
 				if (STUCK.size() < 160) STUCK.add(new float[]{e.getId(), r.nextFloat() - 0.5f, 0.3f + r.nextFloat() * 0.55f,
 						r.nextFloat() - 0.5f, r.nextFloat() * 360f, -20f - r.nextFloat() * 40f, 200});
 			}
-			case "physgun" -> TETHER.put(e.getId(), param);
+			case "physgun" -> {
+				TETHER.put(e.getId(), param);
+				Entity tg = w.getEntityById(param);
+				if (tg != null) for (int i = 0; i < 24; i++) w.addParticle(i % 3 == 0 ? net.minecraft.particle.ParticleTypes.FLASH
+						: i % 3 == 1 ? net.minecraft.particle.ParticleTypes.END_ROD : net.minecraft.particle.ParticleTypes.WAX_ON,
+						tg.getX(), tg.getY() + tg.getHeight() / 2, tg.getZ(), rnd.nextGaussian() * 0.2, rnd.nextGaussian() * 0.2, rnd.nextGaussian() * 0.2);
+			}
 			case "physgun_throw" -> SHAPES.add(new Shape(Kind.GOLD_TRAIL, e.getPos(), 0.8f, 40, 1, e, rnd.nextFloat() * 100));
 			case "shield_flash" -> SHAPES.add(new Shape(Kind.SHIELD_FLASH, e.getPos(), 1.8f, 10, 1, e, rnd.nextFloat() * 100));
 			case "bloom_heal" -> SHAPES.add(new Shape(Kind.BLOOM, e.getPos(), Math.max(0.5f, e.getWidth()), 16, 1, e, rnd.nextFloat() * 100));
@@ -188,6 +205,20 @@ public final class FxWorld {
 			Entity c = mc.world.getEntityById(en.getKey());
 			return c == null || !com.dakura.origins.power.EntityFlags.clientHas(c, "physgun");
 		});
+		// Elfo Real segurando alguém: o raio dourado ganha faíscas, brilho e pó de ouro correndo pela linha
+		for (var en : TETHER.entrySet()) {
+			Entity c = mc.world.getEntityById(en.getKey()), tg = mc.world.getEntityById(en.getValue());
+			if (c == null || tg == null) continue;
+			Vec3d a0 = c.getEyePos().add(c.getRotationVec(1f).multiply(0.6)).add(0, -0.3, 0), b0 = tg.getPos().add(0, tg.getHeight() * 0.5, 0);
+			net.minecraft.util.math.random.Random r = mc.world.random;
+			for (int i = 0; i < 4; i++) {
+				Vec3d q = a0.lerp(b0, r.nextDouble());
+				mc.world.addParticle(i % 2 == 0 ? net.minecraft.particle.ParticleTypes.END_ROD : net.minecraft.particle.ParticleTypes.WAX_ON,
+						q.x, q.y, q.z, r.nextGaussian() * 0.01, 0.01, r.nextGaussian() * 0.01);
+			}
+			if (r.nextInt(2) == 0) mc.world.addParticle(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, b0.x + r.nextGaussian() * 0.4,
+					b0.y + r.nextGaussian() * 0.4, b0.z + r.nextGaussian() * 0.4, 0, 0, 0);
+		}
 		for (Iterator<Debris> it = DEBRIS.iterator(); it.hasNext(); ) {
 			Debris d = it.next();
 			d.px = d.x;
@@ -624,8 +655,8 @@ public final class FxWorld {
 				float ox = (float) Math.cos(a) * 1.3f, oz = (float) Math.sin(a) * 1.3f, oy = MathHelper.sin((float) a * 2) * 0.15f;
 				float k = 1 - j / 8f;
 				if (j == 0) {
-					sphere(m, vc, (float) p.x + ox, (float) p.y + h + oy, (float) p.z + oz, 0.2f, 0x4FA8FF, 0.45f);
-					sphere(m, vc, (float) p.x + ox, (float) p.y + h + oy, (float) p.z + oz, 0.11f, 0xF0FAFF, 0.95f);
+					sphere(m, vc, (float) p.x + ox, (float) p.y + h + oy, (float) p.z + oz, 0.34f, 0x4FA8FF, 0.5f);
+					sphere(m, vc, (float) p.x + ox, (float) p.y + h + oy, (float) p.z + oz, 0.18f, 0xF0FAFF, 1f);
 				} else dot(m, vc, (float) p.x + ox, (float) p.y + h + oy, (float) p.z + oz, 0.15f * k, j % 2 == 0 ? 0x7FC4FF : 0xB59CFF, 0.45f * k);
 			}
 		}

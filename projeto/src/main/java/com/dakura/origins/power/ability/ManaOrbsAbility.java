@@ -113,6 +113,8 @@ public final class ManaOrbsAbility implements Ability {
 				double d = to.length();
 				if (d < 0.9) {
 					LegendKit.hurt(pl, tg, dmg, false);
+					SpiritOrbAbility.freeze(tg, 30);
+					SpiritOrbAbility.breakBlocks(w, pl, aimAt, 1.0f);
 					LegendKit.fxAt(w, "boom_mana", aimAt, 1.3f, 0, 0);
 					ModSounds.play(w, aimAt, ModSounds.MANA_BURST, 0.8f, 1.2f + i * 0.05f);
 					o.discard();

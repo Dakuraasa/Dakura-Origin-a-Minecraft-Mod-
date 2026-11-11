@@ -221,6 +221,7 @@ final class ExtraEffects {
 	static void fxAt(ClientWorld world, String name, Vec3d p, float a, float b, float c, Random rnd) {
 		switch (name) {
 			case "dark_burst" -> {
+				com.dakura.origins.client.fx.NativeFx.darkBurst(world, p, a, rnd);
 				expandingRing(p, 1.5 * a, 5, VIOLET, 22);
 				for (int i = 0; i < 30 * a; i++) world.addParticle(i % 2 == 0 ? SHADOW : VIOLET, p.x, p.y, p.z,
 						rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.3);

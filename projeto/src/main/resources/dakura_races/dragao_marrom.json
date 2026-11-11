@@ -144,15 +144,22 @@
 	],
 	"abilities": [
 		{
-			"type": "dakura_origins:magma_volley",
-			"name": "Rajada de Magma",
+			"type": "dakura_origins:fireball",
+			"name": "Bola de Fogo Verde",
+			"description": "A mesma bola de fogo do Dracônico, em chamas verdes e azuis: explode, empurra sem exagero e incendeia de verdade quem estiver perto e o chão em volta.",
 			"cooldown": 200,
-			"speed": 1.5,
-			"interval": 6,
-			"radius": 3.5,
-			"blast": 5,
-			"fire": 3,
-			"description": "Dispara blocos de magma verde que giram no ar e explodem em fogo verde, lançando pedaços do chão para o alto. A maturidade aumenta a quantidade: 1, 2 e depois 3 disparos seguidos."
+			"speed": 1.6,
+			"life": 50,
+			"explosion_power": 4.0,
+			"block_power": 1.5,
+			"fire_count": 12,
+			"fire_radius": 3,
+			"maturity_damage": [
+				1.0,
+				1.4,
+				1.8
+			],
+			"palette": "green"
 		},
 		{
 			"type": "dakura_origins:skyfall_grab",

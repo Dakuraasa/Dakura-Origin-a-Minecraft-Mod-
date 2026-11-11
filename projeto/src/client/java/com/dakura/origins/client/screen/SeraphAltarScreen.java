@@ -61,7 +61,7 @@ public class SeraphAltarScreen extends Screen {
 		int x = left(), y = top() + Math.round((1 - in) * 20);
 
 		// as seis asas do Serafim (as mesmas do personagem, sem brilho) abertas atrás do altar, batendo devagar
-		drawWings(ctx, x + W / 2f, y + 34, t);
+		// ícone de asa removido do altar (pedido do Artur)
 		ctx.getMatrices().push();
 		ctx.getMatrices().translate(0, 0, 30); // o painel fica na frente das asas
 

@@ -178,15 +178,13 @@
 	],
 	"abilities": [
 		{
-			"type": "dakura_origins:vine_snare",
-			"name": "Vinhas Rasteiras",
-			"description": "Vinhas correm pelo chão até o inimigo, prendem seus pés na terra e o deixam muito lento.",
-			"cooldown": 160,
-			"range": 16,
-			"speed": 0.9,
-			"root_ticks": 50,
-			"slow_ticks": 80,
-			"damage": 2.0
+			"type": "dakura_origins:natural_growth",
+			"cooldown": 6000,
+			"radius": 20,
+			"height": 8,
+			"max_steps": 12,
+			"name": "Florescer",
+			"description": "Libera uma onda de energia natural num raio de 20 blocos: mudas viram árvores, plantações amadurecem e as plantas crescem na hora, seguindo as regras do jogo (espaço e solo certos). Recarga de 5 minutos."
 		},
 		{
 			"type": "dakura_origins:solar_beam",

@@ -122,6 +122,7 @@ public final class PowerRegistry {
 		registerPowerType(DakuraOrigins.id("lily_pad"), com.dakura.origins.power.types.LilyPadPower::new);
 		com.dakura.origins.power.types.RebirthPower.bootstrap();
 		com.dakura.origins.power.types.GlidePower.bootstrap();
+		com.dakura.origins.power.types.FlightPower.bootstrap();
 		registerPowerType(DakuraOrigins.id("golden_ward"), com.dakura.origins.power.types.GoldenWardPower::new);
 		com.dakura.origins.power.types.GoldenWardPower.bootstrap();
 		registerPowerType(DakuraOrigins.id("toxic_affinity"), com.dakura.origins.power.types.ToxicAffinityPower::new);
@@ -205,6 +206,7 @@ public final class PowerRegistry {
 		registerAbilityType(DakuraOrigins.id("fist_barrage"), com.dakura.origins.power.ability.FistBarrageAbility::new);
 		registerAbilityType(DakuraOrigins.id("spirit_orb"), com.dakura.origins.power.ability.SpiritOrbAbility::new);
 		registerAbilityType(DakuraOrigins.id("dark_comet"), com.dakura.origins.power.ability.DarkCometAbility::new);
+		registerAbilityType(DakuraOrigins.id("natural_growth"), com.dakura.origins.power.ability.NaturalGrowthAbility::new);
 		registerAbilityType(DakuraOrigins.id("mana_orbs"), com.dakura.origins.power.ability.ManaOrbsAbility::new);
 		registerAbilityType(DakuraOrigins.id("flower_sanctuary"), com.dakura.origins.power.ability.FlowerSanctuaryAbility::new);
 		com.dakura.origins.power.ability.LegendKit.bootstrap();

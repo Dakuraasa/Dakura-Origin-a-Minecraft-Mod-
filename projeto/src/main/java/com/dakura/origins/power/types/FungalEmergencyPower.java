@@ -78,32 +78,43 @@ public final class FungalEmergencyPower implements RacePower {
 		List<List<Object[]>> layers = layers(base);
 		LegendKit.fxAt(w, "spores", Vec3d.ofBottomCenter(base), 5, 40, 0);
 		ModSounds.play(w, Vec3d.ofCenter(base), ModSounds.MUSHROOM_RISE, 1.3f, 0.9f);
-		LegendKit.run(p, "fungal_grow", layers.size() * 2 + 2, (pl, age) -> {
-			if (age % 2 == 0 && age / 2 < layers.size()) {
-				for (Object[] o : layers.get(age / 2)) {
-					BlockPos bp = (BlockPos) o[0];
-					BlockState old = w.getBlockState(bp);
-					if (old.isAir() || old.isReplaceable()) {
-						w.setBlockState(bp, ((Block) o[1]).getDefaultState());
-						placed.add(bp);
-					}
+		// topo = em cima do bloco mais alto do cogumelo (o domo é oco: procurar ar a partir de dentro a prendia lá)
+		int topY = base.getY();
+		for (List<Object[]> layer : layers)
+			for (Object[] o : layer) topY = Math.max(topY, ((BlockPos) o[0]).getY());
+		BlockPos top = new BlockPos(base.getX(), topY + 1, base.getZ());
+		for (int i = 0; i < 6 && !(w.getBlockState(top).isAir() && w.getBlockState(top.up()).isAir()); i++) top = top.up();
+		// a Dama vai para o topo ANTES de o cogumelo surgir, para nunca ficar presa dentro dele
+		p.stopRiding();
+		p.setVelocity(Vec3d.ZERO);
+		p.requestTeleport(top.getX() + 0.5, top.getY(), top.getZ() + 0.5);
+		p.fallDistance = 0;
+		for (List<Object[]> layer : layers)
+			for (Object[] o : layer) {
+				BlockPos bp = (BlockPos) o[0];
+				BlockState old = w.getBlockState(bp);
+				if (old.isAir() || old.isReplaceable()) {
+					w.setBlockState(bp, ((Block) o[1]).getDefaultState());
+					placed.add(bp);
 				}
 			}
-			pl.fallDistance = 0;
-			pl.setVelocity(0, Math.max(0, pl.getVelocity().y), 0);
+		Vec3d topC = new Vec3d(top.getX() + 0.5, top.getY(), top.getZ() + 0.5);
+		LegendKit.fxAt(w, "spores", topC, 3, 30, 0);
+		// veneno de verdade em volta e embaixo do cogumelo enquanto ele existe
+		Vec3d foot = Vec3d.ofBottomCenter(base);
+		AreaZones.create(w, foot, 7f, 6, stay, AreaZones.Kind.POISON, p, 1.0f, null);
+		LegendKit.fxAt(w, "boom_poison", foot.add(0, 0.5, 0), 7f, 0, 0);
+		// regeneração por 10 s, feita por código (sem efeito de poção)
+		LegendKit.run(p, "fungal_regen", 200, (pp, a) -> {
+			if (a % 10 == 0) pp.heal(1f);
+			pp.fallDistance = 0;
 			return true;
-		}, pl -> {
-			pl.requestTeleport(base.getX() + 0.5, base.getY() + 15, base.getZ() + 0.5);
-			pl.fallDistance = 0;
-			LegendKit.fxAt(w, "spores", new Vec3d(base.getX() + 0.5, base.getY() + 15, base.getZ() + 0.5), 3, 30, 0);
-			// regeneração por 10 s, feita por código (sem efeito de poção)
-			LegendKit.run(pl, "fungal_regen", 200, (pp, a) -> {
-				if (a % 10 == 0) pp.heal(1f);
-				return true;
-			});
-			LegendKit.run(pl, "fungal_vanish", stay, (pp, a) -> true, pp -> {
-				for (BlockPos bp : placed) if (ModBlocks.isTemporary(w.getBlockState(bp).getBlock())) w.removeBlock(bp, false);
-			});
+		});
+		LegendKit.run(p, "fungal_vanish", stay, (pp, a) -> {
+			if (a % 10 == 0) LegendKit.fxAt(w, "poison_mist", foot, 7f, 0, 0);
+			return true;
+		}, pp -> {
+			for (BlockPos bp : placed) if (ModBlocks.isTemporary(w.getBlockState(bp).getBlock())) w.removeBlock(bp, false);
 		});
 	}
 

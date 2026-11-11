@@ -60,7 +60,6 @@ public final class DawnWingsAbility implements Ability {
 		pulse(p, 1f);
 		LegendKit.anim(p, "wings_spread", 26);
 		LegendKit.fx(p, "dawn_wings", (int) (radius * 10));
-		LegendKit.fxAt(p.getServerWorld(), "fire_field", p.getPos(), (float) (radius * 0.9), pulses * 20 + 40, 1);
 		DragonFire.igniteGround(p.getServerWorld(), p.getPos(), (int) radius, 6);
 		com.dakura.origins.sound.ModSounds.play(p, com.dakura.origins.sound.ModSounds.FIRE_ROAR, 1f, 1.2f);
 		LegendKit.snd(p, SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1.2f, 0.9f);

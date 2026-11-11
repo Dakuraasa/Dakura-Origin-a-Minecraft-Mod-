@@ -67,6 +67,7 @@ public final class DarkCometAbility implements Ability {
 			if (w.raycast(new RaycastContext(pos, next, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, orb))
 					.getType() != HitResult.Type.MISS || pos.distanceTo(start) >= range) {
 				LegendKit.fxAt(w, "dark_burst", pos, 0.6f, 0, 0);
+				SpiritOrbAbility.breakBlocks(w, pl, pos, 1.6f);
 				orb.discard();
 				return false;
 			}
@@ -81,6 +82,8 @@ public final class DarkCometAbility implements Ability {
 		ServerWorld w = p.getServerWorld();
 		LegendKit.stop(p, "dark_chain");
 		LegendKit.hurt(p, t, damage * mult, false);
+		SpiritOrbAbility.freeze(t, root);
+		SpiritOrbAbility.breakBlocks(w, p, t.getPos().add(0, t.getHeight() * 0.5, 0), 1.6f);
 		Vec3d mid = t.getPos().add(0, t.getHeight() * 0.5, 0);
 		LegendKit.fxAt(w, "dark_burst", mid, 1.4f, 0, 0);
 		ModSounds.play(w, mid, ModSounds.CHAIN_BIND, 1.2f, 0.9f);

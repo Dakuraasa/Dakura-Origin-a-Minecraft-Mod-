@@ -11,18 +11,18 @@
 	],
 	"palette": {
 		"ink": [
-			"#07040C",
-			"#170B24",
-			"#2E1548",
-			"#5B2C8C",
-			"#B98CFF",
-			"#F3E9FF"
+			"#050507",
+			"#111116",
+			"#1F1F27",
+			"#3A3A46",
+			"#D9D9E3",
+			"#FFFFFF"
 		],
-		"sky": "#040208",
-		"glow": "#E8D6FF",
-		"text": "#123524",
-		"accent": "#7A3FC4",
-		"muted": "#6B5E80"
+		"sky": "#020203",
+		"glow": "#F2F2FA",
+		"text": "#16161C",
+		"accent": "#4A4A5A",
+		"muted": "#6E6E7A"
 	},
 	"description": "Uma raposa que viveu mil anos e ganhou nove caudas brancas como a neve. Mensageira dos santuários, guarda uma pérola estelar que a traz de volta da morte. Suas chamas-fantasma curam quem ela protege e queimam quem ela caça, e quando as nove caudas se abrem, o próprio espírito da raposa celestial desce para lutar ao seu lado.",
 	"traits": [
@@ -83,9 +83,9 @@
 			"style": "kitsune",
 			"grow_message": "dakura_origins.message.corrupt_grow",
 			"colors": [
-				"#6A3FA8",
-				"#9B2FC4",
-				"#D23A8C"
+				"#4A4A58",
+				"#8A8A9A",
+				"#F0F0FA"
 			]
 		},
 		{
@@ -150,7 +150,7 @@
 		},
 		{
 			"type": "dakura_origins:flag",
-			"flag": "aura#9B5CFF",
+			"flag": "aura#E6E6F0",
 			"when": "night"
 		},
 		{
