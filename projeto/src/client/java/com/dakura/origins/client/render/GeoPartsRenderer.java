@@ -165,29 +165,22 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 	 * No voo: abertas, batendo devagar e "preguiçosas", cada par num ritmo próprio. Brilho branco permanente.
 	 */
 	private void seraph(MatrixStack m, VertexConsumerProvider vcp, AbstractClientPlayerEntity e, float t) {
-		float[] st = phys(e);
-		boolean air = airborne(e);
-		float o = open(e, 0, air, 0.06f);
-		boolean fast = air && e.isSprinting();
+		float o = open(e, 0, airborne(e), 0.08f);
 		float glow = Emissive.pulse(t, 0.05f, 0.35f, 0.5f);
+		float[] size = {40f, 34f, 28f};             // par de cima ~2,5 blocos
+		float[] rootY = {1.5f, 4.5f, 7.5f};
+		float[] flyRoll = {-0.4f, 0.05f, 0.5f};     // leque: cima, meio, baixo
+		float[] restRoll = {1.0f, 1.2f, 1.4f};      // no chão: caídas e recolhidas atrás
 		m.push();
 		getContextModel().body.rotate(m);
 		for (int p = 2; p >= 0; p--) {
-			// mesma animação de antes: cada par com frequência e fase próprias, batendo devagar
-			float freq = (fast ? 0.2f : 0.12f) + p * 0.023f, amp = (fast ? 0.5f : 0.38f) - p * 0.04f;
-			float ph = phase(e, 10 + p, freq, t) - p * 1.35f;
-			float flap = MathHelper.sin(ph) * amp;
-			for (int s = 1; s >= -1; s -= 2) {
-				float capeRoll = s * (1.45f - p * 0.12f) + s * st[2] * 0.3f - s * st[5] * 0.4f;
-				float capeYaw = -s * (0.85f + p * 0.1f) + s * st[5] * 0.3f;
-				float capePitch = 0.18f + p * 0.06f + st[0] * 0.6f + st[4] * 0.35f + MathHelper.sin(t * 0.05f + p) * 0.025f;
-				float flyRoll = -s * (0.4f - p * 0.4f) - s * flap;
-				float flyYaw = -s * ((fast ? 0.5f : 0.2f) + MathHelper.cos(ph) * 0.08f);
-				float flyPitch = fast ? 0.25f : 0.05f;
-				float sc = 1f - p * 0.16f;
-				spriteWing(m, vcp, SPR_SERAPH, Emissive.FULL_BRIGHT, s, 1.6f, 4.0f + p * 2.6f, 2.4f + p * 0.3f, 22f * sc, 0.665f, 0.06f,
-						MathHelper.lerp(o, capePitch, flyPitch), MathHelper.lerp(o, capeYaw, flyYaw), MathHelper.lerp(o, capeRoll, flyRoll), glow, 0xFFFFFF);
-			}
+			float breathe = MathHelper.sin(t * 0.06f + p * 1.3f) * 0.035f * o;
+			float roll = MathHelper.lerp(o, restRoll[p], flyRoll[p]) + breathe;
+			float yaw = MathHelper.lerp(o, -1.0f, -0.25f - p * 0.08f);
+			float pitch = MathHelper.lerp(o, 0.12f, 0.03f);
+			for (int s = 1; s >= -1; s -= 2)
+				spriteWing(m, vcp, SPR_SERAPH, Emissive.FULL_BRIGHT, s, 1.0f, rootY[p], 2.3f + p * 0.15f, size[p], 0.62f, 0.02f,
+						pitch, yaw, roll, glow, 0xFFFFFF);
 		}
 		m.pop();
 	}
@@ -203,11 +196,13 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		float w = widthPx / 16f, h = w * sp.aspect;
 		m.push();
 		m.translate(s * px / 16f, py / 16f, pz / 16f);
-		if (s < 0) m.scale(-1, 1, 1);
-		m.multiply(new org.joml.Quaternionf().rotationZYX(roll, yaw, pitch));
-		float x0 = -pivotX * w, x1 = x0 + w, y0 = -pivotY * h, y1 = y0 + h;
-		quad(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(tex)), x0, x1, y0, y1, 0, 1, 0, 1, light, 0xFFFFFFFF);
-		if (glow > 0) quad(m, vcp.getBuffer(RenderLayer.getEyes(tex)), x0, x1, y0, y1, 0, 1, 0, 1, Emissive.FULL_BRIGHT, Emissive.argb(glow, tint));
+		// ângulos são do lado esquerdo; o direito é o reflexo exato (yaw e roll invertidos), sem escala negativa
+		m.multiply(new org.joml.Quaternionf().rotationY(s * yaw).rotateZ(s * roll).rotateX(pitch));
+		float a0 = -pivotX * w, a1 = a0 + w, y0 = -pivotY * h, y1 = y0 + h;
+		float x0 = s > 0 ? a0 : -a1, x1 = s > 0 ? a1 : -a0;
+		float u0 = s > 0 ? 0 : 1, u1 = s > 0 ? 1 : 0;
+		quad(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(tex)), x0, x1, y0, y1, u0, u1, 0, 1, light, 0xFFFFFFFF);
+		if (glow > 0) quad(m, vcp.getBuffer(RenderLayer.getEyes(tex)), x0, x1, y0, y1, u0, u1, 0, 1, Emissive.FULL_BRIGHT, Emissive.argb(glow, tint));
 		m.pop();
 	}
 
@@ -237,14 +232,12 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		boolean power = EntityFlags.clientHas(e, "solar_dive") || EntityFlags.clientHas(e, "reborn")
 				|| AbilityAnimations.active("wings_spread").contains(e.getId());
 		if (!airborne(e) && !power) return;
-		float fast = e.isFallFlying() || e.isSprinting() ? 1.5f : 1f;
-		float ph = phase(e, 20, (power ? 0.55f : 0.32f) * fast, t);
-		float flap = MathHelper.sin(ph) * (power ? 0.55f : 0.42f);
+		float breathe = MathHelper.sin(t * 0.07f) * 0.035f;
 		float glow = power ? Emissive.pulse(t, 0.6f, 0.75f, 1f) : Emissive.pulse(t, 0.2f, 0.5f, 0.65f);
 		m.push();
 		getContextModel().body.rotate(m);
 		for (int s = 1; s >= -1; s -= 2)
-			spriteWing(m, vcp, SPR_PHOENIX, Emissive.FULL_BRIGHT, s, 1.5f, 3.0f, 2.4f, 26f, 0.665f, 0.06f, 0.05f, -s * 0.15f, -s * (0.3f + flap), glow, 0xFFB050);
+			spriteWing(m, vcp, SPR_PHOENIX, Emissive.FULL_BRIGHT, s, 1.0f, 2.0f, 2.3f, 32f, 0.62f, 0.02f, 0.03f, -0.28f, -0.2f + breathe, glow, 0xFFB050);
 		m.pop();
 	}
 
@@ -254,7 +247,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		float flap = MathHelper.sin(phase(e, 30, 0.12f + speed(e) * 0.4f, t)) * 0.12f;
 		m.push();
 		getContextModel().body.rotate(m);
-		spriteWing(m, vcp, SPR_VASTAYA, light, 1, 1.5f, 3.0f, 2.4f, 28f, 0.665f, 0.06f, 0.1f, -0.1f, -0.15f - flap, 0, 0);
+		spriteWing(m, vcp, SPR_VASTAYA, light, 1, 1.5f, 3.0f, 2.4f, 35f, 0.665f, 0.06f, 0.1f, -0.1f, -0.15f - flap, 0, 0);
 		m.pop();
 	}
 
@@ -327,16 +320,15 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		boolean grabbing = EntityFlags.clientHas(e, "skyfall");
 		boolean air = airborne(e);
 		float o = open(e, 1, air || grabbing, 0.12f);
-		float fast = e.isFallFlying() || e.isSprinting() ? 1.45f : 1f;
-		float flap = MathHelper.sin(phase(e, 40, (grabbing ? 0.45f : 0.26f) * fast, t)) * 0.55f;
+		float breathe = MathHelper.sin(t * 0.06f) * 0.03f * o;
 		m.push();
 		getContextModel().body.rotate(m);
 		for (int s = 1; s >= -1; s -= 2) {
-			// repouso: inclinadas para baixo, pesadas, junto às costas; voo: abertas e batendo pesado
-			float pitch = MathHelper.lerp(o, 0.25f + st[0] * 0.3f + st[4] * 0.2f, 0.05f);
-			float yaw = MathHelper.lerp(o, -s * 1.05f + s * st[5] * 0.3f, -s * 0.12f);
-			float roll = MathHelper.lerp(o, s * 0.85f + s * st[2] * 0.2f, -s * (0.15f + flap));
-			spriteWing(m, vcp, brown ? SPR_DRAGON_BROWN : SPR_DRAGON_RED, light, s, 1.6f, 2.6f, 2.4f, brown ? 24f : 28f, 0.657f, 0.04f,
+			// repouso: caídas e recolhidas para trás, pesadas; voo: abertas em leve "V", paradas
+			float pitch = MathHelper.lerp(o, 0.12f, 0.04f);
+			float yaw = MathHelper.lerp(o, -1.1f, -0.25f);
+			float roll = MathHelper.lerp(o, 0.85f, -0.15f) + breathe;
+			spriteWing(m, vcp, brown ? SPR_DRAGON_BROWN : SPR_DRAGON_RED, light, s, 1.2f, 2.0f, 2.3f, 32f, 0.625f, 0.02f,
 					pitch, yaw, roll, 0, 0);
 		}
 		m.pop();
@@ -345,12 +337,14 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		tl.reset();
 		float v = Math.min(0.35f, speed(e));
 		float freq = 0.07f + v * 1.5f, amp = 0.05f + v * 0.85f;
-		float lift = air ? 0.4f : 0f;
+		// no voo o corpo fica deitado: a cauda desce ao longo dele, apontando para os pés
+		float lift = MathHelper.lerp(o, 0f, -1.0f);
+		amp *= 1f - 0.6f * o;
 		float tph = phase(e, 41, freq, t), tph2 = phase(e, 42, freq * 2f, t);
 		for (int k = 0; k < 12; k++) {
 			float yaw = MathHelper.sin(tph - k * 0.55f) * amp * (0.3f + k * 0.06f) + st[2] * 0.07f + st[5] * 0.12f * (k + 1) / 12f;
 			float pitch = (k == 0 ? lift + st[0] * 0.25f - st[4] * 0.2f : 0) + MathHelper.sin(tph2 - k * 0.45f) * amp * 0.12f
-					+ (air ? -0.03f : 0f) + st[4] * 0.04f;
+					+ st[4] * 0.04f * (1f - o);
 			tl.turn("tail_" + k, pitch, yaw, 0);
 		}
 		tl.turn("tail_tip", 0, MathHelper.sin(tph - 7f) * amp * 0.6f, 0);
@@ -385,6 +379,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		float glow = Emissive.pulse(t, 0.08f, 0.2f, 0.32f);
 		m.push();
 		getContextModel().body.rotate(m);
+		m.translate(0, -1.6f / 16f, 0);
 		for (int i = 0; i < n; i++) {
 			float k = n <= 1 ? 0 : (i / (float) (n - 1)) * 2f - 1f;   // -1..1
 			// cada cauda com fase e ritmo próprios (fase acumulada: sem saltos quando a velocidade muda)
@@ -395,7 +390,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 			float yaw = k * spreadMax * (fan ? 1.3f : 1f) + st[2] * 0.5f + st[5] * 0.6f;
 			// correndo, as caudas se esticam para trás acompanhando o corpo; no ar sobem; ao aterrissar afundam e quicam
 			float stretch = MathHelper.clamp(v * 3.2f, 0f, 1f);
-			float pitch = -0.1f * Math.abs(k) + layer + st[0] * 0.55f - stretch * 0.75f + st[4] * 0.45f - (fan ? 0.3f : 0);
+			float pitch = 0.14f - 0.1f * Math.abs(k) + layer + st[0] * 0.55f - stretch * 0.75f + st[4] * 0.45f - (fan ? 0.3f : 0);
 			g.turn("tail", pitch, yaw * (1f - stretch * 0.35f), k * 0.25f);
 			for (int s = 1; s < 10; s++) {
 				float wave = MathHelper.sin(ph - s * 0.55f) * (0.045f + v * 0.18f) * (1f - stretch * 0.5f);

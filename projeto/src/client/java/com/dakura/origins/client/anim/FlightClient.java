@@ -46,7 +46,11 @@ public final class FlightClient {
 		ClientPlayerEntity me = mc.player;
 		if (me != null && me.isFallFlying() && !me.isSneaking()) {
 			float[] fp = params(me);
-			if (fp != null && me.input.movementForward > 0) {
+			// sem a flag ainda sincronizada, as raças aladas usam o impulso padrão (antes a Fênix ficava só planando)
+			if (fp == null && (DakuraConfig.cosmetic(me, "phoenix_wings") || DakuraConfig.cosmetic(me, "seraph_wings")
+					|| DakuraConfig.cosmetic(me, "dragon_red") || DakuraConfig.cosmetic(me, "dragon_brown")))
+				fp = new float[]{0.06f, 1.8f};
+			if (fp != null && (me.input.movementForward > 0 || me.input.jumping)) {
 				float thrust = fp[0] * (me.isSprinting() || mc.options.sprintKey.isPressed() ? 1.5f : 1f);
 				Vec3d look = me.getRotationVector();
 				Vec3d v = me.getVelocity().add(look.multiply(thrust));
