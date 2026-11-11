@@ -398,7 +398,13 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 			}
 			m.push();
 			// mais redondas e volumosas: engrossa a cauda sem alongar
-			m.scale(scale * 1.18f, scale * 1.18f, scale);
+			if (n > 1) {
+				// Kitsune: a cauda cresce a partir da própria raiz, que fica na mesma altura da Raposa de Fogo
+				m.translate(0, (10.8f - 10.5f * 1.18f + 1.6f) / 16f, 0);
+				m.translate(0, 10.5f / 16f, 2f / 16f);
+				m.scale(scale * 1.18f, scale * 1.18f, scale);
+				m.translate(0, -10.5f / 16f, -2f / 16f);
+			} else m.scale(scale * 1.18f, scale * 1.18f, scale);
 			Emissive.geo(g, m, vcp, tex, glow, tint);
 			m.pop();
 		}
