@@ -60,9 +60,10 @@ public class SeraphAltarScreen extends Screen {
 		float in = Math.min(1f, t / 0.35f);
 		int x = left(), y = top() + Math.round((1 - in) * 20);
 
-		// asas de anjo nas laterais, batendo devagar
-		drawWing(ctx, x - 8, y + 40, -1, t);
-		drawWing(ctx, x + W + 8, y + 40, 1, t);
+		// as seis asas do Serafim (as mesmas do personagem, sem brilho) abertas atrás do altar, batendo devagar
+		drawWings(ctx, x + W / 2f, y + 34, t);
+		ctx.getMatrices().push();
+		ctx.getMatrices().translate(0, 0, 30); // o painel fica na frente das asas
 
 		// painel arredondado com borda dourada dupla
 		round(ctx, x, y, W, H, 0xFFE9C66A);
@@ -120,21 +121,39 @@ public class SeraphAltarScreen extends Screen {
 		}
 		Text hint = Text.translatable("dakura_origins.altar.hint").formatted(Formatting.ITALIC);
 		ctx.drawText(textRenderer, hint, x + (W - textRenderer.getWidth(hint)) / 2, y + H - 16, 0xFFA48B4C, false);
+		ctx.getMatrices().pop();
 	}
 
-	/** Asa de anjo em pixel art: fileiras de penas arredondadas, abrindo e fechando. */
-	private static void drawWing(DrawContext ctx, int ax, int ay, int dir, float t) {
-		float flap = (float) Math.sin(t * 1.8f) * 0.18f;
-		for (int row = 0; row < 6; row++) {
-			int len = 46 - row * 5;
-			double ang = -0.9 + row * 0.32 + flap;
-			for (int k = 0; k < len; k += 2) {
-				int px = ax + dir * (int) Math.round(Math.cos(ang) * k), py = ay + (int) Math.round(Math.sin(ang) * k * 0.9) + row * 6;
-				int c = k > len - 8 ? 0xFFF4E6B8 : 0xFFFFFFFF;
-				ctx.fill(px - 2, py - 2, px + 3, py + 3, 0x30000000);
-				ctx.fill(px - 2, py - 2, px + 2, py + 2, c);
+	/**
+	 * Asas do Serafim no menu: o mesmo modelo e a mesma textura do personagem, sem a camada de brilho,
+	 * abertas para os dois lados do painel e batendo suave, cada par no seu ritmo.
+	 */
+	private static void drawWings(DrawContext ctx, float cx, float cy, float t) {
+		com.dakura.origins.client.geo.GeoModel g = com.dakura.origins.client.geo.GeoModel.get("seraph_wings");
+		g.reset();
+		float tt = t * 20f;
+		for (int p = 0; p < 3; p++) {
+			float ph = tt * (0.12f + p * 0.023f) - p * 1.35f;
+			float flap = MathHelper.sin(ph) * (0.32f - p * 0.04f);
+			for (int s = 1; s >= -1; s -= 2) {
+				String w = "wing_" + p + "_" + (s > 0 ? "l" : "r");
+				g.set(w, 0, -s * (0.1f + MathHelper.cos(ph) * 0.06f), -s * (0.35f - p * 0.42f) - s * flap);
+				g.turn(w + "_fore", 0, 0, -s * MathHelper.sin(ph - 0.5f) * 0.14f);
+				for (int k = 0; k < 5; k++) g.turn(w + "_pri_" + k, 0, 0, MathHelper.sin(ph - 0.9f - k * 0.15f) * 0.05f * k);
 			}
 		}
+		var ms = ctx.getMatrices();
+		ms.push();
+		ms.translate(cx, cy, 10);
+		float sc = 62f; // o modelo é medido em blocos: ~2,5 blocos de envergadura viram ~150 px de cada lado
+		ms.scale(sc, sc, 0.05f);
+		ms.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Y.rotationDegrees(180));
+		net.minecraft.client.render.DiffuseLighting.disableGuiDepthLighting();
+		g.render(ms, ctx.getVertexConsumers().getBuffer(net.minecraft.client.render.RenderLayer.getEntityCutoutNoCull(
+				com.dakura.origins.DakuraOrigins.id("textures/entity/geo/seraph_wings.png"))), 0xF000F0);
+		ctx.draw();
+		net.minecraft.client.render.DiffuseLighting.enableGuiDepthLighting();
+		ms.pop();
 	}
 
 	private static void round(DrawContext ctx, int x, int y, int w, int h, int c) {

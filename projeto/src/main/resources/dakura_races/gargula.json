@@ -6,8 +6,8 @@
 	"epithet": "A Sentinela de Pedra",
 	"icon": "dakura_origins:textures/race/gargula.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -142,6 +142,11 @@
 			"operation": "add_multiplied_base",
 			"amount": -0.1,
 			"when": "day"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fireproof",
+			"when": "always"
 		}
 	],
 	"abilities": [

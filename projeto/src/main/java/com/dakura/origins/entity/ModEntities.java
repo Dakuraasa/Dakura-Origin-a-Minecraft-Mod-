@@ -22,6 +22,11 @@ public final class ModEntities {
 			EntityType.Builder.<FeatherEntity>create(FeatherEntity::new, SpawnGroup.MISC).dimensions(0.4f, 0.4f)
 					.maxTrackingRange(4).trackingTickInterval(20).build("feather"));
 
+	public static final EntityType<GeoProjectileEntity> GEO_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
+			DakuraOrigins.id("geo_projectile"),
+			EntityType.Builder.<GeoProjectileEntity>create(GeoProjectileEntity::new, SpawnGroup.MISC).dimensions(0.6f, 0.6f)
+					.maxTrackingRange(8).trackingTickInterval(1).alwaysUpdateVelocity(true).build("geo_projectile"));
+
 	private ModEntities() {}
 
 	public static void init() {

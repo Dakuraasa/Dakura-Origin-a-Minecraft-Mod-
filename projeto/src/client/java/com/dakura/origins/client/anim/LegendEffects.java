@@ -448,7 +448,7 @@ final class LegendEffects {
 						rnd.nextGaussian() * 0.4, rnd.nextDouble() * 0.5, rnd.nextGaussian() * 0.4);
 				world.addParticle(ParticleTypes.FLASH, c.x, c.y + 0.5, c.z, 0, 0, 0);
 			}
-			default -> {}
+			default -> com.dakura.origins.client.fx.FxWorld.fx(world, name, e, param, rnd);
 		}
 	}
 
@@ -539,7 +539,7 @@ final class LegendEffects {
 					return age + 1 < ticks;
 				});
 			}
-			default -> {}
+			default -> com.dakura.origins.client.fx.FxWorld.fxAt(world, name, p, a, b, c, rnd);
 		}
 	}
 

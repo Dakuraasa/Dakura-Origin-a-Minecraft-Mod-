@@ -57,6 +57,7 @@ public final class MirrorShieldAbility implements Ability {
 			}
 			if (src.getSource() != null && src.getSource() != attacker) src.getSource().discard();
 			ModNetworking.sendAround(new AnimPayload(p.getId(), "fx:mirror_hit", attacker.getId()), p, attacker);
+			LegendKit.fx(p, "shield_flash", 0);
 			p.getWorld().playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.PLAYERS, 1.0f, 1.8f);
 			p.getWorld().playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 0.7f, 1.5f);
 			return false;

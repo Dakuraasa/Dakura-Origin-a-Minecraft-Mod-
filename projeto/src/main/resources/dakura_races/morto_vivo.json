@@ -6,8 +6,8 @@
 	"epithet": "O Que Voltou por Vingança",
 	"icon": "dakura_origins:textures/race/morto_vivo.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

@@ -59,6 +59,10 @@ public class DakuraOriginsClient implements ClientModInitializer {
 				com.dakura.origins.entity.ModEntities.UNDEAD_MINION, net.minecraft.client.render.entity.ZombieEntityRenderer::new);
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
 				com.dakura.origins.entity.ModEntities.FEATHER, com.dakura.origins.client.render.FeatherRenderer::new);
+		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
+				com.dakura.origins.entity.ModEntities.GEO_PROJECTILE, com.dakura.origins.client.render.GeoProjectileRenderer::new);
+		com.dakura.origins.client.fx.FxWorld.init();
+		com.dakura.origins.client.fx.DarkFx.init();
 		// opção "Aparências de raça" na tela de Personalização da skin (fica salva em config/dakura_origins.json)
 		ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
 			if (!(screen instanceof net.minecraft.client.gui.screen.option.SkinOptionsScreen)) return;
@@ -82,6 +86,7 @@ public class DakuraOriginsClient implements ClientModInitializer {
 		// HUD: teclas das habilidades + livro da página da raça (canto inferior esquerdo)
 		HudRenderCallback.EVENT.register(AbilityHud::render);
 		HudRenderCallback.EVENT.register(com.dakura.origins.client.hud.CasinoHud::render);
+		HudRenderCallback.EVENT.register(com.dakura.origins.client.hud.DiceHud::render);
 		net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.AFTER_ENTITIES.register(com.dakura.origins.client.anim.FloatingText::render);
 		net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
 				(type, renderer, helper, context) -> {
@@ -90,6 +95,7 @@ public class DakuraOriginsClient implements ClientModInitializer {
 						helper.register(new com.dakura.origins.client.render.FoxEarsFeature(pr));
 						helper.register(new com.dakura.origins.client.render.RaceFeatureRenderer(pr));
 						helper.register(new com.dakura.origins.client.render.LegendFeatureRenderer(pr));
+						helper.register(new com.dakura.origins.client.render.GeoPartsRenderer(pr));
 					}
 				});
 		HudRenderCallback.EVENT.register(com.dakura.origins.client.hud.SecondChanceOverlay::render);

@@ -6,8 +6,8 @@
 	"epithet": "O Coro das Seis Asas",
 	"icon": "dakura_origins:textures/race/serafim.png",
 	"icon_size": [
-		96,
-		96
+		220,
+		256
 	],
 	"palette": {
 		"ink": [
@@ -52,7 +52,7 @@
 		},
 		{
 			"type": "neutro",
-			"text": "Aura branca permanente e auréola de luz."
+			"text": "Aura branca permanente; as seis asas brilham com luz própria."
 		}
 	],
 	"powers": [
@@ -107,6 +107,11 @@
 		{
 			"type": "dakura_origins:status_effect",
 			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fireproof",
+			"when": "always"
 		}
 	],
 	"abilities": [

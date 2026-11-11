@@ -6,8 +6,8 @@
 	"epithet": "A Fome que Sorri no Escuro",
 	"icon": "dakura_origins:textures/race/vampirica.png",
 	"icon_size": [
-		109,
-		109
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

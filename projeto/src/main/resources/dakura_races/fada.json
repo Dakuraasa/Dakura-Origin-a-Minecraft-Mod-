@@ -6,8 +6,8 @@
 	"epithet": "A Luz Entre as Folhas",
 	"icon": "dakura_origins:textures/race/fada.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -28,27 +28,39 @@
 	"traits": [
 		{
 			"type": "vantagem",
-			"text": "Voa de verdade com asas translúcidas (dois pulos para levantar voo)."
+			"text": "Voa de verdade com asas de mariposa (dois pulos para levantar voo)."
 		},
 		{
 			"type": "vantagem",
-			"text": "Minúscula: difícil de acertar."
+			"text": "Pequena demais para ser notada: os monstros não a percebem nem a atacam, até ela atacar um deles (aí a trégua acaba por 30 segundos)."
+		},
+		{
+			"type": "vantagem",
+			"text": "Come como um passarinho: cada alimento enche e sacia o dobro, e a fome cai pela metade."
 		},
 		{
 			"type": "vantagem",
 			"text": "Regenera aos poucos e faz as plantas por perto crescerem."
 		},
 		{
-			"type": "desvantagem",
-			"text": "Muito frágil: só 6 corações."
+			"type": "vantagem",
+			"text": "Vitória-régia: ao pousar na água, uma vitória-régia surge sob seus pés e a leva boiando (agache para mergulhar)."
+		},
+		{
+			"type": "neutro",
+			"text": "Pousada no ombro de um amigo, os dois regeneram juntos."
 		},
 		{
 			"type": "desvantagem",
-			"text": "Golpes fracos."
+			"text": "Muito frágil: só 6 corações, e golpes fracos."
 		},
 		{
 			"type": "desvantagem",
-			"text": "As asas não deixam vestir peitoral nem calças."
+			"text": "Não veste nenhuma armadura."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Não sabe nadar: dentro d'água, afunda."
 		}
 	],
 	"powers": [
@@ -97,33 +109,49 @@
 			"amount": -1.5
 		},
 		{
-			"type": "dakura_origins:no_armor",
-			"slots": [
-				"chest",
-				"legs"
-			],
-			"message": "dakura_origins.message.fairy_armor"
-		},
-		{
 			"type": "dakura_origins:flag",
 			"flag": "aura#C8FFB0",
 			"when": "always"
+		},
+		{
+			"type": "dakura_origins:no_armor",
+			"message": "dakura_origins.message.fairy_armor"
+		},
+		{
+			"type": "dakura_origins:food_multiplier",
+			"factor": 2.0
+		},
+		{
+			"type": "dakura_origins:slow_hunger",
+			"factor": 0.5
+		},
+		{
+			"type": "dakura_origins:monster_truce",
+			"break_on_attack": 600
+		},
+		{
+			"type": "dakura_origins:no_swim"
+		},
+		{
+			"type": "dakura_origins:lily_pad"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:fairy_perch",
+			"cooldown": 40,
 			"name": "Pouso no Ombro",
-			"description": "Pousa no ombro do jogador mais próximo: enquanto estiver lá, ele regenera e ganha o dobro de experiência. Use de novo (ou agache) para sair.",
-			"cooldown": 40
+			"description": "Pousa no ombro do jogador mais próximo: enquanto estiver lá, os dois regeneram e ele ganha o dobro de experiência. Use de novo (ou agache) para sair."
 		},
 		{
-			"type": "dakura_origins:fairy_dust",
-			"name": "Pó Encantado",
-			"description": "Espalha uma chuva de brilho: jogadores por perto são curados, ganham um escudo e perdem efeitos ruins; monstros flutuam sem controle e ficam marcados.",
-			"cooldown": 600,
-			"radius": 6,
-			"heal": 6
+			"type": "dakura_origins:flower_sanctuary",
+			"cooldown": 900,
+			"radius": 7,
+			"duration": 300,
+			"heal": 1.0,
+			"interval": 20,
+			"name": "Santuário de Flores",
+			"description": "Abre um grande círculo mágico no chão por 15 segundos. Nenhum monstro consegue entrar, e um campo de flores encantadas desabrocha lá dentro, curando sem parar os jogadores e aliados que estiverem no círculo."
 		}
 	]
 }

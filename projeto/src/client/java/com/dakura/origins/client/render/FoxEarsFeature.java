@@ -31,6 +31,7 @@ import java.util.Map;
 public class FoxEarsFeature extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
 	private static final Identifier FIRE_TEX = DakuraOrigins.id("textures/entity/fox_ears.png");
 	private static final Identifier SNOW_TEX = DakuraOrigins.id("textures/entity/fox_ears_snow.png");
+	private static final Identifier DARK_TEX = DakuraOrigins.id("textures/entity/fox_ears_dark.png");
 	private static final ModelPart FIRE = build(false), SNOW = build(true);
 	private static final Map<Integer, float[]> STATE = new HashMap<>(); // perk, último check, havia alguém perto
 
@@ -59,7 +60,8 @@ public class FoxEarsFeature extends FeatureRenderer<AbstractClientPlayerEntity, 
 	public void render(MatrixStack m, VertexConsumerProvider vcp, int light, AbstractClientPlayerEntity e, float limbAngle,
 					   float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
 		if (e.isInvisible()) return;
-		boolean snow = DakuraConfig.cosmetic(e, "fox_ears_snow");
+		boolean dark = DakuraConfig.cosmetic(e, "fox_ears_dark");
+		boolean snow = dark || DakuraConfig.cosmetic(e, "fox_ears_snow");
 		if (!snow && !DakuraConfig.cosmetic(e, "fox_ears")) return;
 
 		float[] st = STATE.computeIfAbsent(e.getId(), i -> new float[]{0.5f, -100f, 0f});
@@ -88,7 +90,7 @@ public class FoxEarsFeature extends FeatureRenderer<AbstractClientPlayerEntity, 
 
 		m.push();
 		getContextModel().getHead().rotate(m);
-		model.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(snow ? SNOW_TEX : FIRE_TEX)), light, OverlayTexture.DEFAULT_UV);
+		model.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(dark ? DARK_TEX : snow ? SNOW_TEX : FIRE_TEX)), light, OverlayTexture.DEFAULT_UV);
 		m.pop();
 	}
 }

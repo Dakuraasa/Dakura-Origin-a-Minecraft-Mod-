@@ -1,0 +1,170 @@
+{
+	"id": "dragao_marrom",
+	"order": 3,
+	"tag": "combat",
+	"variant_of": "draconica",
+	"name": "Dragão Marrom",
+	"epithet": "A Fera dos Desfiladeiros",
+	"icon": "dakura_origins:textures/race/dragao_marrom.png",
+	"icon_size": [
+		384,
+		145
+	],
+	"palette": {
+		"ink": [
+			"#120B05",
+			"#2A1A0C",
+			"#4E3218",
+			"#8C6234",
+			"#E2B97A",
+			"#FFF4E2"
+		],
+		"sky": "#0A0603",
+		"glow": "#E8FFD8",
+		"text": "#123524",
+		"accent": "#3FB548",
+		"muted": "#5E806B"
+	},
+	"description": "Um dragão menor e mais ágil, de escamas cor de terra, com 2,5 blocos de altura desde que sai do ovo. Não tem a força bruta do dragão vermelho, mas cada inimigo derrubado aumenta seu poder: os disparos de magma verde se multiplicam, e sua investida aérea agarra o inimigo, sobe até as nuvens e o arremessa contra o chão.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Asas de dragão: voa (um pouco mais devagar que outras raças aladas)."
+		},
+		{
+			"type": "vantagem",
+			"text": "Ágil: bem mais rápido que o dragão vermelho, com 2,5 blocos de altura fixos."
+		},
+		{
+			"type": "vantagem",
+			"text": "Pode usar armaduras normalmente."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune a fogo e a dano de queda."
+		},
+		{
+			"type": "neutro",
+			"text": "Maturidade por abates: cada inimigo derrotado (monstros, jogadores e outras criaturas) conta. Ela aumenta a quantidade de disparos de magma."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Menos vida e menos força bruta que o dragão vermelho."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Só come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Lento na água."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "dragon_brown"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.scale",
+			"operation": "add_value",
+			"amount": 0.389
+		},
+		{
+			"type": "dakura_origins:maturity",
+			"thresholds": [
+				15,
+				50
+			],
+			"per_kill": 1,
+			"only_monsters": false,
+			"colors": [
+				"#7ED957",
+				"#3FB548",
+				"#1E7A2A"
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"stage_values": [
+				16,
+				18,
+				22
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"stage_values": [
+				1.0,
+				1.5,
+				2.0
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.2
+		},
+		{
+			"type": "dakura_origins:flight",
+			"speed": 0.028,
+			"exhaustion": 0.015
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fireproof",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"allowed": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.meat_only"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.35,
+			"when": "water"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:magma_volley",
+			"name": "Rajada de Magma",
+			"cooldown": 200,
+			"speed": 1.5,
+			"interval": 6,
+			"radius": 3.5,
+			"blast": 5,
+			"fire": 3,
+			"description": "Dispara blocos de magma verde que giram no ar e explodem em fogo verde, lançando pedaços do chão para o alto. A maturidade aumenta a quantidade: 1, 2 e depois 3 disparos seguidos."
+		},
+		{
+			"type": "dakura_origins:skyfall_grab",
+			"name": "Queda do Céu",
+			"cooldown": 900,
+			"range": 4.5,
+			"windup": 60,
+			"rise": 16,
+			"damage": 18,
+			"radius": 5,
+			"splash": 8,
+			"description": "Agarra o inimigo à frente e abre as asas por 3 s (se levar dano nesse tempo, solta o alvo). Depois voa para o alto com ele e mergulha contra o chão: explosão verde, cratera e fogo verde no local, com dano enorme."
+		}
+	]
+}

@@ -94,6 +94,8 @@ public final class FoxFormAbility implements Ability {
 			w.playSound(null, x, y, z, SoundEvents.ENTITY_PLAYER_HURT_FREEZE, SoundCategory.PLAYERS, 1.0f, 0.8f);
 		} else {
 			w.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, x, y, z, 60, 1.6, 0.8, 1.6, 0.12);
+			// fogo de verdade nos atingidos (queimadura real, carne assada)
+			DragonFire.burnArea(w, new net.minecraft.util.math.Vec3d(x, y, z), 4.5, p, 2f, 5);
 		}
 		ModNetworking.sendAround(new AnimPayload(p.getId(), "fx:fox_burst", snow ? 1 : 0), p);
 		Box standing = new Box(p.getX() - 0.3, p.getY(), p.getZ() - 0.3, p.getX() + 0.3, p.getY() + p.getScale() * 1.8, p.getZ() + 0.3);

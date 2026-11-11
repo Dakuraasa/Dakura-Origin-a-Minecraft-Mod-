@@ -6,8 +6,8 @@
 	"epithet": "A Lebre da Lua Cheia",
 	"icon": "dakura_origins:textures/race/vastaya_coelho.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -126,13 +126,15 @@
 			"description": "Salta no alvo da mira e solta 8 chutes no ar, cada um com um estalo de estrela, fechando com uma meia-lua que manda o alvo para o alto."
 		},
 		{
-			"type": "dakura_origins:moon_leap",
-			"name": "Salto Lunar",
-			"cooldown": 400,
-			"max_charge": 40,
-			"damage": 12,
-			"radius": 6,
-			"description": "Segure para agachar e carregar (a lua cresce aos seus pés); solte para um salto gigantesco. Ao cair, uma cratera de luar explode em volta, com dano e arremesso conforme a carga."
+			"type": "dakura_origins:fist_barrage",
+			"cooldown": 360,
+			"range": 10,
+			"punches": 10,
+			"damage": 2.0,
+			"finisher": 9,
+			"knockback": 2.6,
+			"name": "Fúria da Lebre",
+			"description": "Avança no alvo da mira e o prende com o primeiro soco: ele não anda, não ataca e não foge. Segue uma barragem de dez socos rapidíssimos, cada um explodindo em luz no ponto do impacto, e um soco final devastador que o arremessa para longe."
 		}
 	],
 	"variant_of": "vastaya"

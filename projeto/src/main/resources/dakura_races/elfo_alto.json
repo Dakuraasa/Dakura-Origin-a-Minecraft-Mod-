@@ -6,8 +6,8 @@
 	"epithet": "Sangue Real",
 	"icon": "dakura_origins:textures/race/elfo_alto.png",
 	"icon_size": [
-		89,
-		89
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -28,7 +28,11 @@
 	"traits": [
 		{
 			"type": "vantagem",
-			"text": "Mais forte e mais rápido que um elfo comum."
+			"text": "Arqueira real: flechas e outros projéteis causam 60% mais dano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Mais rápido que um elfo comum."
 		},
 		{
 			"type": "vantagem",
@@ -44,11 +48,15 @@
 		},
 		{
 			"type": "neutro",
+			"text": "Passiva — Égide Dourada: a cada 60 s ganha um contorno dourado que anula o próximo ataque. Golpe corpo a corpo: o atacante e quem estiver perto são arremessados. Projétil ou habilidade lançada: ela se teletransporta antes do impacto (se surgir no ar, cai devagar)."
+		},
+		{
+			"type": "neutro",
 			"text": "Passiva — Presença Real: jogadores por perto recebem regeneração e sorte."
 		},
 		{
 			"type": "desvantagem",
-			"text": "Nobre e frágil: 9 corações."
+			"text": "Nobre e frágil: 9 corações, e sem força extra no corpo a corpo."
 		},
 		{
 			"type": "desvantagem",
@@ -64,12 +72,6 @@
 		}
 	],
 	"powers": [
-		{
-			"type": "dakura_origins:attribute",
-			"attribute": "minecraft:generic.attack_damage",
-			"operation": "add_value",
-			"amount": 2.0
-		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.movement_speed",
@@ -133,21 +135,34 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#FFD45E",
 			"when": "always"
+		},
+		{
+			"type": "dakura_origins:archery",
+			"multiplier": 1.6
+		},
+		{
+			"type": "dakura_origins:golden_ward",
+			"interval": 1200,
+			"push": 1.6,
+			"min": 6,
+			"max": 12
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:tether",
 			"name": "Laço Áureo",
-			"description": "Prende a criatura na mira num feixe de luz dourada por 3 segundos: arraste-a com o olhar, use a rodinha do mouse para aproximar ou afastar e solte para arremessá-la. Enquanto segura, anda devagar e não faz mais nada.",
+			"description": "Um feixe dourado agarra o alvo na mira e o mantém suspenso à sua frente por até 10 s, seguindo seu olhar (a câmera fica livre). A rodinha aproxima ou afasta. Ataque para arremessá-lo com força na direção da mira: ele sofre dano ao bater no chão, em paredes ou em outras criaturas. Use de novo para soltar.",
 			"cooldown": 900,
 			"range": 20,
-			"duration": 60
+			"duration": 200,
+			"throw": 2.8,
+			"impact": 4
 		},
 		{
 			"type": "dakura_origins:mirror_shield",
 			"name": "Égide Espelhada",
-			"description": "Estende a mão e abre um selo dourado que, por 3 segundos, absorve os golpes dos inimigos e os devolve como um espelho. Enquanto isso, anda devagar e não faz mais nada.",
+			"description": "Abre à frente um grande círculo rúnico dourado que gira sem parar. Por alguns segundos todo golpe de um inimigo é absorvido e devolvido a ele como num espelho.",
 			"cooldown": 600,
 			"duration": 60,
 			"reflect": 1.0

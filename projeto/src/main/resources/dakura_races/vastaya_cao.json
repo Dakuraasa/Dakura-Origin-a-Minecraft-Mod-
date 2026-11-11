@@ -5,8 +5,8 @@
 	"epithet": "Faro da Matilha",
 	"icon": "dakura_origins:textures/race/vastaya_cao.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

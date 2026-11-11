@@ -1,0 +1,204 @@
+{
+	"id": "kitsune_corrompida",
+	"order": 19,
+	"tag": "combat",
+	"name": "Kitsune Corrompida",
+	"epithet": "A Raposa que Devora",
+	"icon": "dakura_origins:textures/race/kitsune_corrompida.png",
+	"icon_size": [
+		384,
+		145
+	],
+	"palette": {
+		"ink": [
+			"#07040C",
+			"#170B24",
+			"#2E1548",
+			"#5B2C8C",
+			"#B98CFF",
+			"#F3E9FF"
+		],
+		"sky": "#040208",
+		"glow": "#E8D6FF",
+		"text": "#123524",
+		"accent": "#7A3FC4",
+		"muted": "#6B5E80"
+	},
+	"description": "Uma raposa que viveu mil anos e ganhou nove caudas brancas como a neve. Mensageira dos santuários, guarda uma pérola estelar que a traz de volta da morte. Suas chamas-fantasma curam quem ela protege e queimam quem ela caça, e quando as nove caudas se abrem, o próprio espírito da raposa celestial desce para lutar ao seu lado.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Caudas que crescem: começa com 3 caudas e ganha mais 3 a cada estágio de maturidade, até 9. Vida, força, dano e o número de esferas crescem junto."
+		},
+		{
+			"type": "vantagem",
+			"text": "Olhos de raposa: visão noturna, e a sorte sempre a acompanha."
+		},
+		{
+			"type": "vantagem",
+			"text": "Não toma dano de queda."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Pérola Estelar: ao morrer, volta de pé com 1 coração (a cada 10 minutos)."
+		},
+		{
+			"type": "neutro",
+			"text": "Maturidade espiritual: não usa a barra de experiência; toda a experiência que ganha vira maturidade. A barra muda de cor a cada estágio e demora bastante para encher."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Caudas encharcadas: lenta na água."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Explosões causam 50% mais dano."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Criatura da noite: um pouco mais fraca de dia."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "kitsune_tails_dark"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "fox_ears_dark"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:maturity",
+			"thresholds": [
+				1500,
+				5000
+			],
+			"from_xp": false,
+			"from_kills": false,
+			"style": "kitsune",
+			"grow_message": "dakura_origins.message.corrupt_grow",
+			"colors": [
+				"#6A3FA8",
+				"#9B2FC4",
+				"#D23A8C"
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"stage_values": [
+				3,
+				5,
+				8
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"stage_values": [
+				2.0,
+				3.5,
+				5.0
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.1
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:luck"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:second_chance",
+			"cooldown": 12000,
+			"regen_seconds": 6
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": -0.3,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_explosion",
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -1.0,
+			"when": "day"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#9B5CFF",
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:fox_friend"
+		},
+		{
+			"type": "dakura_origins:devour",
+			"cooldown": 6000,
+			"threshold": 0.25,
+			"min_health": 6
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:spirit_orb",
+			"cooldown": 120,
+			"range": 14,
+			"speed": 1.1,
+			"damage": 6,
+			"radius": 2.5,
+			"return_damage": 5,
+			"return_radius": 3.5,
+			"maturity_damage": [
+				1.0,
+				1.4,
+				1.8
+			],
+			"name": "Orbe Espiritual",
+			"description": "Lança uma esfera de mana azul na direção da mira. Se acertar uma criatura, explode com força e volta para a Kitsune, explodindo de novo ao chegar. Se não acertar ninguém, só volta, sem explosões."
+		},
+		{
+			"type": "dakura_origins:dark_comet",
+			"cooldown": 400,
+			"speed": 2.6,
+			"range": 40,
+			"damage": 6,
+			"root": 60,
+			"chain": 160,
+			"tick_damage": 1.5,
+			"leash": 9,
+			"maturity_damage": [
+				1.0,
+				1.3,
+				1.6
+			],
+			"name": "Cometa Negro",
+			"description": "Dispara uma esfera negra veloz como um cometa. Quem for atingido toma dano, fica preso no lugar e é acorrentado à Kitsune. Depois de solto, continua acorrentado por mais um tempo, tomando dano e sendo puxado de volta se tentar fugir."
+		}
+	],
+	"variant_of": "kitsune"
+}

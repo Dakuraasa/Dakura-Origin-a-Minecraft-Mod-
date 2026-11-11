@@ -31,6 +31,8 @@ public class DakuraOrigins implements ModInitializer {
 	public void onInitialize() {
 		// ordem importa: tipos de poder/habilidade (e addons) antes de ler os JSONs das raças
 		RaceAttachments.init();
+		com.dakura.origins.block.ModBlocks.init();
+		com.dakura.origins.sound.ModSounds.init();
 		com.dakura.origins.entity.ModEntities.init();
 		PowerRegistry.bootstrap();
 		RaceRegistry.load();

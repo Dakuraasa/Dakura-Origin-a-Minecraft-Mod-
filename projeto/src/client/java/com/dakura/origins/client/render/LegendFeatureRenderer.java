@@ -197,11 +197,7 @@ public class LegendFeatureRenderer extends FeatureRenderer<AbstractClientPlayerE
 			m.pop();
 		}
 		m.pop();
-		m.push();
-		getContextModel().getHead().rotate(m);
-		for (int i = 0; i < 3; i++) CREST.getChild("p" + i).pitch = -0.75f + MathHelper.sin(t * 0.2f + i) * 0.08f;
-		CREST.render(m, vc, 0xF000F0, OverlayTexture.DEFAULT_UV);
-		m.pop();
+		// penas de fogo da cabeça removidas (pedido do Artur)
 	}
 
 	private float[] earPhysics(AbstractClientPlayerEntity e) {
@@ -244,10 +240,10 @@ public class LegendFeatureRenderer extends FeatureRenderer<AbstractClientPlayerE
 	public void render(MatrixStack m, VertexConsumerProvider vcp, int light, AbstractClientPlayerEntity e, float limbAngle,
 					   float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
 		if (e.isInvisible()) return;
-		boolean mermaid = DakuraConfig.cosmetic(e, "mermaid_tail") && e.isTouchingWater();
+		boolean mermaid = false; // cauda da Sereia: agora modelo do Blockbench (GeoPartsRenderer)
 		boolean anubis = DakuraConfig.cosmetic(e, "anubis_ears");
-		boolean phoenix = DakuraConfig.cosmetic(e, "phoenix_wings");
-		boolean bunny = DakuraConfig.cosmetic(e, "bunny_ears");
+		boolean phoenix = false; // asas da Fênix: agora modelo do Blockbench com brilho (GeoPartsRenderer)
+		boolean bunny = false;   // orelhas da coelha: agora modelo do Blockbench (GeoPartsRenderer)
 		if (!mermaid && !anubis && !phoenix && !bunny) return;
 		VertexConsumer vc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(TEX));
 		if (mermaid) renderMermaid(m, vc, light, e, animationProgress);

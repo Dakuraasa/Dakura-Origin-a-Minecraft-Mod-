@@ -5,8 +5,8 @@
 	"epithet": "A Raposa que Não Divide o Inverno",
 	"icon": "dakura_origins:textures/race/huli_jing_neve.png",
 	"icon_size": [
-		93,
-		93
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -70,6 +70,10 @@
 		{
 			"type": "dakura_origins:cosmetic",
 			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "fox_tail_snow"
 		},
 		{
 			"type": "dakura_origins:cosmetic",

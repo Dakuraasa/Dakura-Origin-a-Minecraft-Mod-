@@ -6,8 +6,8 @@
 	"epithet": "A Raposa que Não Divide Nada",
 	"icon": "dakura_origins:textures/race/huli_jing.png",
 	"icon_size": [
-		93,
-		93
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -74,6 +74,10 @@
 		},
 		{
 			"type": "dakura_origins:cosmetic",
+			"feature": "fox_tail"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
 			"feature": "fox_ears"
 		},
 		{
@@ -130,6 +134,11 @@
 			"type": "dakura_origins:damage_multiplier",
 			"damage_tag": "minecraft:is_explosion",
 			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fireproof",
+			"when": "always"
 		}
 	],
 	"abilities": [

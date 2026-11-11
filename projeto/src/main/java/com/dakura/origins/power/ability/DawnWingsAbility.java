@@ -46,7 +46,7 @@ public final class DawnWingsAbility implements Ability {
 		}
 		for (LivingEntity e : LegendKit.enemies(p, c, radius)) {
 			LegendKit.hurt(p, e, damage * mult, false);
-			e.setOnFireFor(4f);
+			DragonFire.burn(p.getServerWorld(), e, p, 1.5f * mult, 5);
 			if (mult >= 1f) {
 				Vec3d push = LegendKit.flat(e.getPos().subtract(c));
 				e.addVelocity(push.x * 0.9, 0.35, push.z * 0.9);
@@ -60,6 +60,9 @@ public final class DawnWingsAbility implements Ability {
 		pulse(p, 1f);
 		LegendKit.anim(p, "wings_spread", 26);
 		LegendKit.fx(p, "dawn_wings", (int) (radius * 10));
+		LegendKit.fxAt(p.getServerWorld(), "fire_field", p.getPos(), (float) (radius * 0.9), pulses * 20 + 40, 1);
+		DragonFire.igniteGround(p.getServerWorld(), p.getPos(), (int) radius, 6);
+		com.dakura.origins.sound.ModSounds.play(p, com.dakura.origins.sound.ModSounds.FIRE_ROAR, 1f, 1.2f);
 		LegendKit.snd(p, SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 1.2f, 0.9f);
 		LegendKit.snd(p, SoundEvents.BLOCK_BEACON_ACTIVATE, 1.0f, 1.5f);
 		LegendKit.snd(p, SoundEvents.ITEM_TOTEM_USE, 0.4f, 1.6f);

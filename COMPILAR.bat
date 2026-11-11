@@ -23,11 +23,10 @@ if errorlevel 1 (
     exit /b 1
 )
 
-del /q "..\builds\*.jar" 2>nul
 copy /y "build\libs\dakura-origins-*.jar" "..\builds\" >nul
 del /q "..\builds\*-sources.jar" 2>nul
 echo BUILD_RESULT=OK >> "..\logs\build-log.txt"
 echo.
 echo  [OK] Pronto! O .jar esta na pasta builds\
 echo       Coloque-o na pasta mods do Cobbleverse (junto com o Fabric API).
-pause
+timeout /t 10

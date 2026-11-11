@@ -6,8 +6,8 @@
 	"epithet": "A Ninfa que Ouve as Raízes",
 	"icon": "dakura_origins:textures/race/driade.png",
 	"icon_size": [
-		128,
-		127
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

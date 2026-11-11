@@ -16,7 +16,7 @@ git pull origin main --allow-unrelated-histories --no-edit -X ours > logs\github
 git push -u origin main >> logs\github-log.txt 2>&1
 type logs\github-log.txt
 echo.
-where gh >nul 2>&1 && (gh release create v%VER% "builds\dakura-origins-%VER%.jar" --title "Dakura Origins %VER% (Minecraft 1.21.1 / Fabric)" --notes "Versao oficial: 13 racas - Humano, Vampirica, Draconica, Espectro, Driade, Elfo, Huli Jing, Cabra, Minotauro, Gargula, Morto-vivo, Demonio e Vastaya.") || echo Para o .jar em Releases, crie a release v%VER% pelo site do GitHub e anexe builds\dakura-origins-%VER%.jar.
+where gh >nul 2>&1 && (gh release create v%VER% "builds\dakura-origins-%VER%.jar" --title "Dakura Origins %VER% (Minecraft 1.21.1 / Fabric)" --notes "Dakura Origins %VER% para Minecraft 1.21.1 (Fabric). Requer Fabric API. Novidades: Kitsune Corrompida, Lilac com Sorye e roleta, Dama Cogumelo, Dragao Marrom, Fada, Vastaya Coelha, Serafim, Fenix e Draconica refeitos, brilho emissivo compativel com shaders.") || echo Para o .jar em Releases, crie a release v%VER% pelo site do GitHub e anexe builds\dakura-origins-%VER%.jar.
 echo.
 echo Para as proximas atualizacoes, use o ATUALIZAR-GITHUB.bat (um clique).
 pause

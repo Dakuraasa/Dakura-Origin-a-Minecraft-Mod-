@@ -15,6 +15,8 @@ public final class CasinoHud {
 	private static final String[] LABEL = {"✗", "×1", "×2", "×3", "×5"};
 	private static final int[] COLOR = {0xFF7A1424, 0xFF5C5A63, 0xFF2F8A4C, 0xFF2E5FA8, 0xFFD4A21E};
 	private static final int[] WHEEL = {0, 1, 2, 0, 1, 3, 0, 2, 1, 0, 4, 2};
+	private static final net.minecraft.util.Identifier WHEEL_TEX = com.dakura.origins.DakuraOrigins.id("textures/gui/casino_wheel.png");
+	private static final net.minecraft.util.Identifier POINTER_TEX = com.dakura.origins.DakuraOrigins.id("textures/gui/casino_pointer.png");
 	private static long start = -1;
 	private static int result, tier, spinMs, lastTop = -1;
 
@@ -49,63 +51,37 @@ public final class CasinoHud {
 		double angle = total * ease;
 		int cx = ctx.getScaledWindowWidth() / 2, cy = 74, r = 44;
 
-		// painel
-		ctx.fill(cx - 62, cy - 62, cx + 62, cy + 66, 0xB0140C06);
-		ctx.fill(cx - 62, cy - 62, cx + 62, cy - 61, 0xFFD4A21E);
-		ctx.fill(cx - 62, cy + 65, cx + 62, cy + 66, 0xFFD4A21E);
-		ctx.fill(cx - 62, cy - 62, cx - 61, cy + 66, 0xFFD4A21E);
-		ctx.fill(cx + 61, cy - 62, cx + 62, cy + 66, 0xFFD4A21E);
-		// luzes do aro piscando
-		for (int i = 0; i < 24; i++) {
-			double a = i * Math.PI / 12;
-			int lx = cx + (int) Math.round(Math.cos(a) * (r + 12)), ly = cy + (int) Math.round(Math.sin(a) * (r + 12));
-			boolean on = ((el / 120) + i) % 2 == 0;
-			ctx.fill(lx - 1, ly - 1, lx + 2, ly + 2, on ? 0xFFFFE9A0 : 0xFF6B4A10);
-		}
-		// fichas
-		int top = 0;
-		double best = 9;
-		for (int i = 0; i < n; i++) {
-			double a = i * step - angle - Math.PI / 2;
-			int x = cx + (int) Math.round(Math.cos(a) * r), y = cy + (int) Math.round(Math.sin(a) * r);
-			double dTop = Math.abs(Math.atan2(Math.sin(a + Math.PI / 2), Math.cos(a + Math.PI / 2)));
-			if (dTop < best) {
-				best = dTop;
-				top = i;
-			}
-			int c = COLOR[WHEEL[i]];
-			ctx.fill(x - 10, y - 7, x + 10, y + 7, 0xFF1A1208);
-			ctx.fill(x - 9, y - 6, x + 9, y + 6, c);
-			ctx.fill(x - 9, y - 6, x + 9, y - 5, 0x40FFFFFF);
-			Text l = Text.literal(LABEL[WHEEL[i]]).formatted(Formatting.BOLD);
-			ctx.drawText(mc.textRenderer, l, x - mc.textRenderer.getWidth(l) / 2, y - 4, 0xFFFFFFFF, true);
-		}
+		// roda em pixel art (desenho do Artur) girando sob o ponteiro fixo
+		ctx.fill(cx - 62, cy - 62, cx + 62, cy + 66, 0x9A140C06);
+		var mtx = ctx.getMatrices();
+		mtx.push();
+		mtx.translate(cx, cy, 0);
+		mtx.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Z.rotation((float) -angle));
+		float sc = 112f / 256f;
+		mtx.scale(sc, sc, 1f);
+		ctx.drawTexture(WHEEL_TEX, -128, -128, 0, 0, 256, 256, 256, 256);
+		mtx.pop();
+		int top = (int) Math.floorMod(Math.round(angle / step), n);
 		if (top != lastTop && tt < 1f) {
 			lastTop = top;
 			mc.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HAT.value(), 0.35f, 1.2f + tt * 0.6f);
 		}
-		// ponteiro
-		for (int i = 0; i < 6; i++) ctx.fill(cx - 6 + i, cy - r - 22 + i, cx + 7 - i, cy - r - 21 + i, 0xFFFFD84A);
-		// centro
-		ctx.fill(cx - 16, cy - 16, cx + 16, cy + 16, 0xFF2A1A08);
-		ctx.fill(cx - 15, cy - 15, cx + 15, cy + 15, 0xFFB8861B);
-		ctx.fill(cx - 13, cy - 13, cx + 13, cy + 13, 0xFF3A2408);
-		Text hub = Text.literal("$").formatted(Formatting.BOLD, Formatting.GOLD);
-		ctx.getMatrices().push();
-		ctx.getMatrices().translate(cx, cy - 6, 0);
-		ctx.getMatrices().scale(1.6f, 1.6f, 1f);
-		ctx.drawText(mc.textRenderer, hub, -mc.textRenderer.getWidth(hub) / 2, 0, 0xFFFFD84A, true);
-		ctx.getMatrices().pop();
+		// ponteiro (a peça verde do desenho), preso no topo
+		mtx.push();
+		mtx.translate(cx, cy - 56, 50);
+		mtx.scale(0.55f, 0.55f, 1f);
+		ctx.drawTexture(POINTER_TEX, -10, -4, 0, 0, 19, 46, 19, 46);
+		mtx.pop();
 		// resultado
 		if (tt >= 1f) {
 			boolean blink = (el / 150) % 2 == 0;
 			Text res = Text.translatable(result == 0 ? "dakura_origins.casino.lose" : result == 1 ? "dakura_origins.casino.even"
 					: "dakura_origins.casino.win", LABEL[result]).formatted(Formatting.BOLD);
 			int col = result == 0 ? 0xFFFF6B6B : result == 1 ? 0xFFDDDDDD : (blink ? 0xFFFFE066 : 0xFFFFB020);
-			ctx.drawText(mc.textRenderer, res, cx - mc.textRenderer.getWidth(res) / 2, cy + 52, col, true);
+			ctx.drawText(mc.textRenderer, res, cx - mc.textRenderer.getWidth(res) / 2, cy + 58, col, true);
 		} else {
 			Text sp = Text.translatable("dakura_origins.casino.spinning");
-			ctx.drawText(mc.textRenderer, sp, cx - mc.textRenderer.getWidth(sp) / 2, cy + 52, 0xFFE8D7A8, true);
+			ctx.drawText(mc.textRenderer, sp, cx - mc.textRenderer.getWidth(sp) / 2, cy + 58, 0xFFE8D7A8, true);
 		}
 	}
 }

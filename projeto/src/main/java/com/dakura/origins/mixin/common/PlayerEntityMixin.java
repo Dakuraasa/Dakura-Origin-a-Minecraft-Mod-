@@ -71,7 +71,19 @@ public abstract class PlayerEntityMixin {
 	/** Raças com maturidade (Dracônica) não acumulam experiência vanilla. */
 	@Inject(method = "addExperience", at = @At("HEAD"), cancellable = true)
 	private void dakura$blockExperience(int amount, CallbackInfo ci) {
-		if (MaturityPower.blocksExperience((PlayerEntity) (Object) this)) ci.cancel();
+		if (MaturityPower.blocksExperience((PlayerEntity) (Object) this)) {
+			MaturityPower.gainXp((PlayerEntity) (Object) this, amount);
+			ci.cancel();
+		}
+	}
+
+	/** Fada: a vitória-régia a mantém boiando na superfície da água. */
+	@Inject(method = "travel", at = @At("HEAD"), require = 0)
+	private void dakura$lilyPad(net.minecraft.util.math.Vec3d movement, CallbackInfo ci) {
+		PlayerEntity p = (PlayerEntity) (Object) this;
+		if (p.isTouchingWater() || p.getWorld().getFluidState(p.getBlockPos()).isIn(net.minecraft.registry.tag.FluidTags.WATER)) {
+			if (com.dakura.origins.power.types.LilyPadPower.has(p)) com.dakura.origins.power.types.LilyPadPower.support(p);
+		}
 	}
 
 	@Inject(method = "addExperienceLevels", at = @At("HEAD"), cancellable = true)

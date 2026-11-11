@@ -6,8 +6,8 @@
 	"epithet": "O Punho da Horda",
 	"icon": "dakura_origins:textures/race/orc.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

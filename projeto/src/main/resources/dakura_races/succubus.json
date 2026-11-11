@@ -6,8 +6,8 @@
 	"epithet": "O Encanto que Cobra Tudo",
 	"icon": "dakura_origins:textures/race/succubus.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

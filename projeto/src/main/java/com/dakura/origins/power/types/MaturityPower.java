@@ -55,6 +55,13 @@ public final class MaturityPower implements RacePower {
 	private final int[] colors;
 	private final String growMessage;
 	private final boolean undead;
+	/** Pontos fixos por abate (0 = proporcional à vida da vítima). */
+	private final int perKill;
+	/** Kitsune: a experiência ganha vira maturidade (em vez de ir para a barra vanilla). */
+	private final boolean fromXp;
+	/** false = matar não dá maturidade. */
+	private final boolean fromKills;
+	private final boolean kitsune;
 
 	public MaturityPower(JsonObject json) {
 		List<Integer> t = new ArrayList<>();
@@ -66,7 +73,12 @@ public final class MaturityPower implements RacePower {
 		List<String> c = JsonParams.strings(json, "colors");
 		if (c.isEmpty()) c = List.of("#7ED957", "#F2B33D", "#D9364A");
 		this.growMessage = JsonParams.str(json, "grow_message", "dakura_origins.message.maturity_grow");
-		this.undead = "undead".equals(JsonParams.str(json, "style", "dragon"));
+		String style = JsonParams.str(json, "style", "dragon");
+		this.undead = "undead".equals(style);
+		this.kitsune = "kitsune".equals(style);
+		this.fromXp = JsonParams.bool(json, "from_xp", false);
+		this.fromKills = JsonParams.bool(json, "from_kills", true);
+		this.perKill = JsonParams.integer(json, "per_kill", 0);
 		this.colors = c.stream().mapToInt(s -> 0xFF000000 | Integer.parseInt(s.replace("#", ""), 16)).toArray();
 	}
 
@@ -161,6 +173,42 @@ public final class MaturityPower implements RacePower {
 		}
 		if (player.getAttached(POINTS) == null) player.setAttached(POINTS, 0);
 		sync(player);
+		flags(player);
+	}
+
+	/** Estágio visível para os outros jogadores (ex.: quantas caudas a Kitsune mostra). */
+	private void flags(ServerPlayerEntity player) {
+		int st = stageOf(points(player));
+		com.dakura.origins.power.EntityFlags.set(player, "mat_1", st >= 1);
+		com.dakura.origins.power.EntityFlags.set(player, "mat_2", st >= 2);
+	}
+
+	@Override
+	public void tick(ServerPlayerEntity player) {
+		if (player.age % 100 == 0) flags(player);
+	}
+
+	/** Experiência que viraria nível vira maturidade (raças com "from_xp"). */
+	public static void gainXp(PlayerEntity player, int amount) {
+		if (amount <= 0 || !(player instanceof ServerPlayerEntity sp)) return;
+		of(player).filter(m -> m.fromXp).ifPresent(m -> m.addPoints(sp, amount));
+	}
+
+	/** Soma maturidade vinda de fora (ex.: devorar da Kitsune Corrompida). */
+	public static void grant(ServerPlayerEntity player, int gain) {
+		if (gain > 0) of(player).ifPresent(m -> m.addPoints(player, gain));
+	}
+
+	private void addPoints(ServerPlayerEntity player, int gain) {
+		int before = points(player);
+		if (before >= maxPoints()) return;
+		int after = Math.min(maxPoints(), before + gain);
+		player.setAttached(POINTS, after);
+		sync(player);
+		if (stageOf(after) > stageOf(before)) {
+			celebrate(player);
+			flags(player);
+		}
 	}
 
 	@Override
@@ -168,6 +216,8 @@ public final class MaturityPower implements RacePower {
 		Integer stored = player.getAttached(STORED_XP);
 		player.removeAttached(STORED_XP);
 		player.removeAttached(POINTS);
+		com.dakura.origins.power.EntityFlags.set(player, "mat_1", false);
+		com.dakura.origins.power.EntityFlags.set(player, "mat_2", false);
 		if (stored != null && stored > 0) {
 			restoringXp = true;
 			try {
@@ -181,18 +231,20 @@ public final class MaturityPower implements RacePower {
 
 	@Override
 	public void onKill(ServerPlayerEntity player, LivingEntity victim) {
-		if (onlyMonsters && !(victim instanceof Monster)) return;
-		int gain = Math.max(1, Math.round(victim.getMaxHealth() * pointsPerHealth));
-		int before = points(player);
-		if (before >= maxPoints()) return;
-		int after = Math.min(maxPoints(), before + gain);
-		player.setAttached(POINTS, after);
-		sync(player);
-		if (stageOf(after) > stageOf(before)) celebrate(player);
+		if (!fromKills || (onlyMonsters && !(victim instanceof Monster))) return;
+		int gain = perKill > 0 ? perKill : Math.max(1, Math.round(victim.getMaxHealth() * pointsPerHealth));
+		addPoints(player, gain);
 	}
 
 	private void celebrate(ServerPlayerEntity player) {
-		player.sendMessage(Text.translatable(growMessage).formatted(undead ? Formatting.DARK_AQUA : Formatting.GOLD), true);
+		player.sendMessage(Text.translatable(growMessage).formatted(undead || kitsune ? Formatting.AQUA : Formatting.GOLD), true);
+		if (kitsune) {
+			com.dakura.origins.sound.ModSounds.play(player, com.dakura.origins.sound.ModSounds.MANA_BURST, 1.2f, 0.8f);
+			com.dakura.origins.power.ability.LegendKit.anim(player, "fan", 30);
+			if (player.getWorld() instanceof ServerWorld sw)
+				com.dakura.origins.power.ability.LegendKit.fxAt(sw, "boom_mana", player.getPos().add(0, 1, 0), 3.5f, 0, 0);
+			return;
+		}
 		if (undead) {
 			player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
 					SoundEvents.ENTITY_WITHER_SKELETON_AMBIENT, SoundCategory.PLAYERS, 0.8f, 0.7f);

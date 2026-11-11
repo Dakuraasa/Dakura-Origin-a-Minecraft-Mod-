@@ -1,0 +1,128 @@
+{
+	"cauldron_throw": {
+		"sounds": [
+			"dakura_origins:cauldron_throw"
+		],
+		"subtitle": "subtitles.dakura_origins.cauldron_throw"
+	},
+	"cauldron_shatter": {
+		"sounds": [
+			"dakura_origins:cauldron_shatter"
+		],
+		"subtitle": "subtitles.dakura_origins.cauldron_shatter"
+	},
+	"poison_bubble": {
+		"sounds": [
+			"dakura_origins:poison_bubble"
+		],
+		"subtitle": "subtitles.dakura_origins.poison_bubble"
+	},
+	"poison_burst": {
+		"sounds": [
+			"dakura_origins:poison_burst"
+		],
+		"subtitle": "subtitles.dakura_origins.poison_burst"
+	},
+	"mushroom_rise": {
+		"sounds": [
+			"dakura_origins:mushroom_rise"
+		],
+		"subtitle": "subtitles.dakura_origins.mushroom_rise"
+	},
+	"magma_launch": {
+		"sounds": [
+			"dakura_origins:magma_launch"
+		],
+		"subtitle": "subtitles.dakura_origins.magma_launch"
+	},
+	"magma_explode": {
+		"sounds": [
+			"dakura_origins:magma_explode"
+		],
+		"subtitle": "subtitles.dakura_origins.magma_explode"
+	},
+	"dragon_grab": {
+		"sounds": [
+			"dakura_origins:dragon_grab"
+		],
+		"subtitle": "subtitles.dakura_origins.dragon_grab"
+	},
+	"dragon_slam": {
+		"sounds": [
+			"dakura_origins:dragon_slam"
+		],
+		"subtitle": "subtitles.dakura_origins.dragon_slam"
+	},
+	"wing_beat": {
+		"sounds": [
+			"dakura_origins:wing_beat"
+		],
+		"subtitle": "subtitles.dakura_origins.wing_beat"
+	},
+	"punch_hit": {
+		"sounds": [
+			"dakura_origins:punch_hit"
+		],
+		"subtitle": "subtitles.dakura_origins.punch_hit"
+	},
+	"punch_final": {
+		"sounds": [
+			"dakura_origins:punch_final"
+		],
+		"subtitle": "subtitles.dakura_origins.punch_final"
+	},
+	"mana_cast": {
+		"sounds": [
+			"dakura_origins:mana_cast"
+		],
+		"subtitle": "subtitles.dakura_origins.mana_cast"
+	},
+	"mana_burst": {
+		"sounds": [
+			"dakura_origins:mana_burst"
+		],
+		"subtitle": "subtitles.dakura_origins.mana_burst"
+	},
+	"flower_bloom": {
+		"sounds": [
+			"dakura_origins:flower_bloom"
+		],
+		"subtitle": "subtitles.dakura_origins.flower_bloom"
+	},
+	"fire_roar": {
+		"sounds": [
+			"dakura_origins:fire_roar"
+		],
+		"subtitle": "subtitles.dakura_origins.fire_roar"
+	},
+	"dice_roll": {
+		"sounds": [
+			"dakura_origins:dice_roll"
+		],
+		"subtitle": "subtitles.dakura_origins.dice_roll"
+	},
+	"jackpot": {
+		"sounds": [
+			"dakura_origins:jackpot"
+		],
+		"subtitle": "subtitles.dakura_origins.jackpot"
+	},
+	"dark_comet": {
+		"sounds": [
+			"dakura_origins:dark_comet"
+		],
+		"subtitle": "subtitles.dakura_origins.dark_comet"
+	},
+	"chain_bind": {
+		"sounds": [
+			"dakura_origins:chain_bind"
+		],
+		"subtitle": "subtitles.dakura_origins.chain_bind"
+	},
+	"devour": {
+		"sounds": [
+			"dakura_origins:devour"
+		],
+		"subtitle": "subtitles.dakura_origins.devour"
+	}
+}

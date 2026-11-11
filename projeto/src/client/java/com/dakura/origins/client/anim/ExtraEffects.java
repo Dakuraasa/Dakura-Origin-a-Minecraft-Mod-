@@ -25,6 +25,9 @@ import java.util.Set;
  */
 final class ExtraEffects {
 	static final DustParticleEffect GOLD = new DustParticleEffect(new Vector3f(1.0f, 0.82f, 0.3f), 1.1f);
+	static final DustParticleEffect ORANGE_LUX = new DustParticleEffect(new Vector3f(1.0f, 0.55f, 0.15f), 1.2f);
+	static final DustParticleEffect BLUE_LUX = new DustParticleEffect(new Vector3f(0.35f, 0.7f, 1.0f), 1.0f);
+	static final DustParticleEffect VIOLET = new DustParticleEffect(new Vector3f(0.6f, 0.2f, 1.0f), 1.4f);
 	static final DustParticleEffect GOLD_SOFT = new DustParticleEffect(new Vector3f(1.0f, 0.93f, 0.62f), 0.7f);
 	static final DustParticleEffect SHADOW = new DustParticleEffect(new Vector3f(0.16f, 0.05f, 0.26f), 1.7f);
 	static final DustParticleEffect SHADOW_EDGE = new DustParticleEffect(new Vector3f(0.55f, 0.3f, 0.85f), 0.8f);
@@ -117,6 +120,16 @@ final class ExtraEffects {
 			case "gold_fist" -> {
 				Vec3d c = base.add(0, e.getHeight() * 0.55, 0);
 				ClientEffects.ring(world, c, 0.6, 16, GOLD);
+				// explosão luxuosa: ouro, laranja e azul em camadas
+				expandingRing(c, 1.8, 5, GOLD, 22);
+				expandingRing(c, 1.3, 4, ORANGE_LUX, 16);
+				for (int i = 0; i < 26; i++) {
+					double th = rnd.nextDouble() * Math.PI * 2, ph = rnd.nextDouble() * Math.PI - Math.PI / 2, sp = 0.15 + rnd.nextDouble() * 0.3;
+					world.addParticle(i % 3 == 0 ? BLUE_LUX : i % 3 == 1 ? ORANGE_LUX : GOLD_SOFT, c.x, c.y, c.z, 0, 0, 0);
+					world.addParticle(i % 2 == 0 ? ParticleTypes.END_ROD : ParticleTypes.WAX_ON, c.x, c.y, c.z,
+							Math.cos(th) * Math.cos(ph) * sp, Math.sin(ph) * sp, Math.sin(th) * Math.cos(ph) * sp);
+				}
+				world.addParticle(ParticleTypes.FLASH, c.x, c.y, c.z, 0, 0, 0);
 				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.WAX_ON, c.x, c.y, c.z,
 						rnd.nextGaussian() * 0.3, rnd.nextDouble() * 0.3, rnd.nextGaussian() * 0.3);
 				if (param == 1) {
@@ -128,10 +141,54 @@ final class ExtraEffects {
 			}
 			case "jackpot" -> {
 				FloatingText.add(e.getId(), param > 1 ? "×" + param + "!" : "JACKPOT", 0xFFD84A, 50);
+				// fogos de artifício (só partículas do cliente: não causam dano)
+				for (int i = 0; i < 4; i++) {
+					final int k = i;
+					ClientEffects.schedule((w, r, age) -> {
+						if (age < k * 6) return true;
+						Vec3d f = e.getPos().add(r.nextGaussian() * 2, 3.5 + r.nextDouble() * 2, r.nextGaussian() * 2);
+						w.addFireworkParticle(f.x, f.y, f.z, 0, 0, 0, java.util.List.of(new net.minecraft.component.type.FireworkExplosionComponent(
+								k % 2 == 0 ? net.minecraft.component.type.FireworkExplosionComponent.Type.LARGE_BALL : net.minecraft.component.type.FireworkExplosionComponent.Type.STAR,
+								it.unimi.dsi.fastutil.ints.IntList.of(0xFFD23A, 0xFF8A1E, 0x4FA8FF), it.unimi.dsi.fastutil.ints.IntList.of(0xFFF3B0), true, true)));
+						return false;
+					});
+				}
 				Vec3d top = base.add(0, e.getHeight() + 0.3, 0);
 				for (int i = 0; i < 24; i++) world.addParticle(i % 2 == 0 ? ParticleTypes.WAX_ON : ParticleTypes.FIREWORK, top.x, top.y, top.z,
 						rnd.nextGaussian() * 0.18, 0.15 + rnd.nextDouble() * 0.25, rnd.nextGaussian() * 0.18);
 				expandingRing(base.add(0, 0.1, 0), 2.2, 6, GOLD, 26);
+			}
+			case "dice_hud" -> {
+				if (e == MinecraftClient.getInstance().player) com.dakura.origins.client.hud.DiceHud.start(param);
+			}
+			case "chain_pulse" -> {
+				Vec3d c = base.add(0, e.getHeight() * 0.5, 0);
+				for (int i = 0; i < 10; i++) world.addParticle(i % 2 == 0 ? SHADOW : VIOLET, c.x + rnd.nextGaussian() * 0.3, c.y + rnd.nextGaussian() * 0.4,
+						c.z + rnd.nextGaussian() * 0.3, 0, 0.02, 0);
+			}
+			case "devour_bite" -> {
+				Vec3d c = base.add(0, e.getHeight() * 0.5, 0);
+				for (int i = 0; i < 40; i++) world.addParticle(i % 3 == 0 ? VIOLET : SHADOW, c.x, c.y, c.z,
+						rnd.nextGaussian() * 0.25, rnd.nextGaussian() * 0.25, rnd.nextGaussian() * 0.25);
+				world.addParticle(ParticleTypes.FLASH, c.x, c.y, c.z, 0, 0, 0);
+			}
+			case "devour_flame" -> {
+				// fogo roxo envolvendo corpo e caudas por um instante (visual, não queima)
+				final int dur = Math.max(10, param);
+				ClientEffects.schedule((w, r, age) -> {
+					if (e.isRemoved()) return false;
+					Vec3d p = e.getPos();
+					float k = 1 - age / (float) dur;
+					for (int i = 0; i < 6; i++) {
+						double a2 = r.nextDouble() * Math.PI * 2, rr = 0.35 + r.nextDouble() * 0.5;
+						w.addParticle(i % 2 == 0 ? ParticleTypes.SOUL_FIRE_FLAME : VIOLET, p.x + Math.cos(a2) * rr, p.y + r.nextDouble() * 2.0 * k + 0.1,
+								p.z + Math.sin(a2) * rr, 0, 0.04 + r.nextDouble() * 0.05, 0);
+					}
+					Vec3d back = e.getRotationVec(1f).multiply(-1, 0, -1).normalize();
+					for (int i = 0; i < 3; i++) w.addParticle(VIOLET, p.x + back.x * (0.6 + r.nextDouble()), p.y + 0.6 + r.nextDouble() * 0.8,
+							p.z + back.z * (0.6 + r.nextDouble()), 0, 0.05, 0);
+					return age + 1 < dur;
+				});
 			}
 			case "casino" -> {
 				if (e == MinecraftClient.getInstance().player) CasinoHud.start(param & 15, (param >> 4) & 15, param >> 8);
@@ -163,6 +220,33 @@ final class ExtraEffects {
 
 	static void fxAt(ClientWorld world, String name, Vec3d p, float a, float b, float c, Random rnd) {
 		switch (name) {
+			case "dark_burst" -> {
+				expandingRing(p, 1.5 * a, 5, VIOLET, 22);
+				for (int i = 0; i < 30 * a; i++) world.addParticle(i % 2 == 0 ? SHADOW : VIOLET, p.x, p.y, p.z,
+						rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.3);
+				world.addParticle(ParticleTypes.FLASH, p.x, p.y, p.z, 0, 0, 0);
+			}
+			case "chest_reroll" -> {
+				// baú brilhando: coluna dourada, anéis girando e faíscas elegantes
+				final int dur = Math.max(10, (int) a);
+				ClientEffects.schedule((w, r, age) -> {
+					float k = age / (float) dur;
+					double rr = 0.9 - k * 0.4;
+					for (int i = 0; i < 3; i++) {
+						double ang = age * 0.35 + i * Math.PI * 2 / 3;
+						w.addParticle(i == 0 ? GOLD : i == 1 ? GOLD_SOFT : ORANGE_LUX, p.x + Math.cos(ang) * rr, p.y - 0.4 + k * 1.6, p.z + Math.sin(ang) * rr, 0, 0, 0);
+					}
+					if (age % 3 == 0) w.addParticle(ParticleTypes.END_ROD, p.x + r.nextGaussian() * 0.4, p.y + 0.6, p.z + r.nextGaussian() * 0.4, 0, 0.06, 0);
+					if (age % 2 == 0) w.addParticle(ParticleTypes.WAX_ON, p.x + r.nextGaussian() * 0.5, p.y + r.nextDouble(), p.z + r.nextGaussian() * 0.5, 0, 0.05, 0);
+					return age + 1 < dur;
+				});
+			}
+			case "lucky_chest" -> {
+				expandingRing(p, a > 0 ? 2.2 : 1.2, 5, GOLD, a > 0 ? 28 : 16);
+				for (int i = 0; i < (a > 0 ? 40 : 16); i++) world.addParticle(i % 3 == 0 ? ParticleTypes.END_ROD : i % 3 == 1 ? GOLD_SOFT : BLUE_LUX,
+						p.x, p.y + 0.4, p.z, rnd.nextGaussian() * 0.15, 0.1 + rnd.nextDouble() * 0.2, rnd.nextGaussian() * 0.15);
+				if (a > 0) world.addParticle(ParticleTypes.FLASH, p.x, p.y + 0.5, p.z, 0, 0, 0);
+			}
 			case "shadow_orb" -> {
 				for (int i = 0; i < 4; i++) world.addParticle(SHADOW, p.x + rnd.nextGaussian() * 0.12, p.y + rnd.nextGaussian() * 0.12,
 						p.z + rnd.nextGaussian() * 0.12, 0, 0, 0);
@@ -230,7 +314,7 @@ final class ExtraEffects {
 				if (rnd.nextInt(10) == 0) world.addParticle(d, pl.getX() + rnd.nextGaussian() * 0.4, pl.getY() + 0.05,
 						pl.getZ() + rnd.nextGaussian() * 0.4, 0, 0, 0);
 			}
-			if (flags.contains("mirror_shield")) mandala(world, pl, t);
+			// Égide Espelhada: desenhada pelo FxWorld com o círculo rúnico animado (GIF)
 			if (flags.contains("charging") && rnd.nextInt(2) == 0) {
 				world.addParticle(RAGE, pl.getX() + rnd.nextGaussian() * 0.3, pl.getY() + 0.1, pl.getZ() + rnd.nextGaussian() * 0.3, 0, 0, 0);
 				world.addParticle(ParticleTypes.CLOUD, pl.getX(), pl.getY() + 0.2, pl.getZ(), 0, 0.02, 0);

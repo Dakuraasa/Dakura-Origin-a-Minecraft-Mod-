@@ -15,6 +15,12 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "doAttack", at = @At("HEAD"), cancellable = true, require = 0)
 	private void dakura$foxBurst(CallbackInfoReturnable<Boolean> cir) {
 		var mc = (MinecraftClient) (Object) this;
+		// Laço Áureo segurando alguém: o ataque arremessa o alvo
+		if (mc.player != null && com.dakura.origins.power.EntityFlags.clientHas(mc.player, "physgun")) {
+			cir.setReturnValue(false);
+			com.dakura.origins.client.DakuraOriginsClient.sendSpecial(com.dakura.origins.power.ability.TetherAbility.class, 4, 0);
+			return;
+		}
 		if (mc.player == null || !com.dakura.origins.power.ability.FoxFormAbility.isFox(mc.player)
 				&& !com.dakura.origins.power.ability.Channeling.active(mc.player)) return;
 		cir.setReturnValue(false);
@@ -25,5 +31,7 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "hasOutline", at = @At("HEAD"), cancellable = true)
 	private void dakura$keenSight(Entity entity, CallbackInfoReturnable<Boolean> cir) {
 		if (ClientEffects.keenOutline(entity)) cir.setReturnValue(true);
+		// proteção dourada do Alto Elfo pronta: contorno brilhante (como o das flechas espectrais), visível para todos
+		else if (com.dakura.origins.power.EntityFlags.clientHas(entity, "gold_ward")) cir.setReturnValue(true);
 	}
 }

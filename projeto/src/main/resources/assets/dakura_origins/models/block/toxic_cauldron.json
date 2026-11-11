@@ -1,0 +1,315 @@
+{
+	"textures": {
+		"particle": "dakura_origins:block/toxic_cauldron_side",
+		"side": "dakura_origins:block/toxic_cauldron_side",
+		"inside": "dakura_origins:block/toxic_cauldron_inside",
+		"liquid": "dakura_origins:block/toxic_liquid"
+	},
+	"elements": [
+		{
+			"from": [
+				0,
+				0,
+				0
+			],
+			"to": [
+				4,
+				3,
+				4
+			],
+			"faces": {
+				"north": {
+					"texture": "#side"
+				},
+				"south": {
+					"texture": "#side"
+				},
+				"east": {
+					"texture": "#side"
+				},
+				"west": {
+					"texture": "#side"
+				},
+				"up": {
+					"texture": "#side"
+				},
+				"down": {
+					"texture": "#side"
+				}
+			}
+		},
+		{
+			"from": [
+				12,
+				0,
+				0
+			],
+			"to": [
+				16,
+				3,
+				4
+			],
+			"faces": {
+				"north": {
+					"texture": "#side"
+				},
+				"south": {
+					"texture": "#side"
+				},
+				"east": {
+					"texture": "#side"
+				},
+				"west": {
+					"texture": "#side"
+				},
+				"up": {
+					"texture": "#side"
+				},
+				"down": {
+					"texture": "#side"
+				}
+			}
+		},
+		{
+			"from": [
+				0,
+				0,
+				12
+			],
+			"to": [
+				4,
+				3,
+				16
+			],
+			"faces": {
+				"north": {
+					"texture": "#side"
+				},
+				"south": {
+					"texture": "#side"
+				},
+				"east": {
+					"texture": "#side"
+				},
+				"west": {
+					"texture": "#side"
+				},
+				"up": {
+					"texture": "#side"
+				},
+				"down": {
+					"texture": "#side"
+				}
+			}
+		},
+		{
+			"from": [
+				12,
+				0,
+				12
+			],
+			"to": [
+				16,
+				3,
+				16
+			],
+			"faces": {
+				"north": {
+					"texture": "#side"
+				},
+				"south": {
+					"texture": "#side"
+				},
+				"east": {
+					"texture": "#side"
+				},
+				"west": {
+					"texture": "#side"
+				},
+				"up": {
+					"texture": "#side"
+				},
+				"down": {
+					"texture": "#side"
+				}
+			}
+		},
+		{
+			"from": [
+				0,
+				3,
+				0
+			],
+			"to": [
+				16,
+				4,
+				16
+			],
+			"faces": {
+				"north": {
+					"texture": "#inside"
+				},
+				"south": {
+					"texture": "#inside"
+				},
+				"east": {
+					"texture": "#inside"
+				},
+				"west": {
+					"texture": "#inside"
+				},
+				"up": {
+					"texture": "#inside"
+				},
+				"down": {
+					"texture": "#inside"
+				}
+			}
+		},
+		{
+			"from": [
+				0,
+				3,
+				0
+			],
+			"to": [
+				2,
+				16,
+				16
+			],
+			"faces": {
+				"north": {
+					"texture": "#side"
+				},
+				"south": {
+					"texture": "#side"
+				},
+				"east": {
+					"texture": "#side"
+				},
+				"west": {
+					"texture": "#side"
+				},
+				"up": {
+					"texture": "#side"
+				},
+				"down": {
+					"texture": "#side"
+				}
+			}
+		},
+		{
+			"from": [
+				14,
+				3,
+				0
+			],
+			"to": [
+				16,
+				16,
+				16
+			],
+			"faces": {
+				"north": {
+					"texture": "#side"
+				},
+				"south": {
+					"texture": "#side"
+				},
+				"east": {
+					"texture": "#side"
+				},
+				"west": {
+					"texture": "#side"
+				},
+				"up": {
+					"texture": "#side"
+				},
+				"down": {
+					"texture": "#side"
+				}
+			}
+		},
+		{
+			"from": [
+				2,
+				3,
+				0
+			],
+			"to": [
+				14,
+				16,
+				2
+			],
+			"faces": {
+				"north": {
+					"texture": "#side"
+				},
+				"south": {
+					"texture": "#side"
+				},
+				"east": {
+					"texture": "#side"
+				},
+				"west": {
+					"texture": "#side"
+				},
+				"up": {
+					"texture": "#side"
+				},
+				"down": {
+					"texture": "#side"
+				}
+			}
+		},
+		{
+			"from": [
+				2,
+				3,
+				14
+			],
+			"to": [
+				14,
+				16,
+				16
+			],
+			"faces": {
+				"north": {
+					"texture": "#side"
+				},
+				"south": {
+					"texture": "#side"
+				},
+				"east": {
+					"texture": "#side"
+				},
+				"west": {
+					"texture": "#side"
+				},
+				"up": {
+					"texture": "#side"
+				},
+				"down": {
+					"texture": "#side"
+				}
+			}
+		},
+		{
+			"from": [
+				2,
+				13,
+				2
+			],
+			"to": [
+				14,
+				13,
+				14
+			],
+			"faces": {
+				"up": {
+					"texture": "#liquid"
+				}
+			}
+		}
+	]
+}

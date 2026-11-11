@@ -66,7 +66,7 @@ public final class SolarDiveAbility implements Ability {
 			for (LivingEntity e : LegendKit.enemies(pl, c, radius)) {
 				double k = 1 - Math.min(1, e.getPos().distanceTo(c) / radius) * 0.5;
 				LegendKit.hurt(pl, e, (float) (damage * k), false);
-				e.setOnFireFor(5f);
+				DragonFire.burn(pl.getServerWorld(), e, pl, 2f, 6);
 				Vec3d push = LegendKit.flat(e.getPos().subtract(c)).multiply(1.1);
 				e.addVelocity(push.x, 0.7, push.z);
 				e.velocityModified = true;
@@ -74,6 +74,10 @@ public final class SolarDiveAbility implements Ability {
 			pl.setVelocity(0, 0.35, 0);
 			pl.velocityModified = true;
 			LegendKit.fx(pl, "solar_impact", (int) (radius * 10));
+			// o chão em volta do impacto pega fogo: chamas visuais, brasas e alguns focos de fogo de verdade
+			LegendKit.fxAt(pl.getServerWorld(), "fire_field", c, (float) radius, 120, 1);
+			DragonFire.igniteGround(pl.getServerWorld(), c, (int) radius, 7);
+			com.dakura.origins.sound.ModSounds.play(pl, com.dakura.origins.sound.ModSounds.FIRE_ROAR, 1.2f, 1f);
 			LegendKit.anim(pl, "land_pose", 12);
 			LegendKit.snd(pl, SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f, 1.3f);
 			LegendKit.snd(pl, SoundEvents.ITEM_FIRECHARGE_USE, 1.2f, 0.5f);

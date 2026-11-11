@@ -19,6 +19,22 @@ public abstract class EntityMixin {
 		if ((Object) this instanceof PlayerEntity p && StealthPower.silent(p)) ci.cancel();
 	}
 
+	/**
+	 * Raças imunes ao fogo: igual à poção de Resistência ao Fogo, elas nem chegam a "pegar fogo"
+	 * (sem chamas no corpo, sem a tela em chamas em primeira pessoa, sem o som de queimar), no servidor e no cliente.
+	 */
+	@org.spongepowered.asm.mixin.injection.ModifyVariable(method = "setFireTicks", at = @At("HEAD"), argsOnly = true)
+	private int dakura$fireproofTicks(int ticks) {
+		Entity self = (Entity) (Object) this;
+		if (ticks > 0 && self instanceof PlayerEntity p && fireproof(p)) return 0;
+		return ticks;
+	}
+
+	private static boolean fireproof(PlayerEntity p) {
+		return p.getWorld().isClient ? com.dakura.origins.power.EntityFlags.clientHas(p, "fireproof")
+				: p instanceof net.minecraft.server.network.ServerPlayerEntity sp && com.dakura.origins.power.EntityFlags.has(sp, "fireproof");
+	}
+
 	/** Raças imunes ao fogo (Dracônica, Demônio...): sem chamas desenhadas no corpo. */
 	@Inject(method = "doesRenderOnFire", at = @At("HEAD"), cancellable = true, require = 0)
 	private void dakura$noFireVisual(org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> cir) {

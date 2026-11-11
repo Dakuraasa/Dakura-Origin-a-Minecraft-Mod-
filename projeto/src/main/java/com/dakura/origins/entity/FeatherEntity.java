@@ -17,7 +17,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Pena cortante da Vastaya (ave): fica presa como flecha e acumula dano no mesmo alvo
+ * Pena-adaga da Vastaya (ave): flecha própria da raça (não existe em outro lugar do jogo). Fica cravada no
+ * corpo do alvo (desenho próprio, não a flecha vanilla), aplica fraqueza e acumula dano no mesmo alvo
  * (+1 a cada 3 penas, por 5 s). Não pode ser recolhida e some sozinha.
  */
 public class FeatherEntity extends PersistentProjectileEntity {
@@ -53,7 +54,12 @@ public class FeatherEntity extends PersistentProjectileEntity {
 		setDamage((dmg - 0.02) / v);
 		e.timeUntilRegen = 0;
 		super.onEntityHit(hit);
-		if (e instanceof LivingEntity) {
+		if (e instanceof LivingEntity le) {
+			// sem flechas vanilla presas: a pena cravada é desenhada pelo cliente
+			if (le.getStuckArrowCount() > 0) le.setStuckArrowCount(le.getStuckArrowCount() - 1);
+			le.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
+					net.minecraft.entity.effect.StatusEffects.WEAKNESS, 100, st[0] >= 6 ? 1 : 0));
+			com.dakura.origins.power.ability.LegendKit.fx(le, "feather_stuck", random.nextInt(1 << 20));
 			st[0] = Math.min(9, st[0] + 1);
 			st[1] = now + 100;
 			STACKS.put(e.getUuid(), st);
@@ -64,9 +70,6 @@ public class FeatherEntity extends PersistentProjectileEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (getWorld().isClient) {
-			if (age % 2 == 0 && getVelocity().lengthSquared() > 0.05)
-				getWorld().addParticle(ParticleTypes.WHITE_ASH, getX(), getY(), getZ(), 0, 0, 0);
-		} else if (age > 80) discard();
+		if (!getWorld().isClient && age > 80) discard();
 	}
 }

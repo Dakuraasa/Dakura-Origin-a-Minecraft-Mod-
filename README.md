@@ -146,14 +146,14 @@ A experiência clássica do Minecraft, sem vantagens nem fraquezas.
 ### Serafim
 - Seis asas (dobradas no chão, abertas no voo), aura branca e auréola. Totalmente pacífico: não ataca e nenhum mob o ataca. **Coro Celestial** (cura em área) e **Altar Celestial** (escolhe um entre três encantamentos sorteados para o item da mão; recarga de 3 min).
 
-### Oni
-- Guerreiro demônio inspirado em Akaza. Passiva **Desvio** (desliza para o lado e evita o golpe). **Técnica de Sangue: Agulha da Bússola**: pisa e abre um pentagrama vermelho; 15 s de buffs absurdos, sede de sangue e todos os inimigos revelados (recarga de 4 min).
+### Dama Cogumelo (variante da Dríade)
+- Chapéu de cogumelo gigante e veneno roxo. **Caldeirão Venenoso** (o caldeirão fica plantado 10 s vazando veneno) e a passiva **Cogumelo de Emergência** (com 4 corações, um cogumelo gigante brota e a leva ao topo).
+
+### Dragão Marrom (variante do Dracônico)
+- Menor (2,5 blocos), ágil, voa e usa armadura. Maturidade por abates. **Rajada de Magma** (1 a 3 blocos de magma verde) e **Queda do Céu** (agarra, sobe e mergulha com o inimigo).
 
 ### Sereia
 - Respira e nada como um golfinho; dentro d'água as pernas viram uma cauda de escamas. Seca fora da água. **Canto das Marés** (encanta monstros e cura aliados) e **Maremoto** (onda gigante que arrasta inimigos, com a Sereia surfando na crista).
-
-### Anúbis
-- Guia das almas: cada inimigo derrotado o cura. Mortos-vivos não o atacam. **Pesagem do Coração** (balança de Maat sobre o alvo; abaixo de 35% da vida, julgamento) e **Areias do Duat** (redemoinho de areia com chacais espectrais).
 
 ### Fênix
 - Asas e crista de fogo, voa e é imune a fogo. Passiva **Renascimento** (renasce das cinzas com a vida cheia). **Mergulho Solar** (cometa que abre um anel de sol no chão) e **Asas da Aurora** (fogo sagrado que cura aliados e queima inimigos).

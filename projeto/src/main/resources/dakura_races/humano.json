@@ -6,8 +6,8 @@
 	"epithet": "O Andarilho Comum",
 	"icon": "dakura_origins:textures/race/humano.png",
 	"icon_size": [
-		44,
-		47
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

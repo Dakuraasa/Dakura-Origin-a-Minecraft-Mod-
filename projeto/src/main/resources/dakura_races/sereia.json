@@ -6,8 +6,8 @@
 	"epithet": "A Voz das Marés",
 	"icon": "dakura_origins:textures/race/sereia.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

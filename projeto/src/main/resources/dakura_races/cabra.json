@@ -6,8 +6,8 @@
 	"epithet": "Os Cascos das Montanhas",
 	"icon": "dakura_origins:textures/race/cabra.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

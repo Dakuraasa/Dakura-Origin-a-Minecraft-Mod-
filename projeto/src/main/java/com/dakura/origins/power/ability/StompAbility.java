@@ -101,6 +101,9 @@ public final class StompAbility implements Ability {
 			target.velocityModified = true;
 		}
 		ModNetworking.sendAround(new AnimPayload(owner.getId(), "fx:stomp", (int) Math.round(r * 10)), owner);
+		// peso do dragão: pedaços do chão voam (só visual, o terreno não muda) e uma nuvem de poeira sobe
+		LegendKit.fxAt(world, "debris", at, (int) Math.round(r * 7), (float) r, 0);
+		LegendKit.fxAt(world, "dust", at, (float) r, 0, 0);
 		world.playSound(null, at.x, at.y, at.z, SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.PLAYERS, 0.6f, 1.3f);
 		world.playSound(null, at.x, at.y, at.z, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.PLAYERS, 0.35f, 0.5f);
 		world.playSound(null, at.x, at.y, at.z, SoundEvents.ENTITY_IRON_GOLEM_ATTACK, SoundCategory.PLAYERS, 0.9f, 0.6f);

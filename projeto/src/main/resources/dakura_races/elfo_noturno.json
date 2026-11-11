@@ -6,8 +6,8 @@
 	"epithet": "Filho da Lua Escura",
 	"icon": "dakura_origins:textures/race/elfo_noturno.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

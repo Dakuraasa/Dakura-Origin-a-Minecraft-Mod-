@@ -6,8 +6,8 @@
 	"epithet": "A Fera que Não Divide o Céu",
 	"icon": "dakura_origins:textures/race/draconica.png",
 	"icon_size": [
-		146,
-		160
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -28,7 +28,11 @@
 	"traits": [
 		{
 			"type": "vantagem",
-			"text": "Corpo colossal: começa com 2,5 blocos e cresce até 3,5 conforme amadurece."
+			"text": "Asas de dragão: agora voa."
+		},
+		{
+			"type": "vantagem",
+			"text": "Corpo colossal, mas ágil: começa com 2,5 blocos, cresce até 3,5 conforme amadurece e anda um pouco mais rápido que um humano."
 		},
 		{
 			"type": "vantagem",
@@ -68,6 +72,10 @@
 		}
 	],
 	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "dragon_red"
+		},
 		{
 			"type": "dakura_origins:maturity",
 			"thresholds": [
@@ -149,6 +157,12 @@
 		},
 		{
 			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.08
+		},
+		{
+			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:player.block_interaction_range",
 			"stage_values": [
 				0.5,
@@ -209,20 +223,25 @@
 			"operation": "add_multiplied_base",
 			"amount": -0.35,
 			"when": "water"
+		},
+		{
+			"type": "dakura_origins:flight",
+			"speed": 0.03,
+			"exhaustion": 0.02
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:fireball",
 			"name": "Bola de Fogo",
-			"description": "Dispara uma esfera de fogo dracônico que explode com a força de uma TNT e incendeia o local.",
+			"description": "Dispara uma esfera de fogo dracônico que explode com a força de uma TNT, empurra sem exagero e incendeia de verdade quem estiver perto e o chão em volta.",
 			"cooldown": 200,
 			"speed": 1.6,
 			"life": 50,
 			"explosion_power": 4.0,
 			"block_power": 1.5,
-			"fire_count": 0,
-			"fire_radius": 0,
+			"fire_count": 12,
+			"fire_radius": 3,
 			"maturity_damage": [
 				1.0,
 				1.4,

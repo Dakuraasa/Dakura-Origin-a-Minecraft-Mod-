@@ -12,7 +12,8 @@
 		"LivingEntityRendererMixin",
 		"MinecraftClientMixin",
 		"MouseMixin",
-		"PlayerEntityModelMixin"
+		"PlayerEntityModelMixin",
+		"EntityTeamColorMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

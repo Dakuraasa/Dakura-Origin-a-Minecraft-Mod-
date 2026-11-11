@@ -6,8 +6,8 @@
 	"epithet": "A Gênia da Própria Ganância",
 	"icon": "dakura_origins:textures/race/lilac.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -57,6 +57,10 @@
 		{
 			"type": "neutro",
 			"text": "Viciada em apostas."
+		},
+		{
+			"type": "vantagem",
+			"text": "Passiva — Sorye: baús rendem mais e melhor, piglins deixam mais coisas e aldeões dão desconto, tudo dentro do que o jogo já permitiria. A cada 5 min, bater num baú já aberto joga os dados e gera o conteúdo de novo, com mais sorte (uma vez por baú)."
 		}
 	],
 	"powers": [
@@ -115,6 +119,23 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#FFC83A",
 			"when": "always"
+		},
+		{
+			"type": "dakura_origins:sorye",
+			"chest_chance": 0.35,
+			"piglin_chance": 0.4,
+			"reroll_cooldown": 6000,
+			"reroll_luck": 3
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.luck",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "lucky_discount"
 		}
 	],
 	"abilities": [

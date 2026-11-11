@@ -110,8 +110,36 @@ public abstract class BipedEntityModelMixin {
 		if (kr >= 0f) poseKickRush(kr, animationProgress);
 		float kh = AbilityAnimations.progress(entity, "kick_high", animationProgress);
 		if (kh >= 0f) poseKickHigh(kh);
+		float pr = AbilityAnimations.progress(entity, "punch_rush", animationProgress);
+		if (pr >= 0f) posePunchRush(pr, animationProgress);
+		float pf = AbilityAnimations.progress(entity, "punch_final", animationProgress);
+		if (pf >= 0f) posePunchFinal(pf);
 		float leap = AbilityAnimations.progress(entity, "leap", animationProgress);
 		if (leap >= 0f) poseLeap(leap);
+		float thr = AbilityAnimations.progress(entity, "throw", animationProgress);
+		if (thr >= 0f) poseThrow(thr);
+		float grab = AbilityAnimations.progress(entity, "grab", animationProgress);
+		if (grab >= 0f) poseGrab(grab, animationProgress);
+	}
+
+	/** Arremesso por cima da cabeça (caldeirão, magma): braço vai para trás e chicoteia para a frente. */
+	private void poseThrow(float p) {
+		float back = AbilityAnimations.window(p, 0.00f, 0.25f, 0.30f, 0.45f);
+		float fwd = AbilityAnimations.window(p, 0.30f, 0.50f, 0.70f, 1.00f);
+		rightArm.pitch = MathHelper.lerp(Math.max(back, fwd), rightArm.pitch, back > fwd ? -2.9f : -1.2f);
+		rightArm.roll = MathHelper.lerp(back, rightArm.roll, -0.2f);
+		body.yaw = MathHelper.lerp(Math.max(back, fwd), body.yaw, back > fwd ? 0.35f : -0.25f);
+		leftArm.pitch = MathHelper.lerp(fwd, leftArm.pitch, -0.6f);
+	}
+
+	/** Agarrão do dragão: os dois braços à frente segurando o alvo, corpo inclinado. */
+	private void poseGrab(float p, float t) {
+		float w = AbilityAnimations.window(p, 0.00f, 0.08f, 0.92f, 1.00f);
+		rightArm.pitch = MathHelper.lerp(w, rightArm.pitch, -1.45f + MathHelper.sin(t * 0.3f) * 0.05f);
+		leftArm.pitch = MathHelper.lerp(w, leftArm.pitch, -1.45f - MathHelper.sin(t * 0.3f) * 0.05f);
+		rightArm.yaw = MathHelper.lerp(w, rightArm.yaw, 0.35f);
+		leftArm.yaw = MathHelper.lerp(w, leftArm.yaw, -0.35f);
+		body.pitch = MathHelper.lerp(w, body.pitch, 0.2f);
 	}
 
 	// ------------------------------------------------------------------ leva lendária
@@ -246,6 +274,35 @@ public abstract class BipedEntityModelMixin {
 		rightArm.roll = MathHelper.lerp(w, rightArm.roll, 0.5f);
 		leftArm.roll = MathHelper.lerp(w, leftArm.roll, -0.5f);
 		body.pitch = MathHelper.lerp(w, body.pitch, -0.2f);
+	}
+
+	/** Barragem de socos: os dois braços se alternam em jabs rapidíssimos, corpo girando a cada soco. */
+	private void posePunchRush(float p, float t) {
+		float w = AbilityAnimations.window(p, 0.00f, 0.06f, 0.94f, 1.00f);
+		float k = MathHelper.sin(t * 3.14f);
+		float r = Math.max(0, k), l = Math.max(0, -k);
+		rightArm.pitch = MathHelper.lerp(w, rightArm.pitch, -1.55f * r - 0.5f * (1 - r));
+		leftArm.pitch = MathHelper.lerp(w, leftArm.pitch, -1.55f * l - 0.5f * (1 - l));
+		rightArm.yaw = MathHelper.lerp(w, rightArm.yaw, -0.25f * r);
+		leftArm.yaw = MathHelper.lerp(w, leftArm.yaw, 0.25f * l);
+		rightArm.roll = MathHelper.lerp(w, rightArm.roll, 0.15f * (1 - r));
+		leftArm.roll = MathHelper.lerp(w, leftArm.roll, -0.15f * (1 - l));
+		body.yaw = MathHelper.lerp(w, body.yaw, 0.28f * k);
+		body.pitch = MathHelper.lerp(w, body.pitch, 0.12f);
+		rightLeg.pitch = MathHelper.lerp(w, rightLeg.pitch, 0.35f);
+		leftLeg.pitch = MathHelper.lerp(w, leftLeg.pitch, -0.35f);
+	}
+
+	/** Soco final: o braço direito recua e explode para a frente, com o corpo inteiro girando no golpe. */
+	private void posePunchFinal(float p) {
+		float back = AbilityAnimations.window(p, 0.00f, 0.15f, 0.2f, 0.3f);
+		float fwd = AbilityAnimations.window(p, 0.2f, 0.35f, 0.8f, 1.00f);
+		rightArm.pitch = MathHelper.lerp(Math.max(back, fwd), rightArm.pitch, back > fwd ? 0.6f : -1.65f);
+		rightArm.yaw = MathHelper.lerp(fwd, rightArm.yaw, -0.1f);
+		leftArm.pitch = MathHelper.lerp(Math.max(back, fwd), leftArm.pitch, -0.9f);
+		body.yaw = MathHelper.lerp(Math.max(back, fwd), body.yaw, back > fwd ? 0.6f : -0.45f);
+		rightLeg.pitch = MathHelper.lerp(fwd, rightLeg.pitch, 0.5f);
+		leftLeg.pitch = MathHelper.lerp(fwd, leftLeg.pitch, -0.6f);
 	}
 
 	/** Chute Lunar: perna sobe num arco por cima da cabeça. */

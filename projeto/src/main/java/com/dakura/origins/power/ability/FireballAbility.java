@@ -172,10 +172,23 @@ public final class FireballAbility implements Ability {
 			world.createExplosion(owner, null, new BlocksOnlyBehavior(), at.x, at.y, at.z,
 					blockPower, false, World.ExplosionSourceType.MOB);
 		}
-		// 3) fogo espalhado, em quantidade limitada
+		// 3) fogo de verdade: quem estava na explosão pega fogo (e a carne cai assada), e o chão em volta queima
+		DragonFire.burnArea(world, at, explosionPower * 1.2, owner, 3f * mult, 6);
 		spreadFire(world, BlockPos.ofFloored(at));
+		// 4) empurrão moderado e proporcional (as explosões em si não arremessam mais ninguém para o céu)
+		double r = explosionPower * 1.2;
+		for (net.minecraft.entity.LivingEntity e : world.getEntitiesByClass(net.minecraft.entity.LivingEntity.class,
+				new Box(at, at).expand(r), x -> x.isAlive() && x != owner)) {
+			double d = e.getPos().distanceTo(at);
+			if (d > r) continue;
+			double k = 1 - d / r;
+			Vec3d dir = LegendKit.flat(e.getPos().subtract(at));
+			e.addVelocity(dir.x * 0.75 * k, 0.12 + 0.22 * k, dir.z * 0.75 * k);
+			e.velocityModified = true;
+		}
+		LegendKit.fxAt(world, "fire_field", at, (float) r * 0.8f, 80, 0);
 
-		// 4) o impacto visual (onda de choque, coluna de fogo, brasas) é desenhado pelos clientes
+		// 5) o impacto visual (onda de choque, coluna de fogo, brasas) é desenhado pelos clientes
 		world.playSound(null, at.x, at.y, at.z, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1.0f, 0.5f);
 	}
 
@@ -214,6 +227,11 @@ public final class FireballAbility implements Ability {
 		public float calculateDamage(Explosion explosion, Entity entity) {
 			return super.calculateDamage(explosion, entity) * damageMultiplier;
 		}
+
+		@Override
+		public float getKnockbackModifier(Entity entity) {
+			return 0f; // o empurrão é aplicado à parte, moderado
+		}
 	}
 
 	/** Explosão que só mexe nos blocos (o dano já veio da primeira). */
@@ -221,6 +239,11 @@ public final class FireballAbility implements Ability {
 		@Override
 		public boolean shouldDamage(Explosion explosion, Entity entity) {
 			return false;
+		}
+
+		@Override
+		public float getKnockbackModifier(Entity entity) {
+			return 0f;
 		}
 	}
 }

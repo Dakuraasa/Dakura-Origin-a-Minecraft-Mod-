@@ -6,8 +6,8 @@
 	"epithet": "A Raposa Celestial de Nove Caudas",
 	"icon": "dakura_origins:textures/race/kitsune.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [
@@ -28,11 +28,7 @@
 	"traits": [
 		{
 			"type": "vantagem",
-			"text": "Nove caudas: mais vida, mais força e mais velocidade."
-		},
-		{
-			"type": "vantagem",
-			"text": "Fogo de raposa: cada golpe incendeia o inimigo."
+			"text": "Caudas que crescem: começa com 3 caudas e ganha mais 3 a cada estágio de maturidade, até 9. Vida, força, dano e o número de esferas crescem junto."
 		},
 		{
 			"type": "vantagem",
@@ -45,6 +41,10 @@
 		{
 			"type": "neutro",
 			"text": "Passiva — Pérola Estelar: ao morrer, volta de pé com 1 coração (a cada 10 minutos)."
+		},
+		{
+			"type": "neutro",
+			"text": "Maturidade espiritual: não usa a barra de experiência; toda a experiência que ganha vira maturidade. A barra muda de cor a cada estágio e demora bastante para encher."
 		},
 		{
 			"type": "desvantagem",
@@ -73,27 +73,44 @@
 			"feature": "slim_model"
 		},
 		{
+			"type": "dakura_origins:maturity",
+			"thresholds": [
+				1500,
+				5000
+			],
+			"from_xp": true,
+			"from_kills": false,
+			"style": "kitsune",
+			"grow_message": "dakura_origins.message.kitsune_grow",
+			"colors": [
+				"#7FD6FF",
+				"#9C8CFF",
+				"#FF8FD8"
+			]
+		},
+		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.max_health",
-			"operation": "add_value",
-			"amount": 4.0
+			"stage_values": [
+				2,
+				4,
+				6
+			]
 		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.attack_damage",
-			"operation": "add_value",
-			"amount": 2.0
+			"stage_values": [
+				1.0,
+				2.0,
+				3.0
+			]
 		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.movement_speed",
 			"operation": "add_multiplied_base",
 			"amount": 0.1
-		},
-		{
-			"type": "dakura_origins:hit_effect",
-			"mode": "fire",
-			"seconds": 3
 		},
 		{
 			"type": "dakura_origins:status_effect",
@@ -142,24 +159,35 @@
 	],
 	"abilities": [
 		{
-			"type": "dakura_origins:foxfire",
-			"name": "Kitsunebi",
-			"cooldown": 500,
-			"wisps": 9,
-			"duration": 240,
-			"range": 10,
-			"damage": 3.5,
-			"heal": 1,
-			"description": "Nove chamas-fantasma azuis giram em volta dela. A cada segundo, uma voa até o inimigo mais próximo (dano, fogo e marca brilhante); enquanto houver chamas, os aliados por perto se curam."
+			"type": "dakura_origins:spirit_orb",
+			"cooldown": 120,
+			"range": 14,
+			"speed": 1.1,
+			"damage": 6,
+			"radius": 2.5,
+			"return_damage": 5,
+			"return_radius": 3.5,
+			"maturity_damage": [
+				1.0,
+				1.4,
+				1.8
+			],
+			"name": "Orbe Espiritual",
+			"description": "Lança uma esfera de mana azul na direção da mira. Se acertar uma criatura, explode com força e volta para a Kitsune, explodindo de novo ao chegar. Se não acertar ninguém, só volta, sem explosões."
 		},
 		{
-			"type": "dakura_origins:nine_tails",
-			"name": "Bênção das Nove Caudas",
-			"cooldown": 900,
-			"radius": 10,
-			"damage": 6,
-			"duration": 200,
-			"description": "As caudas se abrem em leque e o espírito da raposa celestial desce num redemoinho de chamas: aliados ganham regeneração, velocidade e escudo; monstros são lançados ao ar, queimados e ficam tontos."
+			"type": "dakura_origins:mana_orbs",
+			"cooldown": 500,
+			"duration": 400,
+			"damage": 4,
+			"range": 24,
+			"maturity_damage": [
+				1.0,
+				1.35,
+				1.75
+			],
+			"name": "Esferas Errantes",
+			"description": "Esferas de mana com rastro de cometa passam a orbitar em volta dela (3, 6 ou 9, conforme a maturidade). No próximo golpe dela, ou ao usar de novo mirando uma criatura, todas disparam como mísseis teleguiados, uma após a outra, e explodem no alvo."
 		}
 	]
 }

@@ -6,8 +6,8 @@
 	"epithet": "O Que Sempre Cobra o Preço",
 	"icon": "dakura_origins:textures/race/demonio.png",
 	"icon_size": [
-		95,
-		95
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

@@ -5,8 +5,8 @@
 	"epithet": "Garras Silenciosas",
 	"icon": "dakura_origins:textures/race/vastaya_felina.png",
 	"icon_size": [
-		96,
-		96
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

@@ -6,8 +6,8 @@
 	"epithet": "A Alma que Não Partiu",
 	"icon": "dakura_origins:textures/race/espectro.png",
 	"icon_size": [
-		114,
-		128
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

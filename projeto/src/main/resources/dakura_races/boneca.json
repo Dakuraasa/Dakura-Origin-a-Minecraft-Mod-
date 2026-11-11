@@ -6,8 +6,8 @@
 	"epithet": "A Marionete Amaldiçoada",
 	"icon": "dakura_origins:textures/race/boneca.png",
 	"icon_size": [
-		93,
-		93
+		384,
+		145
 	],
 	"palette": {
 		"ink": [

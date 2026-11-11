@@ -1,0 +1,171 @@
+{
+	"id": "dama_cogumelo",
+	"order": 5,
+	"tag": "casual",
+	"variant_of": "driade",
+	"name": "Dama Cogumelo",
+	"epithet": "A Senhora dos Esporos",
+	"icon": "dakura_origins:textures/race/dama_cogumelo.png",
+	"icon_size": [
+		384,
+		145
+	],
+	"palette": {
+		"ink": [
+			"#120A16",
+			"#2A1430",
+			"#4E2458",
+			"#8A3FA0",
+			"#E3A6F0",
+			"#FFF0F4"
+		],
+		"sky": "#08040A",
+		"glow": "#FFE8F4",
+		"text": "#123524",
+		"accent": "#B8324A",
+		"muted": "#5E806B"
+	},
+	"description": "Uma dríade que cresceu na sombra úmida das florestas, onde a luz quase não chega. Em vez de flores, carrega um chapéu de cogumelo enorme e um caldeirão de veneno roxo. Contamina o chão por onde passa e, quando está à beira da morte, um cogumelo gigante brota da terra e a ergue para longe do perigo.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Corpo esguio de 2,5 blocos, mais forte e resistente que um humano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune ao próprio veneno: dentro dele não sofre dano nem lentidão, ganha um escudo dourado e se cura."
+		},
+		{
+			"type": "vantagem",
+			"text": "Imune a veneno e decomposição."
+		},
+		{
+			"type": "vantagem",
+			"text": "Criatura da sombra: mais forte à noite."
+		},
+		{
+			"type": "neutro",
+			"text": "Passiva — Cogumelo de Emergência: ao cair para 4 corações, explode em veneno, um cogumelo gigante brota e a leva para o topo, regenerando por 10 s (a cada 3 minutos)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O sol a resseca: mais fraca de dia."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Não come carne."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O fogo causa o dobro de dano."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "mushroom_cap"
+		},
+		{
+			"type": "dakura_origins:cosmetic",
+			"feature": "slim_model"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.scale",
+			"operation": "add_value",
+			"amount": 0.389
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 1.5
+		},
+		{
+			"type": "dakura_origins:toxic_affinity"
+		},
+		{
+			"type": "dakura_origins:fungal_emergency",
+			"threshold": 8,
+			"cooldown": 3600,
+			"radius": 6,
+			"damage": 6,
+			"stay": 600
+		},
+		{
+			"type": "dakura_origins:effect_immunity",
+			"effects": [
+				"minecraft:poison",
+				"minecraft:wither"
+			]
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -1.0,
+			"when": "day"
+		},
+		{
+			"type": "dakura_origins:restricted_diet",
+			"forbidden": [
+				"#minecraft:meat"
+			],
+			"message": "dakura_origins.message.no_meat"
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fire",
+			"multiplier": 2.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.knockback_resistance",
+			"operation": "add_value",
+			"amount": 0.4
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#B066FF",
+			"when": "night"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:toxic_cauldron",
+			"name": "Caldeirão Venenoso",
+			"cooldown": 400,
+			"speed": 1.15,
+			"radius": 10,
+			"duration": 200,
+			"damage": 2,
+			"impact": 5,
+			"description": "Arremessa um caldeirão de ferro em arco. Onde cai, ele estoura e fica plantado no chão por 10 s, vazando um veneno roxo que se espalha até 10 blocos: dano contínuo, cegueira e lentidão."
+		},
+		{
+			"type": "dakura_origins:passive",
+			"name": "Cogumelo de Emergência",
+			"cooldown": 0,
+			"description": "Automática: ao cair para 4 corações, uma explosão de veneno roxo empurra os inimigos, um cogumelo gigante brota do chão e a Dama é levada ao topo, regenerando por 10 s. Volta em 3 minutos."
+		}
+	]
+}

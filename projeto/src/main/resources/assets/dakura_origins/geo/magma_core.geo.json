@@ -1,0 +1,175 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.dakura_origins.magma_core",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 6,
+				"visible_bounds_height": 5,
+				"visible_bounds_offset": [
+					0,
+					1.5,
+					0
+				]
+			},
+			"bones": [
+				{
+					"name": "core",
+					"pivot": [
+						0.0,
+						24.0,
+						0.0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-4.0,
+								20.0,
+								-4.0
+							],
+							"size": [
+								8.0,
+								8.0,
+								8.0
+							],
+							"uv": [
+								0,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "chunk_0",
+					"pivot": [
+						-5.0,
+						26.0,
+						-2.0
+					],
+					"parent": "core",
+					"rotation": [
+						0.0,
+						0.0,
+						11.459
+					],
+					"cubes": [
+						{
+							"origin": [
+								-6.0,
+								25.0,
+								-3.0
+							],
+							"size": [
+								2.0,
+								2.0,
+								2.0
+							],
+							"uv": [
+								32,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "chunk_1",
+					"pivot": [
+						3.0,
+						29.0,
+						-1.0
+					],
+					"parent": "core",
+					"rotation": [
+						22.918,
+						40.107,
+						11.459
+					],
+					"cubes": [
+						{
+							"origin": [
+								2.0,
+								28.0,
+								-2.0
+							],
+							"size": [
+								2.0,
+								2.0,
+								2.0
+							],
+							"uv": [
+								32,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "chunk_2",
+					"pivot": [
+						-2.0,
+						21.0,
+						2.0
+					],
+					"parent": "core",
+					"rotation": [
+						45.837,
+						80.214,
+						11.459
+					],
+					"cubes": [
+						{
+							"origin": [
+								-3.0,
+								20.0,
+								1.0
+							],
+							"size": [
+								2.0,
+								2.0,
+								2.0
+							],
+							"uv": [
+								32,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "chunk_3",
+					"pivot": [
+						1.0,
+						25.0,
+						3.0
+					],
+					"parent": "core",
+					"rotation": [
+						68.755,
+						120.321,
+						11.459
+					],
+					"cubes": [
+						{
+							"origin": [
+								0.0,
+								24.0,
+								2.0
+							],
+							"size": [
+								2.0,
+								2.0,
+								2.0
+							],
+							"uv": [
+								32,
+								0
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

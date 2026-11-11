@@ -96,7 +96,7 @@ Tipos novos desta versão: `marker` (`kind`), `food_multiplier`, `sleep_altitude
 `conditional_attribute` com `"when": "desert" | "nether"`, `no_armor` com `slots` e `damage_multiplier` com `damage_types`.
 
 Segunda leva: `flag` (aura `"aura#RRGGBB"`, `fireproof`...; `when`: `night`/`day`/`low_health`), `xp_multiplier`, `glide`,
-`ally_aura`, `noble_tools`, `greed`, `cursed_rhythm` (`hits`, `bonus`), `pacifist`, `dodge` (`chance`, `boosted`, `boost_flag`), `aquatic` (`dry_seconds`), `soul_guide` (`heal`, `absorption_ticks`), `rebirth` (`cooldown`, `radius`, `damage`), `rabbit_frenzy` (`max`, `finisher`); `no_armor` com `heavy_only`; e `conditional_attribute` com `day`, `water`, `high`, `no_gold`.
+`ally_aura`, `noble_tools`, `greed`, `cursed_rhythm` (`hits`, `bonus`), `pacifist`, `aquatic` (`dry_seconds`), `rebirth` (`cooldown`, `radius`, `damage`), `rabbit_frenzy` (`max`, `finisher`), `toxic_affinity`, `golden_ward` (`interval`, `push`, `min`, `max`), `fungal_emergency` (`threshold`, `cooldown`, `radius`, `damage`, `stay`); `maturity` aceita `per_kill`; `no_armor` com `heavy_only`; e `conditional_attribute` com `day`, `water`, `high`, `no_gold`.
 
 Todos aceitam `"requires_food": true`, que desliga o poder quando a fome chega a zero.
 
@@ -113,14 +113,31 @@ Também: `passive`, `charged_jump` (segurar e soltar), `headbutt`, `boulder`, `m
 `charm`, `morph` (toque/segurar), `feather_barrage`, `buff_mode`, `stomp`, `phase`, `vine_snare`, `solar_beam`,
 `dash`, `keen_sight`, `fox_form`, `fox_clones`, `tether`, `mirror_shield`, `shadow_orb`, `shadow_step`, `drain_kiss`,
 `mimic`, `war_cry`, `brutal_charge`, `fairy_perch`, `fairy_dust`, `golden_fist`, `casino`, `cursed_threads`, `waterfowl_dance`, `foxfire`, `nine_tails`,
-`seraph_blessing`, `celestial_altar`, `compass_needle`, `tidal_song`, `tsunami`, `heart_weighing`, `duat_sands`,
-`solar_dive`, `dawn_wings`, `rabbit_rush` e `moon_leap` (segurar e soltar).
+`seraph_blessing`, `celestial_altar`, `tidal_song`, `tsunami`,
+`solar_dive`, `dawn_wings`, `rabbit_rush`, `moon_leap` (segurar e soltar), `toxic_cauldron`, `magma_volley` e `skyfall_grab`. `tether` agora é estilo Physgun (`duration`, `throw`, `impact`); `dash` aceita `orb`; `glide` usa o voo de élitro de verdade.
 
 `fireball` e `breath` aceitam `maturity_damage`: o multiplicador do dano em cada estágio de
 maturidade (ex.: `[1.0, 1.4, 1.8]`).
 
 Quem não pode ser mordido fica na tag `data/dakura_origins/tags/entity_type/bite_immune.json`.
 Os blocos que o Sopro queima ficam na tag `data/dakura_origins/tags/block/breath_breakable.json`.
+
+### Ícones das raças
+
+Os ícones são os olhos desenhados pelo Artur (`arte/Olhos`). Arquivos de raças ainda não implementadas ficam guardados
+para quando a raça entrar: `olhos kitsune negra_` (Kitsune Sombria, ainda não criada). A Huli Jing usa `Olhoraposafogo` e a Huli Jing das Neves usa `olho_estilo_skin`.
+
+### Modelos 3D e efeitos (forma definitiva)
+
+As partes do corpo são modelos do Blockbench lidos pelo jogo (`assets/dakura_origins/geo`), gerados por
+`ferramentas/modelos/gerar_modelos.py`. Veja `ferramentas/modelos/COMO-USAR-NO-BLOCKBENCH.md` e as regras em
+`ferramentas/INSTRUCOES-MODELOS-3D.md`. Efeitos das habilidades novas são malhas desenhadas por código
+(`client/fx/FxWorld`), sem partículas vanilla, e os sons são `.ogg` originais (`ferramentas/sons/gerar_sons.py`).
+
+Brilho emissivo: peças mágicas (asas do Serafim e da Fênix, caudas de raposa, asas da Fada) usam
+`client/render/Emissive` — luz máxima mais uma passada aditiva na camada "eyes", que os shaders (Iris/OptiFine)
+tratam como emissiva (glow/bloom). Intensidade, cor e pulsação são escolhidas em cada peça; `Emissive.GLOBAL`
+escala tudo. Os efeitos de habilidade usam a camada aditiva do raio (`RenderLayer.getLightning`).
 
 ### Diretriz visual do projeto
 

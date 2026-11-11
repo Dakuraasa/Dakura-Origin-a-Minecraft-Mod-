@@ -24,6 +24,9 @@ public abstract class VillagerEntityMixin {
 		if (MarkerPower.has(player, "charm_discount")) {
 			// Succubus: o desconto vem do encanto, não da violência
 			frac = com.dakura.origins.power.ability.CharmAbility.charmedBy(v, player) ? 0.6 : 0.0;
+		} else if (MarkerPower.has(player, "lucky_discount")) {
+			// Lilac (Sorye): a sorte puxa o preço para baixo, sem depender de reputação
+			frac = 0.3;
 		} else {
 			if (!MarkerPower.has(player, "villager_discount")) return;
 			int rep = v.getReputation(player);

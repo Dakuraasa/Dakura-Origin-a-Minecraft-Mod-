@@ -7,6 +7,7 @@ import com.dakura.origins.power.EntityFlags;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,6 +39,7 @@ public final class FairyPerchAbility implements Ability {
 				for (Entity pass : host.getPassengerList()) {
 					if (!isFairy(pass)) continue;
 					host.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 60, 0, true, false, true));
+					if (pass instanceof LivingEntity fairy) fairy.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 60, 0, true, false, true));
 					host.getServerWorld().spawnParticles(net.minecraft.particle.ParticleTypes.WAX_OFF, host.getX(), host.getBodyY(0.8),
 							host.getZ(), 3, 0.3, 0.3, 0.3, 0.02);
 				}
