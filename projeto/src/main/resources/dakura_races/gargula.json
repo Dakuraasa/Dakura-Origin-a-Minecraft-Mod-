@@ -24,7 +24,7 @@
 		"accent": "#5E5868",
 		"muted": "#5E806B"
 	},
-	"description": "Estátuas que a magia acordou. A carne é pedra, o sangue é encanto, e as pequenas asas de rocha voam de verdade. Não comem nem bebem: quando precisam de forças, ficam imóveis e voltam a ser estátua até o corpo se refazer.",
+	"description": "Estátuas que a magia acordou. A carne é pedra, o sangue é encanto, e, mesmo de pedra, elas voam de verdade. Não comem nem bebem: quando precisam de forças, ficam imóveis e voltam a ser estátua até o corpo se refazer.",
 	"traits": [
 		{
 			"type": "vantagem",
@@ -32,7 +32,7 @@
 		},
 		{
 			"type": "vantagem",
-			"text": "Voa de verdade com asas de pedra (dois pulos para levantar voo)."
+			"text": "Voa de verdade, mesmo feita de pedra (dois pulos para levantar voo)."
 		},
 		{
 			"type": "vantagem",
@@ -68,10 +68,6 @@
 		}
 	],
 	"powers": [
-		{
-			"type": "dakura_origins:cosmetic",
-			"feature": "stone_wings"
-		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.armor",

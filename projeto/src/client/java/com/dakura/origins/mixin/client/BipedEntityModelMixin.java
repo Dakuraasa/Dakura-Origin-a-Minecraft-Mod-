@@ -96,7 +96,7 @@ public abstract class BipedEntityModelMixin {
 		float dr = AbilityAnimations.progress(entity, "dodge_r", animationProgress);
 		if (dr >= 0f) poseDodge(dr, -1f);
 
-		// ---- Sereia, Anúbis, Fênix, Vastaya Coelho
+		// ---- Mermaid, Phoenix
 		float sing = AbilityAnimations.progress(entity, "sing", animationProgress);
 		if (sing >= 0f) poseSing(sing, animationProgress);
 		float surf = AbilityAnimations.progress(entity, "surf", animationProgress);
@@ -115,16 +115,6 @@ public abstract class BipedEntityModelMixin {
 		if (land >= 0f) poseLand(land);
 		float reb = AbilityAnimations.progress(entity, "rebirth", animationProgress);
 		if (reb >= 0f) poseRebirth(reb, animationProgress);
-		float kr = AbilityAnimations.progress(entity, "kick_rush", animationProgress);
-		if (kr >= 0f) poseKickRush(kr, animationProgress);
-		float kh = AbilityAnimations.progress(entity, "kick_high", animationProgress);
-		if (kh >= 0f) poseKickHigh(kh);
-		float pr = AbilityAnimations.progress(entity, "punch_rush", animationProgress);
-		if (pr >= 0f) posePunchRush(pr, animationProgress);
-		float pf = AbilityAnimations.progress(entity, "punch_final", animationProgress);
-		if (pf >= 0f) posePunchFinal(pf);
-		float leap = AbilityAnimations.progress(entity, "leap", animationProgress);
-		if (leap >= 0f) poseLeap(leap);
 		float thr = AbilityAnimations.progress(entity, "throw", animationProgress);
 		if (thr >= 0f) poseThrow(thr);
 		float grab = AbilityAnimations.progress(entity, "grab", animationProgress);
@@ -270,70 +260,7 @@ public abstract class BipedEntityModelMixin {
 		hat.copyTransform(head);
 	}
 
-	/** Chuva de Chutes: chutes alternados muito rápidos, braços para trás. */
-	private void poseKickRush(float p, float t) {
-		float w = AbilityAnimations.window(p, 0.00f, 0.08f, 0.92f, 1.00f);
-		float k = MathHelper.sin(t * 2.2f);
-		rightLeg.pitch = MathHelper.lerp(w, rightLeg.pitch, -1.5f * Math.max(0, k) + 0.3f);
-		leftLeg.pitch = MathHelper.lerp(w, leftLeg.pitch, -1.5f * Math.max(0, -k) + 0.3f);
-		rightLeg.roll = MathHelper.lerp(w, rightLeg.roll, 0.15f * k);
-		leftLeg.roll = MathHelper.lerp(w, leftLeg.roll, 0.15f * k);
-		rightArm.pitch = MathHelper.lerp(w, rightArm.pitch, 0.9f);
-		leftArm.pitch = MathHelper.lerp(w, leftArm.pitch, 0.9f);
-		rightArm.roll = MathHelper.lerp(w, rightArm.roll, 0.5f);
-		leftArm.roll = MathHelper.lerp(w, leftArm.roll, -0.5f);
-		body.pitch = MathHelper.lerp(w, body.pitch, -0.2f);
-	}
-
 	/** Barragem de socos: os dois braços se alternam em jabs rapidíssimos, corpo girando a cada soco. */
-	private void posePunchRush(float p, float t) {
-		float w = AbilityAnimations.window(p, 0.00f, 0.06f, 0.94f, 1.00f);
-		float k = MathHelper.sin(t * 3.14f);
-		float r = Math.max(0, k), l = Math.max(0, -k);
-		rightArm.pitch = MathHelper.lerp(w, rightArm.pitch, -1.55f * r - 0.5f * (1 - r));
-		leftArm.pitch = MathHelper.lerp(w, leftArm.pitch, -1.55f * l - 0.5f * (1 - l));
-		rightArm.yaw = MathHelper.lerp(w, rightArm.yaw, -0.25f * r);
-		leftArm.yaw = MathHelper.lerp(w, leftArm.yaw, 0.25f * l);
-		rightArm.roll = MathHelper.lerp(w, rightArm.roll, 0.15f * (1 - r));
-		leftArm.roll = MathHelper.lerp(w, leftArm.roll, -0.15f * (1 - l));
-		body.yaw = MathHelper.lerp(w, body.yaw, 0.28f * k);
-		body.pitch = MathHelper.lerp(w, body.pitch, 0.12f);
-		rightLeg.pitch = MathHelper.lerp(w, rightLeg.pitch, 0.35f);
-		leftLeg.pitch = MathHelper.lerp(w, leftLeg.pitch, -0.35f);
-	}
-
-	/** Soco final: o braço direito recua e explode para a frente, com o corpo inteiro girando no golpe. */
-	private void posePunchFinal(float p) {
-		float back = AbilityAnimations.window(p, 0.00f, 0.15f, 0.2f, 0.3f);
-		float fwd = AbilityAnimations.window(p, 0.2f, 0.35f, 0.8f, 1.00f);
-		rightArm.pitch = MathHelper.lerp(Math.max(back, fwd), rightArm.pitch, back > fwd ? 0.6f : -1.65f);
-		rightArm.yaw = MathHelper.lerp(fwd, rightArm.yaw, -0.1f);
-		leftArm.pitch = MathHelper.lerp(Math.max(back, fwd), leftArm.pitch, -0.9f);
-		body.yaw = MathHelper.lerp(Math.max(back, fwd), body.yaw, back > fwd ? 0.6f : -0.45f);
-		rightLeg.pitch = MathHelper.lerp(fwd, rightLeg.pitch, 0.5f);
-		leftLeg.pitch = MathHelper.lerp(fwd, leftLeg.pitch, -0.6f);
-	}
-
-	/** Chute Lunar: perna sobe num arco por cima da cabeça. */
-	private void poseKickHigh(float p) {
-		float up = AbilityAnimations.window(p, 0.00f, 0.30f, 0.55f, 1.00f);
-		rightLeg.pitch = MathHelper.lerp(up, rightLeg.pitch, -2.6f);
-		leftArm.pitch = MathHelper.lerp(up, leftArm.pitch, -0.5f);
-		leftArm.roll = MathHelper.lerp(up, leftArm.roll, -1.0f);
-		rightArm.roll = MathHelper.lerp(up, rightArm.roll, 1.0f);
-		body.pitch = MathHelper.lerp(up, body.pitch, -0.3f);
-	}
-
-	/** Salto Lunar: corpo esticado subindo, braços para cima, pernas juntas. */
-	private void poseLeap(float p) {
-		float w = AbilityAnimations.window(p, 0.00f, 0.15f, 0.75f, 1.00f);
-		rightArm.pitch = MathHelper.lerp(w, rightArm.pitch, -3.0f);
-		leftArm.pitch = MathHelper.lerp(w, leftArm.pitch, -3.0f);
-		rightArm.roll = MathHelper.lerp(w, rightArm.roll, 0.25f);
-		leftArm.roll = MathHelper.lerp(w, leftArm.roll, -0.25f);
-		rightLeg.pitch = MathHelper.lerp(w, rightLeg.pitch, 0.3f);
-		leftLeg.pitch = MathHelper.lerp(w, leftLeg.pitch, 0.3f);
-	}
 
 	// ------------------------------------------------------------------ última leva
 

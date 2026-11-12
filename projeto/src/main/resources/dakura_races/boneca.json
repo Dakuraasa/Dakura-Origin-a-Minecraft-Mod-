@@ -133,15 +133,12 @@
 	],
 	"abilities": [
 		{
-			"type": "dakura_origins:steel_tempest",
-			"cooldown": 60,
-			"range": 5,
-			"damage": 7.5,
-			"dash": 0.9,
-			"empower_after": 3,
-			"reset_ticks": 100,
-			"name": "Tempestade de Aço",
-			"description": "Um corte rápido e pontudo para a frente que impulsiona a Boneca. Recarrega quase na hora. Depois de 3 cortes seguidos, o próximo ignora armadura, desgasta armaduras e escudos, causa mais dano quanto menos vida o alvo tem e aplica um efeito aleatório: congelar, veneno, fraqueza, lentidão ou Wither."
+			"type": "dakura_origins:puppet_chain",
+			"cooldown": 1200,
+			"radius": 6,
+			"duration": 200,
+			"name": "Corrente da Marionete",
+			"description": "Prende com uma corrente o inimigo ou jogador mais próximo (até 6 blocos) e o controla por 10 segundos. Ele não a ataca, segue a Boneca como um lobo domesticado e, quando ela ataca alguém, passa a atacar esse alvo com os próprios golpes. Só uma corrente por vez."
 		}
 	]
 }

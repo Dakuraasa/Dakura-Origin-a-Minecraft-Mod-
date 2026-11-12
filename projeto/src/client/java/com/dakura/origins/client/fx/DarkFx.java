@@ -40,30 +40,6 @@ public final class DarkFx {
 
 	// ------------------------------------------------------------------ cometa
 
-	public static void comet(MatrixStack ms, VertexConsumerProvider vcp, float t, Vec3d vel, float size) {
-		Matrix4f m = ms.peek().getPositionMatrix();
-		float r = 0.3f * size, pulse = 0.9f + 0.1f * MathHelper.sin(t * 1.3f);
-		// núcleo escuro sólido (não aditivo, para ficar realmente negro)
-		VertexConsumer core = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(VOID_TEX));
-		solidSphere(ms.peek(), core, 0, 0.3f, 0, r * pulse);
-		VertexConsumer glow = vcp.getBuffer(RenderLayer.getLightning());
-		FxWorld.sphere(m, glow, 0, 0.3f, 0, r * 1.45f, 0x7A2CFF, 0.38f);
-		FxWorld.sphere(m, glow, 0, 0.3f, 0, r * 2.0f * pulse, 0xC23CFF, 0.16f);
-		for (int i = 0; i < 6; i++) {
-			double a = t * 0.6 + i * Math.PI / 3;
-			FxWorld.dot(m, glow, (float) Math.cos(a) * r * 1.6f, 0.3f + MathHelper.sin(t * 0.5f + i) * r * 0.8f, (float) Math.sin(a) * r * 1.6f,
-					0.045f * size, 0xE6B8FF, 0.95f);
-		}
-		Vec3d back = vel.lengthSquared() > 1e-4 ? vel.normalize().multiply(-1) : new Vec3d(0, 1, 0);
-		for (int i = 1; i <= 22; i++) {
-			float d = i * 0.24f * size, k = 1 - i / 23f;
-			float wob = MathHelper.sin(t * 0.7f + i * 0.8f) * 0.05f * i * size;
-			float x = (float) back.x * d + wob, y = 0.3f + (float) back.y * d, z = (float) back.z * d - wob;
-			FxWorld.sphere(m, glow, x, y, z, r * 1.1f * k, i % 3 == 0 ? 0xD24CFF : 0x6A1FD8, 0.34f * k);
-			if (i % 2 == 0 && i < 14) solidSphere(ms.peek(), core, x, y, z, r * 0.55f * k);
-		}
-	}
-
 	// ------------------------------------------------------------------ correntes
 
 	private static void render(WorldRenderContext ctx) {
@@ -161,23 +137,6 @@ public final class DarkFx {
 		for (float[] q : f) {
 			for (int k = 0; k < 4; k++) vc.vertex(m, q[k * 3], q[k * 3 + 1], q[k * 3 + 2]).color(255, 255, 255, 255).texture(uv[k][0], uv[k][1])
 					.overlay(OverlayTexture.DEFAULT_UV).light(light).normal(e, q[12], q[13], q[14]);
-		}
-	}
-
-	private static void solidSphere(MatrixStack.Entry e, VertexConsumer vc, float x, float y, float z, float r) {
-		Matrix4f m = e.getPositionMatrix();
-		int lat = 6, lon = 10;
-		for (int i = 0; i < lat; i++) {
-			double t0 = Math.PI * i / lat - Math.PI / 2, t1 = Math.PI * (i + 1) / lat - Math.PI / 2;
-			for (int j = 0; j < lon; j++) {
-				double p0 = 2 * Math.PI * j / lon, p1 = 2 * Math.PI * (j + 1) / lon;
-				double[][] pts = {{t0, p0}, {t0, p1}, {t1, p1}, {t1, p0}};
-				for (int k = 3; k >= 0; k--) {
-					float nx = (float) (Math.cos(pts[k][0]) * Math.cos(pts[k][1])), ny = (float) Math.sin(pts[k][0]), nz = (float) (Math.cos(pts[k][0]) * Math.sin(pts[k][1]));
-					vc.vertex(m, x + nx * r, y + ny * r, z + nz * r).color(255, 255, 255, 255).texture(k == 1 || k == 2 ? 1 : 0, k >= 2 ? 1 : 0)
-							.overlay(OverlayTexture.DEFAULT_UV).light(0xF000F0).normal(e, nx, ny, nz);
-				}
-			}
 		}
 	}
 }

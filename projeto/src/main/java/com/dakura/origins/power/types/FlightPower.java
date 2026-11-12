@@ -17,7 +17,8 @@ import java.util.Locale;
  * "dakura_origins:flight" — voo dinâmico das raças aladas: postura de planagem do élitro (corpo deitado no ar),
  * sem élitro e sem foguete. Pular no ar abre as asas; segurando "para frente" o bater de asas dá impulso contínuo
  * (FlightClient, no cliente, que é quem manda no movimento do jogador). Agachar fecha. Gasta um pouco de fome.
- * O impulso e a velocidade máxima saem de "speed": { "speed": 0.035, "exhaustion": 0.02 }
+ * O impulso e a velocidade máxima saem de "speed": { "speed": 0.035, "exhaustion": 0.02, "hover": false }.
+ * "hover": true permite pairar parada no ar e subir segurando pular.
  */
 public final class FlightPower implements RacePower {
 	private final float speed, exhaustion;
@@ -26,8 +27,8 @@ public final class FlightPower implements RacePower {
 	public FlightPower(JsonObject json) {
 		this.speed = JsonParams.num(json, "speed", 0.035f);
 		this.exhaustion = JsonParams.num(json, "exhaustion", 0.02f);
-		// impulso por tick e velocidade máxima (blocos/tick), enviados ao cliente pela flag
-		this.flag = String.format(Locale.ROOT, "flier#%.4f#%.3f", speed * 1.6f, speed * 45f);
+		boolean hover = json.has("hover") && json.get("hover").getAsBoolean();
+		this.flag = String.format(Locale.ROOT, "flier#%.4f#%.3f", speed * 1.6f, speed * 45f) + (hover ? "#hover" : "");
 	}
 
 	public static boolean has(PlayerEntity p) {

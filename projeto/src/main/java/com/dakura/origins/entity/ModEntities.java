@@ -17,10 +17,6 @@ public final class ModEntities {
 			DakuraOrigins.id("undead_minion"),
 			EntityType.Builder.<UndeadMinionEntity>create(UndeadMinionEntity::new, SpawnGroup.MISC).dimensions(0.6f, 1.95f)
 					.eyeHeight(1.74f).maxTrackingRange(8).build("undead_minion"));
-	public static final EntityType<FeatherEntity> FEATHER = Registry.register(Registries.ENTITY_TYPE,
-			DakuraOrigins.id("feather"),
-			EntityType.Builder.<FeatherEntity>create(FeatherEntity::new, SpawnGroup.MISC).dimensions(0.4f, 0.4f)
-					.maxTrackingRange(4).trackingTickInterval(20).build("feather"));
 
 	public static final EntityType<GeoProjectileEntity> GEO_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
 			DakuraOrigins.id("geo_projectile"),

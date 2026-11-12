@@ -1,7 +1,6 @@
 package com.dakura.origins.client.render;
 
 import com.dakura.origins.DakuraOrigins;
-import com.dakura.origins.client.fx.FxGlow;
 import com.dakura.origins.client.geo.GeoModel;
 import com.dakura.origins.entity.GeoProjectileEntity;
 import net.minecraft.client.render.RenderLayer;
@@ -53,12 +52,12 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 			return;
 		}
 		if (e.kind() == GeoProjectileEntity.DARK) {
-			com.dakura.origins.client.fx.DarkFx.comet(m, vcp, t, e.getVelocity(), e.size());
+			com.dakura.origins.client.fx.ElfFx.spiritCube(m, vcp, t, e.size(), true);
 			super.render(e, yaw, tickDelta, m, vcp, light);
 			return;
 		}
 		if (e.kind() == GeoProjectileEntity.ARCANE) {
-			FxGlow.arcaneOrb(m, vcp, t, e.getVelocity());
+			com.dakura.origins.client.fx.ElfFx.sunCube(m, vcp, t, e.size());
 			super.render(e, yaw, tickDelta, m, vcp, light);
 			return;
 		}
@@ -73,8 +72,11 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 		if (!magma) m.translate(0, -1.0, 0);
 		model.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(getTexture(e))), magma ? 0xF000F0 : light);
 		m.pop();
-		if (magma) FxGlow.magmaAura(m, vcp, t, e.getVelocity());
-		else FxGlow.poisonDrip(m, vcp, t);
+		var w = e.getWorld();
+		var r = w.random;
+		for (int i = 0; i < 2; i++) w.addParticle(magma ? (i == 0 ? net.minecraft.particle.ParticleTypes.FLAME : net.minecraft.particle.ParticleTypes.LAVA)
+						: (i == 0 ? net.minecraft.particle.ParticleTypes.WITCH : net.minecraft.particle.ParticleTypes.DRIPPING_WATER),
+				e.getX() + r.nextGaussian() * 0.15, e.getY() + 0.3 + r.nextGaussian() * 0.15, e.getZ() + r.nextGaussian() * 0.15, 0, 0, 0);
 		super.render(e, yaw, tickDelta, m, vcp, light);
 	}
 

@@ -33,7 +33,7 @@ public final class FlightClient {
 			if (!f.startsWith("flier#")) continue;
 			String[] a = f.split("#");
 			try {
-				return new float[]{Float.parseFloat(a[1]), Float.parseFloat(a[2])};
+				return new float[]{Float.parseFloat(a[1]), Float.parseFloat(a[2]), a.length > 3 && a[3].equals("hover") ? 1f : 0f};
 			} catch (Exception ex) {
 				return null;
 			}
@@ -41,16 +41,32 @@ public final class FlightClient {
 		return null;
 	}
 
+	/** Free flight: forward pushes along the look direction, jump climbs, no input hovers in place. */
+	private static void hover(MinecraftClient mc, ClientPlayerEntity me, float[] fp) {
+		float thrust = fp[0] * (me.isSprinting() || mc.options.sprintKey.isPressed() ? 1.5f : 1f);
+		Vec3d v = me.getVelocity();
+		boolean forward = me.input.movementForward > 0, back = me.input.movementForward < 0;
+		if (forward) v = v.add(me.getRotationVector().multiply(thrust));
+		else if (back) v = v.multiply(0.8, 1, 0.8);
+		else v = v.multiply(0.86, 1, 0.86);
+		if (me.input.jumping) v = new Vec3d(v.x, Math.min(v.y + thrust * 1.4, fp[1] * 0.45), v.z);
+		else if (!forward) v = new Vec3d(v.x, v.y * 0.5 + 0.035, v.z);
+		double len = v.length();
+		if (len > fp[1]) v = v.multiply(fp[1] / len);
+		me.setVelocity(v);
+	}
+
 	public static void tick(MinecraftClient mc) {
 		if (mc.world == null) return;
 		ClientPlayerEntity me = mc.player;
 		if (me != null && me.isFallFlying() && !me.isSneaking()) {
 			float[] fp = params(me);
-			// sem a flag ainda sincronizada, as raças aladas usam o impulso padrão (antes a Fênix ficava só planando)
-			if (fp == null && (DakuraConfig.cosmetic(me, "phoenix_wings") || DakuraConfig.cosmetic(me, "seraph_wings")
+			if (fp == null && (DakuraConfig.cosmetic(me, "phoenix_trail")
 					|| DakuraConfig.cosmetic(me, "dragon_red") || DakuraConfig.cosmetic(me, "dragon_brown")))
-				fp = new float[]{0.06f, 1.8f};
-			if (fp != null && (me.input.movementForward > 0 || me.input.jumping)) {
+				fp = new float[]{0.06f, 1.8f, 0f};
+			if (fp != null && fp[2] > 0) {
+				hover(mc, me, fp);
+			} else if (fp != null && (me.input.movementForward > 0 || me.input.jumping)) {
 				float thrust = fp[0] * (me.isSprinting() || mc.options.sprintKey.isPressed() ? 1.5f : 1f);
 				Vec3d look = me.getRotationVector();
 				Vec3d v = me.getVelocity().add(look.multiply(thrust));
@@ -65,7 +81,7 @@ public final class FlightClient {
 		for (PlayerEntity p : mc.world.getPlayers()) {
 			if (!p.isFallFlying() || p.isInvisible()) continue;
 			boolean red = DakuraConfig.cosmetic(p, "dragon_red"), brown = DakuraConfig.cosmetic(p, "dragon_brown"),
-					phoenix = DakuraConfig.cosmetic(p, "phoenix_wings");
+					phoenix = DakuraConfig.cosmetic(p, "phoenix_trail");
 			if (!red && !brown && !phoenix) continue;
 			Vec3d c = p.getPos().add(0, 0.4, 0), back = p.getVelocity().multiply(-1.2);
 			double sp = p.getVelocity().length();

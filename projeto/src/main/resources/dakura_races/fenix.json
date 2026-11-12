@@ -24,11 +24,11 @@
 		"accent": "#E0661A",
 		"muted": "#5E806B"
 	},
-	"description": "Uma ave de fogo eterna em forma humana, com asas de chamas douradas e uma crista ardente. Voa como o sol nascente e mergulha como um cometa. Quando a morte chega, ela vira um ovo de chamas e renasce das próprias cinzas, mais forte. Seu fogo sagrado queima os inimigos e cura os amigos.",
+	"description": "Uma ave de fogo eterna em forma humana, envolta em chamas douradas. Voa como o sol nascente e mergulha como um cometa. Quando a morte chega, ela vira um ovo de chamas e renasce das próprias cinzas, mais forte. Seu fogo sagrado queima os inimigos e cura os amigos.",
 	"traits": [
 		{
 			"type": "vantagem",
-			"text": "Asas de fogo com luz própria: voa, e o brilho cresce nos ataques."
+			"text": "Corpo de fogo com luz própria: voa, e o brilho cresce nos ataques."
 		},
 		{
 			"type": "vantagem",
@@ -66,7 +66,7 @@
 	"powers": [
 		{
 			"type": "dakura_origins:cosmetic",
-			"feature": "phoenix_wings"
+			"feature": "phoenix_trail"
 		},
 		{
 			"type": "dakura_origins:flight",

@@ -20,9 +20,6 @@ public final class XpMultiplierPower implements RacePower {
 	public static float factor(PlayerEntity p) {
 		float f = RaceAccess.getRace(p).flatMap(r -> r.powers().stream().filter(x -> x instanceof XpMultiplierPower)
 				.map(x -> ((XpMultiplierPower) x).factor).findFirst()).orElse(1f);
-		for (var passenger : p.getPassengerList()) {
-			if (com.dakura.origins.power.ability.FairyPerchAbility.isFairy(passenger)) f *= 2f;
-		}
 		return f;
 	}
 }

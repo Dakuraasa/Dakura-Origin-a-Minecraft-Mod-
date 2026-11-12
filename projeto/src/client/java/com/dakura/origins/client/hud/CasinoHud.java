@@ -8,19 +8,16 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 /**
- * A roda do Cassino (Lilac): 12 fichas num círculo que gira, desacelera e para sob o ponteiro dourado
- * no resultado que o servidor sorteou. Depois mostra o prêmio por um instante.
+ * Lilac's casino wheel: 12 pockets that spin, slow down and stop under the pointer on the outcome rolled by the server.
+ * Pocket labels match {@code CasinoAbility.MULTS}.
  */
 public final class CasinoHud {
-	private static final String[] LABEL = {"✗", "×1", "×2", "×3", "×5"};
-	private static final int[] COLOR = {0xFF7A1424, 0xFF5C5A63, 0xFF2F8A4C, 0xFF2E5FA8, 0xFFD4A21E};
-	private static final int[] WHEEL = {0, 1, 2, 0, 1, 3, 0, 2, 1, 0, 4, 2};
+	private static final String[] LABEL = {"✗", "—", "×2", "×3", "×4", "×5"};
+	private static final int[] WHEEL = {0, 2, 1, 3, 0, 2, 1, 4, 0, 3, 1, 5};
 	private static final net.minecraft.util.Identifier WHEEL_TEX = com.dakura.origins.DakuraOrigins.id("textures/gui/casino_wheel.png");
 	private static final net.minecraft.util.Identifier POINTER_TEX = com.dakura.origins.DakuraOrigins.id("textures/gui/casino_pointer.png");
-	private static final int[] ORDER = {0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14,
-			31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26};
 	private static long start = -1;
-	private static int result, tier, spinMs, lastTop = -1;
+	private static int result, tier, spinMs, lastTop = -1, slot;
 
 	private CasinoHud() {}
 
@@ -30,11 +27,9 @@ public final class CasinoHud {
 		spinMs = Math.max(1000, spinTicks * 50);
 		start = System.currentTimeMillis();
 		lastTop = -1;
-	}
-
-	private static int target() {
-		for (int i = 0; i < WHEEL.length; i++) if (WHEEL[i] == result) return i;
-		return 0;
+		java.util.List<Integer> hits = new java.util.ArrayList<>();
+		for (int i = 0; i < WHEEL.length; i++) if (WHEEL[i] == result) hits.add(i);
+		slot = hits.isEmpty() ? 0 : hits.get((int) (Math.random() * hits.size()));
 	}
 
 	public static void render(DrawContext ctx, RenderTickCounter counter) {
@@ -49,9 +44,8 @@ public final class CasinoHud {
 		double step = Math.PI * 2 / n;
 		float tt = Math.min(1f, el / (float) spinMs);
 		float ease = 1f - (float) Math.pow(1f - tt, 3);
-		double total = (4 + tier) * Math.PI * 2 + target() * step;
+		double total = (4 + tier) * Math.PI * 2 + slot * step;
 		double angle = total * ease;
-		// roleta grande no centro da tela (pixel art, fundo transparente), números escritos casa por casa
 		int sw = ctx.getScaledWindowWidth(), sh = ctx.getScaledWindowHeight();
 		int dia = Math.round(Math.min(sw, sh) * 0.66f);
 		float rad = dia / 2f;
@@ -65,17 +59,14 @@ public final class CasinoHud {
 		mtx.scale(sc, sc, 1f);
 		ctx.drawTexture(WHEEL_TEX, -192, -192, 0, 0, 384, 384, 384, 384);
 		mtx.pop();
-		// os 37 números da roleta europeia, virados para fora, girando junto
-		double pocket = Math.PI * 2 / 37;
-		float ns = Math.max(0.5f, rad * 0.0068f);
-		for (int i = 0; i < 37; i++) {
-			int num = ORDER[i];
-			String txt = String.valueOf(num);
+		float ns = Math.max(0.6f, rad * 0.011f);
+		for (int i = 0; i < n; i++) {
+			String txt = LABEL[WHEEL[i]];
 			mtx.push();
-			mtx.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Z.rotation((float) (i * pocket)));
+			mtx.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Z.rotation((float) (i * step)));
 			mtx.translate(0, -rad * 0.785f, 1);
 			mtx.scale(ns, ns, 1f);
-			ctx.drawText(mc.textRenderer, txt, -mc.textRenderer.getWidth(txt) / 2, -4, 0xFFFFF3D6, false);
+			ctx.drawText(mc.textRenderer, txt, -mc.textRenderer.getWidth(txt) / 2, -4, 0xFFFFF3D6, true);
 			mtx.pop();
 		}
 		mtx.pop();
@@ -84,7 +75,6 @@ public final class CasinoHud {
 			lastTop = top;
 			mc.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HAT.value(), 0.35f, 1.2f + tt * 0.6f);
 		}
-		// ponteiro dourado preso no topo
 		mtx.push();
 		float ps = Math.max(1f, rad / 90f);
 		mtx.translate(cx, cy - rad - 6 * ps, 300);
@@ -92,7 +82,6 @@ public final class CasinoHud {
 		ctx.drawTexture(POINTER_TEX, -20, -8, 0, 0, 40, 56, 40, 56);
 		mtx.pop();
 		cy = (int) (cy + rad - 58);
-		// resultado
 		if (tt >= 1f) {
 			boolean blink = (el / 150) % 2 == 0;
 			Text res = Text.translatable(result == 0 ? "dakura_origins.casino.lose" : result == 1 ? "dakura_origins.casino.even"

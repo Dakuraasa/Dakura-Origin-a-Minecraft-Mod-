@@ -6,7 +6,6 @@
 	"mixins": [
 		"ArmorSlotMixin",
 		"BrewingStandMixin",
-		"CreeperEntityMixin",
 		"EntityMixin",
 		"FarmlandBlockMixin",
 		"FleeEntityGoalMixin",
@@ -16,7 +15,8 @@
 		"PlayerEntityMixin",
 		"PowderSnowBlockMixin",
 		"VillagerEntityMixin",
-		"WardenEntityMixin"
+		"WardenEntityMixin",
+		"WitherEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Ferramentas da última leva (Sereia, Anúbis, Fênix, Vastaya Coelho): tarefas que rodam por vários ticks,
+ * Ferramentas da última leva (Sereia, Fênix): tarefas que rodam por vários ticks,
  * busca de alvo, sons (aceita SoundEvent ou RegistryEntry) e envio de efeitos.
  */
 public final class LegendKit {

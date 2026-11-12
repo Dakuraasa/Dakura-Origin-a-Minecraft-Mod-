@@ -29,7 +29,7 @@
 	"traits": [
 		{
 			"type": "vantagem",
-			"text": "Asas de dragão: voa (um pouco mais devagar que outras raças aladas)."
+			"text": "Voo de dragão: voa (um pouco mais devagar que outras raças voadoras)."
 		},
 		{
 			"type": "vantagem",
@@ -191,7 +191,7 @@
 			"damage": 13,
 			"radius": 5,
 			"splash": 6,
-			"description": "Agarra o inimigo à frente e abre as asas por 3 s (se levar dano nesse tempo, solta o alvo). Depois voa para o alto com ele e mergulha contra o chão: explosão verde, cratera e fogo verde no local, com dano enorme."
+			"description": "Agarra o inimigo à frente e o segura por 3 s (se levar dano nesse tempo, solta o alvo). Depois voa para o alto com ele e mergulha contra o chão: explosão verde, cratera e fogo verde no local, com dano enorme."
 		}
 	]
 }

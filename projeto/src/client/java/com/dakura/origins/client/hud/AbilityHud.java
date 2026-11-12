@@ -181,7 +181,6 @@ public final class AbilityHud {
 			case "dakura_origins:phase" -> mc.player.isSpectator();
 			case "dakura_origins:passive" -> EntityFlags.clientHas(mc.player, "berserk");
 			case "dakura_origins:morph" -> com.dakura.origins.power.ability.MorphAbility.morphType(mc.player) != null;
-			case "dakura_origins:buff_mode" -> EntityFlags.clientHas(mc.player, "prowl") || EntityFlags.clientHas(mc.player, "hunt");
 			case "dakura_origins:charged_jump", "dakura_origins:meteor" -> AbilityAnimations.active("crouch").contains(mc.player.getId())
 					|| EntityFlags.clientHas(mc.player, "meteor");
 			default -> false;

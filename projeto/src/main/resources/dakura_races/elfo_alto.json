@@ -28,7 +28,7 @@
 	"traits": [
 		{
 			"type": "vantagem",
-			"text": "Arqueira real: flechas e outros projéteis causam 60% mais dano."
+			"text": "Arqueira real: flechas e outros projéteis causam 75% mais dano."
 		},
 		{
 			"type": "vantagem",
@@ -56,7 +56,7 @@
 		},
 		{
 			"type": "desvantagem",
-			"text": "Nobre e frágil: 9 corações, e sem força extra no corpo a corpo."
+			"text": "Nobre e frágil: 8 corações, e golpes corpo a corpo mais fracos."
 		},
 		{
 			"type": "desvantagem",
@@ -73,14 +73,47 @@
 		{
 			"type": "vantagem",
 			"text": "Harmonia natural: os animais não fogem dela."
+		},
+		{
+			"type": "vantagem",
+			"text": "Porte nobre: +2 de armadura natural."
+		},
+		{
+			"type": "vantagem",
+			"text": "Olhos élficos: enxerga no escuro."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Ossos finos: quando a queda machuca, machuca 50% mais."
 		}
 	],
 	"powers": [
 		{
 			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -1.0
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fall",
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.movement_speed",
 			"operation": "add_multiplied_base",
-			"amount": 0.15
+			"amount": 0.18
 		},
 		{
 			"type": "dakura_origins:attribute",
@@ -92,7 +125,7 @@
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.max_health",
 			"operation": "add_value",
-			"amount": -2.0
+			"amount": -4.0
 		},
 		{
 			"type": "dakura_origins:xp_multiplier",
@@ -133,7 +166,7 @@
 		},
 		{
 			"type": "dakura_origins:slow_hunger",
-			"factor": 1.35
+			"factor": 1.5
 		},
 		{
 			"type": "dakura_origins:flag",
@@ -142,7 +175,7 @@
 		},
 		{
 			"type": "dakura_origins:archery",
-			"multiplier": 1.6
+			"multiplier": 1.75
 		},
 		{
 			"type": "dakura_origins:golden_ward",

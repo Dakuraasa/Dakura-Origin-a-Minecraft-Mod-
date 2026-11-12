@@ -37,7 +37,7 @@ public final class Control {
 	private static final Map<UUID, Hold> LOCKED = new HashMap<>();
 	private static long ticks;
 
-	private record Hold(LivingEntity entity, long until, Vec3d anchor) {}
+	private record Hold(LivingEntity entity, long until, Vec3d anchor, boolean puppet) {}
 
 	private Control() {}
 
@@ -46,11 +46,34 @@ public final class Control {
 		if (e == null || e.getWorld().isClient) return;
 		Hold old = LOCKED.get(e.getUuid());
 		long until = Math.max(ticks + duration, old == null ? 0 : old.until);
-		LOCKED.put(e.getUuid(), new Hold(e, until, anchor != null ? anchor : old != null ? old.anchor : null));
+		LOCKED.put(e.getUuid(), new Hold(e, until, anchor != null ? anchor : old != null ? old.anchor : null, false));
 		var jump = e.getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH);
 		if (jump != null && !jump.hasModifier(NO_JUMP))
 			jump.addTemporaryModifier(new EntityAttributeModifier(NO_JUMP, -1.0, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 		freeze(e, anchor);
+	}
+
+	/**
+	 * Puppet hold: same input lock, but the holder moves the entity by updating {@code anchor} every tick, and the
+	 * entity keeps full strength so it can strike for its controller.
+	 */
+	public static void puppet(LivingEntity e, int duration, Vec3d anchor) {
+		if (e == null || e.getWorld().isClient) return;
+		LOCKED.put(e.getUuid(), new Hold(e, ticks + duration, anchor, true));
+		var jump = e.getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH);
+		if (jump != null && !jump.hasModifier(NO_JUMP))
+			jump.addTemporaryModifier(new EntityAttributeModifier(NO_JUMP, -1.0, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+		move(e, anchor);
+	}
+
+	private static void move(LivingEntity e, Vec3d anchor) {
+		e.setVelocity(Vec3d.ZERO);
+		e.velocityModified = true;
+		e.fallDistance = 0;
+		if (anchor != null && e.getPos().squaredDistanceTo(anchor) > 0.0004) {
+			if (e instanceof ServerPlayerEntity sp) sp.networkHandler.requestTeleport(anchor.x, anchor.y, anchor.z, sp.getYaw(), sp.getPitch());
+			else e.setPosition(anchor.x, anchor.y, anchor.z);
+		}
 	}
 
 	public static void lock(LivingEntity e, int duration) {
@@ -95,7 +118,7 @@ public final class Control {
 		UseItemCallback.EVENT.register((p, w, h) -> !w.isClient && isLocked(p) ? TypedActionResult.fail(p.getStackInHand(h)) : TypedActionResult.pass(p.getStackInHand(h)));
 		// presos não ferem ninguém (golpes de monstros, flechas soltas no instante)
 		ServerLivingEntityEvents.ALLOW_DAMAGE.register((victim, source, amount) -> !(source.getAttacker() != null && source.getAttacker() == source.getSource()
-				&& isLocked(source.getAttacker())));
+				&& isLocked(source.getAttacker()) && !LOCKED.get(source.getAttacker().getUuid()).puppet()));
 	}
 
 	private static void tick(MinecraftServer server) {
@@ -110,7 +133,8 @@ public final class Control {
 				unjump(e);
 				continue;
 			}
-			freeze(e, h.anchor);
+			if (h.puppet) move(e, h.anchor);
+			else freeze(e, h.anchor);
 			if (e instanceof PlayerEntity p) p.stopUsingItem();
 		}
 	}

@@ -42,7 +42,7 @@ public final class DakuraConfig {
 		try (Writer w = Files.newBufferedWriter(FILE, StandardCharsets.UTF_8)) {
 			GSON.toJson(o, w);
 		} catch (Exception e) {
-			DakuraOrigins.LOGGER.warn("Não consegui salvar a configuração: {}", e.getMessage());
+			DakuraOrigins.LOGGER.warn("Could not save the config: {}", e.getMessage());
 		}
 	}
 

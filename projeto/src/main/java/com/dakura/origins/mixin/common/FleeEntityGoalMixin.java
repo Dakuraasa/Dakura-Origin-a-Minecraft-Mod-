@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Vastaya: os animais (coelhos, jaguatiricas...) não fogem dela. */
+/** Races with the "animal_friend" marker do not scare animals away. */
 @Mixin(FleeEntityGoal.class)
 public abstract class FleeEntityGoalMixin {
 	@Shadow @Final protected PathAwareEntity mob;

@@ -8,10 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Sereia: dentro d'água as pernas (e a calça da skin) somem, e a cauda de peixe desenhada pelo
- * LegendFeatureRenderer toma o lugar. O jogo volta a deixar tudo visível a cada quadro.
- */
+/** Mermaid: legs are hidden underwater while the fish tail is drawn in their place. */
 @Mixin(PlayerEntityModel.class)
 public abstract class PlayerEntityModelMixin {
 	@Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))

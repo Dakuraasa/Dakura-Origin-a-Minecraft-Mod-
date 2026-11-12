@@ -24,30 +24,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Peças do corpo feitas no Blockbench (assets/dakura_origins/geo): asas do Serafim e da Fênix, chifres dos demônios
- * e do Dracônico, chapéu da Dama Cogumelo, cauda da Sereia, asas e cauda dos dragões, caudas de raposa (Kitsune,
- * Raposa de Fogo e de Neve), orelhas da Vastaya Coelha e as asas em pixel art da Fada.
- * Tudo com física secundária (inércia, balanço, quique) e, nas peças mágicas, brilho emissivo ({@link Emissive}).
+ * Body parts modelled in Blockbench (assets/dakura_origins/geo): Succubus horns, Mushroom Lady cap, Mermaid tail,
+ * dragon tail and horns, fox tails and the Fairy's pixel-art wings, with secondary motion and emissive glow.
  */
 public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
 	private static Identifier tex(String name) {
 		return DakuraOrigins.id("textures/entity/geo/" + name + ".png");
 	}
 
-	private static final Identifier SERAPH = tex("seraph_wings"), HORNS = tex("demon_horns"),
+	private static final Identifier HORNS = tex("demon_horns"),
 			CAP = tex("mushroom_cap"), MERMAID = tex("mermaid_tail"), MERMAID_DARK = tex("mermaid_tail_dark"),
-			DWINGS_RED = tex("dragon_wings"), DWINGS_BROWN = tex("dragon_wings_brown"), DTAIL_RED = tex("dragon_tail"),
-			DTAIL_BROWN = tex("dragon_tail_brown"), DHORNS = tex("dragon_horns"), FAIRY = tex("fairy_wings"),
-			FOX_FIRE = tex("fox_tail"), FOX_SNOW = tex("fox_tail_snow"), FOX_WHITE = tex("fox_tail_white"), FOX_DARK = tex("fox_tail_dark"),
-			BUNNY = tex("bunny_ears"), BUNNY_TAIL = tex("bunny_tail"), PHOENIX = tex("phoenix_wing");
-	private static Identifier wing(String n) {
-		return DakuraOrigins.id("textures/entity/wings/" + n + ".png");
-	}
-	private static final Identifier SPR_SERAPH = wing("seraph"), SPR_PHOENIX = wing("phoenix"), SPR_VASTAYA = wing("vastaya"),
-			SPR_DRAGON_RED = wing("dragon_red"), SPR_DRAGON_BROWN = wing("dragon_brown");
+			DTAIL_RED = tex("dragon_tail"), DTAIL_BROWN = tex("dragon_tail_brown"), DHORNS = tex("dragon_horns"), FAIRY = tex("fairy_wings"),
+			FOX_FIRE = tex("fox_tail"), FOX_SNOW = tex("fox_tail_snow"), FOX_WHITE = tex("fox_tail_white"), FOX_DARK = tex("fox_tail_dark");
 	/** Física de capa por jogador: {balanço frente/trás, velocidade, balanço lateral, velocidade, quique}. */
 	private static final Map<Integer, float[]> PHYS = new HashMap<>();
-	/** Física das orelhas: {pitch, vel, yaw, vel, headYaw anterior, headPitch anterior}. */
 	/** Abertura suave das asas (0 = recolhidas, 1 = abertas) por jogador e peça. */
 	private static final Map<Long, Float> OPEN = new HashMap<>();
 
@@ -132,12 +122,9 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 					   float limbDistance, float tickDelta, float t, float headYaw, float headPitch) {
 		if (e.isInvisible()) return;
 		pt = tickDelta;
-		if (DakuraConfig.cosmetic(e, "seraph_wings")) seraph(m, vcp, e, t);
-		if (DakuraConfig.cosmetic(e, "bird_wing")) vastaya(m, vcp, light, e, t);
-		if (DakuraConfig.cosmetic(e, "goat_horns")) goatHorns(m, vcp, light);
 		boolean day = e.getWorld().getDimension().hasSkyLight() && (e.getWorld().getTimeOfDay() % 24000L < 12542
 				|| e.getWorld().getTimeOfDay() % 24000L > 23460);
-		if (DakuraConfig.cosmetic(e, "demon_horns") || (DakuraConfig.cosmetic(e, "succubus_horns") && !day)) horns(m, vcp, light, t);
+		if (DakuraConfig.cosmetic(e, "succubus_horns") && !day) horns(m, vcp, light, t);
 		if (DakuraConfig.cosmetic(e, "mushroom_cap")) mushroom(m, vcp, light, e, t);
 		if (DakuraConfig.cosmetic(e, "mermaid_tail")) mermaid(m, vcp, light, e, t, true);
 		boolean red = DakuraConfig.cosmetic(e, "dragon_red"), brown = DakuraConfig.cosmetic(e, "dragon_brown");
@@ -148,119 +135,11 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 			foxTails(m, vcp, e, t, FOX_DARK, kitsuneTails(e), EntityFlags.clientHas(e, "purple_fire") ? 0xC24DFF : 0x8C8C9C);
 		else if (DakuraConfig.cosmetic(e, "fox_tail")) foxTails(m, vcp, e, t, FOX_FIRE, 1, 0xFF9A4A);
 		else if (DakuraConfig.cosmetic(e, "fox_tail_snow")) foxTails(m, vcp, e, t, FOX_SNOW, -1, 0xDDEBFF);
-		if (DakuraConfig.cosmetic(e, "bunny_ears")) bunny(m, vcp, light, e, t);
-		if (DakuraConfig.cosmetic(e, "phoenix_wings")) phoenix(m, vcp, e, t);
 	}
 
 	/** Número de caudas da Kitsune pelo estágio de maturidade: 3, 6, 9. */
 	public static int kitsuneTails(AbstractClientPlayerEntity e) {
 		return EntityFlags.clientHas(e, "mat_2") ? 9 : EntityFlags.clientHas(e, "mat_1") ? 6 : 3;
-	}
-
-	// ------------------------------------------------------------------ Serafim
-
-	/**
-	 * Seis asas. No chão: recolhidas e dobradas sobre si mesmas, caídas como uma capa, com balanço e quique.
-	 * No voo: abertas, batendo devagar e "preguiçosas", cada par num ritmo próprio. Brilho branco permanente.
-	 */
-	private void seraph(MatrixStack m, VertexConsumerProvider vcp, AbstractClientPlayerEntity e, float t) {
-		float o = open(e, 0, airborne(e), 0.08f);
-		float glow = Emissive.pulse(t, 0.05f, 0.35f, 0.5f);
-		float[] size = {40f, 34f, 28f};             // par de cima ~2,5 blocos
-		float[] rootY = {1.5f, 4.5f, 7.5f};
-		float[] flyRoll = {-0.4f, 0.05f, 0.5f};     // leque: cima, meio, baixo
-		float[] restRoll = {1.0f, 1.2f, 1.4f};      // no chão: caídas e recolhidas atrás
-		m.push();
-		getContextModel().body.rotate(m);
-		for (int p = 2; p >= 0; p--) {
-			float breathe = MathHelper.sin(t * 0.06f + p * 1.3f) * 0.035f * o;
-			float roll = MathHelper.lerp(o, restRoll[p], flyRoll[p]) + breathe;
-			float yaw = MathHelper.lerp(o, -1.0f, -0.25f - p * 0.08f);
-			float pitch = MathHelper.lerp(o, 0.12f, 0.03f);
-			for (int s = 1; s >= -1; s -= 2)
-				spriteWing(m, vcp, SPR_SERAPH, Emissive.FULL_BRIGHT, s, 1.0f, rootY[p], 2.3f + p * 0.15f, size[p], 0.62f, 0.02f,
-						pitch, yaw, roll, glow, 0xFFFFFF);
-		}
-		m.pop();
-	}
-
-	/**
-	 * Asa em pixel art (sprites do Artur em textures/entity/wings): um quadro com a raiz no pivô, girado como os
-	 * ossos antigos (pitch, yaw, roll). s = 1 lado esquerdo, -1 direito (espelhado). Tamanho em pixels do modelo.
-	 * glow > 0 soma uma camada emissiva (shaders tratam como brilho).
-	 */
-	private static void spriteWing(MatrixStack m, VertexConsumerProvider vcp, Identifier tex, int light, int s, float px, float py, float pz,
-								   float widthPx, float pivotY, float pivotX, float pitch, float yaw, float roll, float glow, int tint) {
-		WingSprite sp = WingSprite.of(tex);
-		float w = widthPx / 16f, h = w * sp.aspect;
-		m.push();
-		m.translate(s * px / 16f, py / 16f, pz / 16f);
-		// ângulos são do lado esquerdo; o direito é o reflexo exato (yaw e roll invertidos), sem escala negativa
-		m.multiply(new org.joml.Quaternionf().rotationY(s * yaw).rotateZ(s * roll).rotateX(pitch));
-		float a0 = -pivotX * w, a1 = a0 + w, y0 = -pivotY * h, y1 = y0 + h;
-		float x0 = s > 0 ? a0 : -a1, x1 = s > 0 ? a1 : -a0;
-		float u0 = s > 0 ? 0 : 1, u1 = s > 0 ? 1 : 0;
-		quad(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(tex)), x0, x1, y0, y1, u0, u1, 0, 1, light, 0xFFFFFFFF);
-		if (glow > 0) quad(m, vcp.getBuffer(RenderLayer.getEyes(tex)), x0, x1, y0, y1, u0, u1, 0, 1, Emissive.FULL_BRIGHT, Emissive.argb(glow, tint));
-		m.pop();
-	}
-
-	/** Proporção altura/largura de cada sprite (lida uma vez da textura). */
-	private record WingSprite(float aspect) {
-		private static final Map<Identifier, WingSprite> CACHE = new HashMap<>();
-
-		static WingSprite of(Identifier id) {
-			return CACHE.computeIfAbsent(id, k -> {
-				try (var in = MinecraftClient.getInstance().getResourceManager().open(k)) {
-					var img = net.minecraft.client.texture.NativeImage.read(in);
-					float a = img.getHeight() / (float) img.getWidth();
-					img.close();
-					return new WingSprite(a);
-				} catch (Exception ex) {
-					return new WingSprite(0.66f);
-				}
-			});
-		}
-	}
-
-	// ------------------------------------------------------------------ Fênix
-
-	/** Asa de fogo espelhada dos dois lados: recolhida nas costas no chão, aberta e batendo no voo, brilho que cresce nos ataques. */
-	/** Asas de fogo em sprite: somem no chão; no voo (ou nos ataques) abertas e batendo, brilho que cresce nos ataques. */
-	private void phoenix(MatrixStack m, VertexConsumerProvider vcp, AbstractClientPlayerEntity e, float t) {
-		boolean power = EntityFlags.clientHas(e, "solar_dive") || EntityFlags.clientHas(e, "reborn")
-				|| AbilityAnimations.active("wings_spread").contains(e.getId());
-		if (!airborne(e) && !power) return;
-		float breathe = MathHelper.sin(t * 0.07f) * 0.035f;
-		float glow = power ? Emissive.pulse(t, 0.6f, 0.75f, 1f) : Emissive.pulse(t, 0.2f, 0.5f, 0.65f);
-		m.push();
-		getContextModel().body.rotate(m);
-		for (int s = 1; s >= -1; s -= 2)
-			spriteWing(m, vcp, SPR_PHOENIX, Emissive.FULL_BRIGHT, s, 1.0f, 2.0f, 2.3f, 32f, 0.62f, 0.02f, 0.03f, -0.28f, -0.2f + breathe, glow, 0xFFB050);
-		m.pop();
-	}
-
-	/** Vastaya Ave: uma asa só (lado esquerdo), visível apenas planando; aberta como élitro, com batidas leves. */
-	private void vastaya(MatrixStack m, VertexConsumerProvider vcp, int light, AbstractClientPlayerEntity e, float t) {
-		if (!e.isFallFlying() && !EntityFlags.clientHas(e, "gliding")) return;
-		float flap = MathHelper.sin(phase(e, 30, 0.12f + speed(e) * 0.4f, t)) * 0.12f;
-		m.push();
-		getContextModel().body.rotate(m);
-		spriteWing(m, vcp, SPR_VASTAYA, light, 1, 1.5f, 3.0f, 2.4f, 35f, 0.665f, 0.06f, 0.1f, -0.1f, -0.15f - flap, 0, 0);
-		m.pop();
-	}
-
-	/** Cabra: o mesmo modelo de chifres do Dragão, menor. */
-	private void goatHorns(MatrixStack m, VertexConsumerProvider vcp, int light) {
-		GeoModel h = GeoModel.get("dragon_horns");
-		h.reset();
-		m.push();
-		getContextModel().getHead().rotate(m);
-		m.translate(0, -8f / 16f, 0);
-		m.scale(0.67f, 0.63f, 0.71f); // chifres um pouco mais grossos, mesmo formato e posição
-		m.translate(0, 8f / 16f, 0);
-		h.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(DHORNS)), light);
-		m.pop();
 	}
 
 	// ------------------------------------------------------------------ chifres, chapéu, sereia
@@ -283,7 +162,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		float[] st = phys(e);
 		for (String b : new String[]{"hair_l", "hair_r", "hair_back"}) {
 			var part = g.bone(b);
-			if (part != null) part.visible = false; // abas laranja em volta da cabeça/pescoço: removidas
+			if (part != null) part.visible = false;
 		}
 		g.turn("cap", 0, 0, MathHelper.sin(t * 0.05f) * 0.015f);
 		m.push();
@@ -317,20 +196,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 	private void dragon(MatrixStack m, VertexConsumerProvider vcp, int light, AbstractClientPlayerEntity e, float t, boolean brown, boolean horns) {
 		float[] st = phys(e);
 		boolean grabbing = EntityFlags.clientHas(e, "skyfall");
-		boolean air = airborne(e);
-		float o = open(e, 1, air || grabbing, 0.12f);
-		float breathe = MathHelper.sin(t * 0.06f) * 0.03f * o;
-		m.push();
-		getContextModel().body.rotate(m);
-		for (int s = 1; s >= -1; s -= 2) {
-			// repouso: caídas e recolhidas para trás, pesadas; voo: abertas em leve "V", paradas
-			float pitch = MathHelper.lerp(o, 0.12f, 0.04f);
-			float yaw = MathHelper.lerp(o, -1.1f, -0.25f);
-			float roll = MathHelper.lerp(o, 0.85f, -0.15f) + breathe;
-			spriteWing(m, vcp, brown ? SPR_DRAGON_BROWN : SPR_DRAGON_RED, light, s, 1.2f, 2.0f, 2.3f, 32f, 0.625f, 0.02f,
-					pitch, yaw, roll, 0, 0);
-		}
-		m.pop();
+		float o = open(e, 1, airborne(e) || grabbing, 0.12f);
 		// cauda: ondulação lateral com defasagem entre os gomos, mais ampla e rápida conforme a velocidade
 		GeoModel tl = GeoModel.get("dragon_tail");
 		tl.reset();
@@ -402,11 +268,8 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 				float wave = MathHelper.sin(ph - s * 0.55f) * (0.045f + v * 0.18f) * (1f - stretch * 0.5f);
 				g.turn("fox_" + s, wave * 0.5f + st[4] * 0.04f - stretch * 0.04f, wave + st[2] * 0.05f + st[5] * 0.04f, 0);
 			}
-			// Kitsune: perto do chão, a cauda sobe o necessário para não entrar nos blocos.
-			// Antes: a subida só existia "no chão" (sumia de uma vez ao pular), ia em degraus de 0.08, o lado era
-			// redescoberto a cada quadro e a suavização dependia do FPS — daí os trancos. Agora a subida-alvo é
-			// contínua (refinada por bisseção), o lado fica travado enquanto a cauda está erguida e a suavização
-			// usa o tempo real entre quadros, nos dois sentidos.
+			// Near the ground the tail lifts just enough to stay out of blocks: the target lift is found by bisection,
+			// the side is locked while lifted and smoothing uses real frame time.
 			if (n > 1) {
 				float[] lf = TAIL_LIFT.computeIfAbsent(e.getId() * 16 + i, x -> new float[]{0, t, 0});
 				float target = 0f;
@@ -495,41 +358,14 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		return low;
 	}
 
-	// ------------------------------------------------------------------ coelha
-
-	/** Orelhas de coelho menores e paradas, e um pompom na traseira que treme de vez em quando. */
-	private void bunny(MatrixStack m, VertexConsumerProvider vcp, int light, AbstractClientPlayerEntity e, float t) {
-		GeoModel g = GeoModel.get("bunny_ears");
-		g.reset();
-		m.push();
-		getContextModel().getHead().rotate(m);
-		m.translate(0, -0.5f, 0);
-		m.scale(0.65f, 0.65f, 0.65f);
-		m.translate(0, 0.5f, 0);
-		g.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(BUNNY)), light);
-		m.pop();
-		GeoModel tail = GeoModel.get("bunny_tail");
-		tail.reset();
-		float cyc = (t + e.getId() * 13) % 80f;
-		if (cyc > 72f) {
-			float k = (80f - cyc) / 8f;
-			float w = MathHelper.sin(cyc * 3.2f) * 0.14f * k;
-			tail.turn("tail", 0, w, w * 0.75f);
-		}
-		m.push();
-		getContextModel().body.rotate(m);
-		tail.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(BUNNY_TAIL)), light);
-		m.pop();
-	}
-
 	// ------------------------------------------------------------------ fada
 
 	/**
-	 * Asas de mariposa em pixel art (sprite desenhado pelo Artur), maiores que o corpo. No ar batem rápido e leve;
+	 * Asas de mariposa em pixel art (pixel-art sprite), maiores que o corpo. No ar batem rápido e leve;
 	 * pousada, param e ficam recolhidas para trás, juntinhas. Leve brilho mágico.
 	 */
 	private void fairy(MatrixStack m, VertexConsumerProvider vcp, int light, AbstractClientPlayerEntity e, float t) {
-		boolean air = airborne(e) || AbilityAnimations.active("perch").contains(e.getId());
+		boolean air = airborne(e);
 		if (!air) return; // no chão as asas somem
 		float o = 1f;
 		float beat = Math.abs(MathHelper.sin(phase(e, 60, e.isSprinting() || e.isFallFlying() ? 2.6f : 1.9f, t)));

@@ -108,6 +108,26 @@ public final class ElfFx {
 		cube(ms, vcp, dark ? DARK_SPIRIT_TEX : SPIRIT_TEX, t, 0.75f * size, dark ? 0x3A1450 : 0x9FD4FF, dark ? 0.3f : 0.32f, 2.2f);
 	}
 
+	private static final net.minecraft.util.Identifier SUN_TEX = com.dakura.origins.DakuraOrigins.id("textures/entity/sun_cube.png");
+	private static final net.minecraft.util.Identifier LIGHT_TEX = com.dakura.origins.DakuraOrigins.id("textures/entity/light_cube.png");
+
+	/** Golden pixel cube (Elf's dash shot). */
+	public static void sunCube(MatrixStack ms, VertexConsumerProvider vcp, float t, float size) {
+		cube(ms, vcp, SUN_TEX, t, 0.75f * size, 0xFFD24A, 0.32f, 2.2f);
+	}
+
+	/** Large translucent yellow cube drawn around an entity (High Elf's tether prison). */
+	public static void prisonCube(MatrixStack ms, VertexConsumerProvider vcp, float t, float side) {
+		float h = side / 2;
+		ms.push();
+		ms.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(t * 1.2f));
+		MatrixStack.Entry e = ms.peek();
+		texBox(e, vcp.getBuffer(RenderLayer.getEntityTranslucentEmissive(LIGHT_TEX)), -h, -h, -h, h, h, h);
+		float pulse = 0.85f + 0.15f * MathHelper.sin(t * 0.2f);
+		glowBox(e.getPositionMatrix(), vcp.getBuffer(RenderLayer.getLightning()), h * 1.05f, 0xFFE27A, 0.14f * pulse);
+		ms.pop();
+	}
+
 	private static void cube(MatrixStack ms, VertexConsumerProvider vcp, net.minecraft.util.Identifier tex, float t, float side, int glow, float glowA, float spin) {
 		float h = side / 2;
 		ms.push();

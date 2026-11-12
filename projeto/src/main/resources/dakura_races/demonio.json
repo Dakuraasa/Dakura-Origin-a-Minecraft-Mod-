@@ -97,10 +97,6 @@
 	],
 	"powers": [
 		{
-			"type": "dakura_origins:cosmetic",
-			"feature": "demon_horns"
-		},
-		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.attack_damage",
 			"operation": "add_value",

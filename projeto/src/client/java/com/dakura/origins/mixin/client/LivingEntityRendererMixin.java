@@ -30,12 +30,6 @@ public abstract class LivingEntityRendererMixin {
 	@Unique
 	private static boolean dakura$stone = false;
 
-	/** Vastaya camuflada na floresta: sem nome sobre a cabeça. */
-	@Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true, require = 0)
-	private void dakura$hideLabel(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-		if (com.dakura.origins.power.types.ForestStealthPower.camouflaged(entity)) cir.setReturnValue(false);
-	}
-
 	@Inject(method = "isShaking", at = @At("RETURN"), cancellable = true)
 	private void dakura$crampedShake(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
 		if (!cir.getReturnValueZ() && EntityFlags.clientHas(entity, ClaustrophobiaPower.FLAG)) {

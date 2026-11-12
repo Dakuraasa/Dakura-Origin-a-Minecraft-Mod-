@@ -43,15 +43,6 @@ public abstract class EntityMixin {
 				&& com.dakura.origins.power.EntityFlags.clientHas(self, "fireproof")) cir.setReturnValue(false);
 	}
 
-	/** Fada sentada no ombro de outro jogador (em vez de em cima da cabeça). */
-	@Inject(method = "getPassengerAttachmentPos", at = @At("HEAD"), cancellable = true, require = 0)
-	private void dakura$shoulder(Entity passenger, net.minecraft.entity.EntityDimensions dims, float scale,
-								 org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<net.minecraft.util.math.Vec3d> cir) {
-		if ((Object) this instanceof PlayerEntity && com.dakura.origins.power.ability.FairyPerchAbility.isFairy(passenger)) {
-			cir.setReturnValue(new net.minecraft.util.math.Vec3d(-0.36 * scale, dims.height() * 0.78, 0.02));
-		}
-	}
-
 	/** Huli Jing: sem nado rápido (sprint na água). */
 	@Inject(method = "updateSwimming", at = @At("HEAD"), cancellable = true)
 	private void dakura$noSwimming(CallbackInfo ci) {

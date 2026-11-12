@@ -92,7 +92,7 @@ public final class VampireBiteAbility implements Ability {
 				Registries.STATUS_EFFECT.getEntry(id).ifPresentOrElse(
 						entry -> monsterEffects.add(new MonsterEffect(entry,
 								JsonParams.integer(o, "duration", 80), JsonParams.integer(o, "amplifier", 0))),
-						() -> DakuraOrigins.LOGGER.error("Mordida: efeito desconhecido {}", id));
+						() -> DakuraOrigins.LOGGER.error("Bite: unknown effect {}", id));
 			}
 		}
 	}

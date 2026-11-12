@@ -25,22 +25,22 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * "dakura_origins:casino" — Cassino: aposta o item da mão numa roda. O resultado depende da raridade do item
- * (quanto mais raro, mais difícil): perder tudo, devolver, ×2, ×3 ou ×5. { "spin": 70 }
+ * "dakura_origins:casino" — bets the held item on a wheel. Outcomes: lose the item, nothing (item returned),
+ * ×2, ×3, ×4 or ×5. Rarer items have worse odds. { "spin": 70 }
  */
 public final class CasinoAbility implements Ability {
-	/** Resultados da roda, na ordem: perde, ×1, ×2, ×3, ×5. */
-	public static final int[] MULTS = {0, 1, 2, 3, 5};
+	/** Wheel outcomes in order: lose, nothing, ×2, ×3, ×4, ×5. The value is how many times the bet comes back. */
+	public static final int[] MULTS = {0, 1, 2, 3, 4, 5};
 	private static final float[][] ODDS = {
-			{30, 25, 30, 12, 3},     // comum
-			{38, 27, 25, 8, 2},      // incomum
-			{45, 30, 20, 4, 1},      // raro / valioso
-			{55, 30, 12, 2.5f, 0.5f} // épico
+			{25, 30, 22, 13, 7, 3},
+			{30, 32, 20, 10, 6, 2},
+			{38, 34, 16, 7, 4, 1},
+			{45, 35, 12, 5, 2.5f, 0.5f}
 	};
 	private static final Set<net.minecraft.item.Item> VALUABLE = Set.of(Items.DIAMOND, Items.EMERALD, Items.NETHERITE_INGOT,
 			Items.NETHERITE_SCRAP, Items.ANCIENT_DEBRIS, Items.DIAMOND_BLOCK, Items.EMERALD_BLOCK, Items.GOLD_BLOCK,
 			Items.NETHERITE_BLOCK, Items.TOTEM_OF_UNDYING, Items.NETHER_STAR, Items.ELYTRA, Items.ENCHANTED_GOLDEN_APPLE);
-	private static final Map<UUID, Object[]> ACTIVE = new HashMap<>(); // {aposta, resultado, idade, giro}
+	private static final Map<UUID, Object[]> ACTIVE = new HashMap<>();
 	private final int spin;
 
 	public CasinoAbility(JsonObject json) {
@@ -93,10 +93,7 @@ public final class CasinoAbility implements Ability {
 			Object[] st = en.getValue();
 			ServerPlayerEntity p = server.getPlayerManager().getPlayer(en.getKey());
 			ItemStack bet = (ItemStack) st[0];
-			if (p == null) {
-				it.remove();
-				continue;
-			}
+			if (p == null) continue;
 			int age = ++((int[]) st[2])[0];
 			if (age < (int) st[3]) continue;
 			it.remove();

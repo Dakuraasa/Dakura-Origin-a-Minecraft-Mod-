@@ -7,7 +7,6 @@ import com.dakura.origins.race.RaceAccess;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CocoaBlock;
@@ -19,7 +18,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -48,7 +46,7 @@ import java.util.UUID;
 
 /**
  * "dakura_origins:vanilla_perk" — Vantagens Vanilla (mexem nas mecânicas normais do Minecraft, só para a própria jogadora).
- * { "mode": "fortune" | "autosmelt" | "brew_double" | "crop_growth" | "tame_instant" | "harvest_bonus" | "no_trample" | "creeper_fear" | "needs_roof" }
+ * { "mode": "fortune" | "autosmelt" | "brew_double" | "crop_growth" | "no_trample" | "needs_roof" | "butcher" | "scare_animals" }
  */
 public final class VanillaPerkPower implements RacePower {
 	private static final Map<UUID, Vec3d> STILL = new HashMap<>();
@@ -149,29 +147,6 @@ public final class VanillaPerkPower implements RacePower {
 			return false;
 		});
 
-		// Colheita farta: plantações maduras quebradas por ela às vezes rendem de novo
-		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, be) -> {
-			if (!(world instanceof ServerWorld sw) || !(player instanceof ServerPlayerEntity sp)) return;
-			if (state.getBlock() instanceof CropBlock crop && crop.isMature(state) && has(sp, "harvest_bonus") && sw.random.nextFloat() < 0.5f) {
-				Block.dropStacks(state, sw, pos, null, sp, sp.getMainHandStack());
-				sw.spawnParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, 0.3, 0.3, 0.3, 0);
-			}
-		});
-
-		// Domesticação na primeira tentativa (Vastaya Lobo)
-		UseEntityCallback.EVENT.register((player, world, hand, entity, hit) -> {
-			if (world.isClient || !(entity instanceof WolfEntity wolf) || wolf.isTamed() || wolf.isBaby()) return ActionResult.PASS;
-			ItemStack held = player.getStackInHand(hand);
-			if (!held.isOf(Items.BONE) || !has(player, "tame_instant")) return ActionResult.PASS;
-			if (!player.getAbilities().creativeMode) held.decrement(1);
-			wolf.setOwner(player); // 1.21: já marca como domesticado
-			wolf.getNavigation().stop();
-			wolf.setTarget(null);
-			wolf.setSitting(true);
-			world.sendEntityStatus(wolf, (byte) 7);
-			return ActionResult.SUCCESS;
-		});
-
 		// Dragões e Fênix: só dormem com teto a até ~6 blocos
 		EntitySleepEvents.ALLOW_SLEEPING.register((player, pos) -> {
 			if (!(player instanceof ServerPlayerEntity sp) || !has(sp, "needs_roof")) return null;
@@ -188,7 +163,6 @@ public final class VanillaPerkPower implements RacePower {
 	public void tick(ServerPlayerEntity p) {
 		switch (mode) {
 			case "crop_growth" -> cropGrowth(p);
-			case "tame_instant" -> petBuff(p);
 			case "scare_animals" -> scareAnimals(p);
 			default -> {
 			}
@@ -223,16 +197,6 @@ public final class VanillaPerkPower implements RacePower {
 			if (away.lengthSquared() < 1e-3) away = new Vec3d(1, 0, 0);
 			Vec3d to = a.getPos().add(away.normalize().multiply(8));
 			a.getNavigation().startMovingTo(to.x, to.y, to.z, 1.6);
-		}
-	}
-
-	/** Lobos domesticados por ela por perto: cura contínua e mais força. */
-	private void petBuff(ServerPlayerEntity p) {
-		if (p.age % 40 != 0) return;
-		for (WolfEntity wolf : p.getServerWorld().getEntitiesByClass(WolfEntity.class, new Box(p.getBlockPos()).expand(32),
-				x -> x.isTamed() && p.getUuid().equals(x.getOwnerUuid()))) {
-			wolf.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 60, 0, true, false));
-			wolf.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 60, 0, true, false));
 		}
 	}
 

@@ -91,8 +91,7 @@ public final class ClientEffects {
 	public static boolean keenOutline(Entity e) {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		return System.currentTimeMillis() < KEEN_UNTIL && mc.player != null && e != mc.player
-				&& e instanceof LivingEntity && e.squaredDistanceTo(mc.player) < KEEN_RADIUS_SQ
-				&& !com.dakura.origins.power.types.ForestStealthPower.camouflaged(e) && !e.isInvisible();
+				&& e instanceof LivingEntity && e.squaredDistanceTo(mc.player) < KEEN_RADIUS_SQ && !e.isInvisible();
 	}
 
 	/** Efeitos em pontos do mundo (FxPayload). */
@@ -147,7 +146,6 @@ public final class ClientEffects {
 	static final DustParticleEffect STONE_DUST = new DustParticleEffect(new Vector3f(0.62f, 0.6f, 0.57f), 1.2f);
 	static final DustParticleEffect CRIMSON = new DustParticleEffect(new Vector3f(0.75f, 0.1f, 0.22f), 1.0f);
 	static final DustParticleEffect FEATHER = new DustParticleEffect(new Vector3f(0.95f, 0.9f, 0.84f), 0.8f);
-	static final DustParticleEffect WILD = new DustParticleEffect(new Vector3f(0.55f, 0.72f, 0.4f), 0.8f);
 
 	static final DustParticleEffect FROST = new DustParticleEffect(new Vector3f(0.82f, 0.93f, 1.0f), 1.0f);
 	static final DustParticleEffect EMBER_SOFT = new DustParticleEffect(new Vector3f(1.0f, 0.58f, 0.22f), 1.0f);
@@ -227,13 +225,6 @@ public final class ClientEffects {
 				spiral(world, e.getPos(), 0.55, 1.6, 2, 18, CRIMSON, ParticleTypes.SMOKE, rnd);
 				for (int i = 0; i < 8; i++) world.addParticle(ParticleTypes.LARGE_SMOKE, e.getX() + rnd.nextGaussian() * 0.3,
 						e.getY() + 0.3 + rnd.nextDouble() * 0.8, e.getZ() + rnd.nextGaussian() * 0.3, 0, 0.02, 0);
-			}
-			case "feathers" -> ring(world, e.getPos().add(0, e.getHeight() * 0.6, 0), 0.6, 16, FEATHER);
-			case "prowl", "hunt" -> {
-				Vec3d b = e.getPos();
-				for (int i = 0; i < 8; i++) world.addParticle(ParticleTypes.POOF, b.x + rnd.nextGaussian() * 0.25, b.y + 0.15,
-						b.z + rnd.nextGaussian() * 0.25, 0, 0.02, 0);
-				ring(world, b.add(0, 0.05, 0), 0.6, 14, name.equals("hunt") ? CRIMSON : WILD);
 			}
 			case "keen" -> {
 				if (MinecraftClient.getInstance().player != null && entityId == MinecraftClient.getInstance().player.getId()) {
@@ -426,12 +417,6 @@ public final class ClientEffects {
 			if (flags.contains("meteor") && pl.getVelocity().y < -0.5) {
 				world.addParticle(STONE_DUST, pl.getX() + rnd.nextGaussian() * 0.2, pl.getY() + 1.0, pl.getZ() + rnd.nextGaussian() * 0.2, 0, 0, 0);
 				world.addParticle(ParticleTypes.SMOKE, pl.getX(), pl.getY() + 1.4, pl.getZ(), 0, 0.05, 0);
-			}
-			// Vastaya: corrida da felina / caçada do cão
-			if ((flags.contains("prowl") || flags.contains("hunt")) && rnd.nextInt(3) == 0) {
-				double dx = pl.getX() - pl.prevX, dz = pl.getZ() - pl.prevZ;
-				if (dx * dx + dz * dz > 0.004) world.addParticle(flags.contains("hunt") ? CRIMSON : WILD,
-						pl.getX() - dx * 2 + rnd.nextGaussian() * 0.15, pl.getY() + 0.15, pl.getZ() - dz * 2 + rnd.nextGaussian() * 0.15, 0, 0, 0);
 			}
 		}
 

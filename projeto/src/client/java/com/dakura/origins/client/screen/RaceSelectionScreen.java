@@ -66,7 +66,7 @@ public class RaceSelectionScreen extends Screen {
 	private int flipDir = 1;
 	/** Sumário aberto / variante mostrada (ex.: Huli Jing das Neves) — e como estavam antes do flip. */
 	private boolean toc, fromToc, variantFlip;
-	/** 0 = forma base; 1, 2... = variantes (Huli Jing das Neves, Vastaya felina/cão). */
+	/** 0 = forma base; 1, 2... = variantes (e.g. Snow Huli Jing). */
 	private int variant, fromVariant;
 	private float ribbonHover, variantHover;
 	private static final int TOC_LINE = 15;
@@ -121,7 +121,7 @@ public class RaceSelectionScreen extends Screen {
 		titleH = Math.round(titleW * TITLE_TH / (float) TITLE_TW);
 		titleX = (width - titleW) / 2;
 		titleY = 6;
-		int titleBottom = 6; // título do mod removido das páginas
+		int titleBottom = 6;
 
 		// livro fechado
 		closedScale = Math.max(1, Math.min(3, (height - titleBottom - 46) / BOOK_H));
@@ -403,7 +403,7 @@ public class RaceSelectionScreen extends Screen {
 
 		if (state == State.OPEN) backdrop.renderPageEdges(ctx);
 		if (!viewOnly) drawRibbons(ctx, mouseX, mouseY, t, newRace, newToc, interactive);
-		boolean tagHover = false; // selos de categoria (combate, suporte...) removidos
+		boolean tagHover = false;
 		ctx.getMatrices().pop();
 		if (tagHover) ctx.drawTooltip(textRenderer, Text.translatable("dakura_origins.tag." + RaceRegistry.tagOf(newRace.id())), mouseX, mouseY);
 
@@ -452,7 +452,6 @@ public class RaceSelectionScreen extends Screen {
 		int size = BOOK_W * Math.max(1, Math.min(2, (lw - PAD * 4) / BOOK_W));
 		int y = pageY + (pageH - size) / 2 - 16;
 		ctx.drawTexture(BOOK, lx + (lw - size) / 2, y, size, size, 0f, 0f, 43, 43, 43, 43);
-		// nome do mod removido (fica só a assinatura no canto)
 	}
 
 	// ---------------------------------------------------------------- sumário

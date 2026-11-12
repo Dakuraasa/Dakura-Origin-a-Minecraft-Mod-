@@ -47,6 +47,6 @@ public class DakuraOrigins implements ModInitializer {
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> RaceManager.onRespawn(newPlayer));
 		ServerTickEvents.END_SERVER_TICK.register(RaceManager::tick);
 
-		LOGGER.info("Datura Origins carregado com {} raça(s).", RaceRegistry.all().size());
+		LOGGER.info("Datura Origins loaded with {} race(s).", RaceRegistry.all().size());
 	}
 }

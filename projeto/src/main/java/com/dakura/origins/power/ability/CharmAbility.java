@@ -63,6 +63,10 @@ public final class CharmAbility implements Ability {
 		ServerTickEvents.END_SERVER_TICK.register(CharmAbility::tickAll);
 	}
 
+	public static boolean isCharmed(LivingEntity e) {
+		return CHARMED.containsKey(e.getUuid());
+	}
+
 	/** Este monstro está encantado por este jogador (não pode mirá-lo). */
 	public static boolean blocks(MobEntity mob, LivingEntity target) {
 		if (CHARMED.isEmpty()) return false;

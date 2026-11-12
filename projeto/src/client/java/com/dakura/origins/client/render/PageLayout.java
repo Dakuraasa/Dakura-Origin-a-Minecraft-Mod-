@@ -28,7 +28,7 @@ public final class PageLayout {
 	public static final Identifier DIVIDER = DakuraOrigins.id("textures/gui/divider.png");
 	public static final Identifier STAR = DakuraOrigins.id("textures/gui/star.png");
 	private static final int DIVIDER_W = 112, DIVIDER_H = 9, STAR_SIZE = 9;
-	private static final int LINE_H = 11;
+	private static final int LINE_H = 12;
 	private static final int TEXT_INDENT = 13;
 	/** Caixa padrão de todos os ícones de raça (em pixels de interface). */
 	public static final int ICON_BOX_W = 156, ICON_BOX_H = 164; // olhos maiores, sempre limitados à largura da folha
@@ -50,11 +50,7 @@ public final class PageLayout {
 	/** Marcador em pixel art das listas: maçã (vantagem), bigorna (vantagem vanilla), poção (desvantagem). */
 	private record IconOp(Identifier tex, int x, int y, int w, int h, int texW, int texH) implements Op {}
 
-	public static final Identifier ICON_PRO = DakuraOrigins.id("textures/gui/icon_pro.png");
 	public static final Identifier ICON_VANILLA = DakuraOrigins.id("textures/gui/icon_vanilla.png");
-	public static final Identifier ICON_CON = DakuraOrigins.id("textures/gui/icon_con.png");
-	public static final Identifier FEATHER = DakuraOrigins.id("textures/gui/feather.png");
-	private static final int FEATHER_W = 24, FEATHER_H = 22;
 
 	private final List<Op> ops = new ArrayList<>();
 	private final TextRenderer tr;
@@ -121,8 +117,7 @@ public final class PageLayout {
 			ops.add(new TextOp(ep, (innerW - tr.getWidth(ep)) / 2, y, Role.MUTED, 1f));
 			y += LINE_H + 2;
 		}
-		ops.add(new ImageOp(FEATHER, (innerW - FEATHER_W) / 2, y, FEATHER_W, FEATHER_H, FEATHER_W, FEATHER_H));
-		y += FEATHER_H + 6;
+		y += 8;
 
 		boolean first = true;
 		for (String paragraph : race.descriptionText().getString().split("\\n")) {
@@ -203,9 +198,7 @@ public final class PageLayout {
 			first = false;
 		}
 
-		y = Math.max(y + 2, iconH + 4);
-		ops.add(new ImageOp(FEATHER, (innerW - FEATHER_W) / 2, y, FEATHER_W, FEATHER_H, FEATHER_W, FEATHER_H));
-		return y + FEATHER_H + 7;
+		return Math.max(y + 2, iconH + 4) + 10;
 	}
 
 	private void composeAbilities(Race race, List<Text> abilityKeys, @Nullable Details details, int y) {
@@ -236,7 +229,7 @@ public final class PageLayout {
 				y += LINE_H;
 				String desc = ability.descriptionText().getString();
 				if (!desc.isBlank()) y = flow(desc, y, Role.TEXT, false, TEXT_INDENT);
-				y += 4;
+				y += 7;
 			}
 		} else if (details != null) {
 			y = heading(tr("page.abilities"), y);
@@ -258,12 +251,12 @@ public final class PageLayout {
 
 	private int trait(Race.Trait trait, int y) {
 		switch (trait.kind()) {
-			case VANTAGEM -> ops.add(new IconOp(ICON_PRO, colStart(y), y - 1, 9, 10, 12, 14));
+			case VANTAGEM -> ops.add(new StarOp(colStart(y), y + 1, Role.PRO));
 			case VANILLA -> ops.add(new IconOp(ICON_VANILLA, colStart(y) - 2, y + 1, 12, 7, 28, 16));
-			case DESVANTAGEM -> ops.add(new IconOp(ICON_CON, colStart(y) + 1, y - 1, 7, 10, 10, 14));
+			case DESVANTAGEM -> ops.add(new StarOp(colStart(y), y + 1, Role.CON));
 			case NEUTRO -> ops.add(new StarOp(colStart(y), y + 1, Role.NEUTRAL));
 		}
-		return flow(trait.asText().getString(), y, Role.TEXT, false, TEXT_INDENT) + 3;
+		return flow(trait.asText().getString(), y, Role.TEXT, false, TEXT_INDENT) + 5;
 	}
 
 	private int traitGroup(Race race, Race.TraitKind kind, String titleKey, int y) {
@@ -274,12 +267,12 @@ public final class PageLayout {
 				MutableText h = DakuraFonts.heading(tr(titleKey));
 				ops.add(new TextOp(h, colStart(y), y, kind == Race.TraitKind.DESVANTAGEM ? Role.CON
 						: kind == Race.TraitKind.VANTAGEM || kind == Race.TraitKind.VANILLA ? Role.PRO : Role.MUTED, 1.1f));
-				y += LINE_H + 3;
+				y += LINE_H + 5;
 				any = true;
 			}
 			y = trait(t, y);
 		}
-		return any ? y + 4 : y;
+		return any ? y + 8 : y;
 	}
 
 	/** Título centralizado de seção ("Habilidades Ativas", "Controles"). */

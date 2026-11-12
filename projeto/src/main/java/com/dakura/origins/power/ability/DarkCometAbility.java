@@ -8,6 +8,8 @@ import com.dakura.origins.power.types.MaturityPower;
 import com.dakura.origins.sound.ModSounds;
 import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -71,7 +73,7 @@ public final class DarkCometAbility implements Ability {
 		LegendKit.run(p, key, chain, (pl, age) -> {
 			if (!t.isAlive() || t.isRemoved() || t.getWorld() != pl.getWorld() || t.squaredDistanceTo(pl) > 40 * 40) return false;
 			if (age < root) {
-				FistBarrageAbility.pin(t, anchor);
+				pin(t, anchor);
 				com.dakura.origins.power.Control.lock(t, 2, anchor);
 				if (t instanceof MobEntity mob) mob.setAiDisabled(true);
 			} else {
@@ -101,5 +103,21 @@ public final class DarkCometAbility implements Ability {
 	@Override
 	public void onRemove(ServerPlayerEntity p) {
 		LegendKit.stopPrefix(p, "dark_chain#");
+	}
+
+	private static void pin(LivingEntity tg, Vec3d at) {
+		com.dakura.origins.power.Control.lock(tg, 3);
+		tg.setVelocity(Vec3d.ZERO);
+		tg.velocityModified = true;
+		if (tg instanceof ServerPlayerEntity sp) {
+			if (sp.getPos().squaredDistanceTo(at) > 0.01) sp.networkHandler.requestTeleport(at.x, at.y, at.z, sp.getYaw(), sp.getPitch());
+		} else tg.setPosition(at.x, at.y, at.z);
+		tg.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 6, 254, true, false, false));
+		tg.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 6, 254, true, false, false));
+		tg.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 6, 4, true, false, false));
+		if (tg instanceof MobEntity mob) {
+			mob.setTarget(null);
+			mob.getNavigation().stop();
+		}
 	}
 }

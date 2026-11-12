@@ -58,8 +58,6 @@ public class DakuraOriginsClient implements ClientModInitializer {
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
 				com.dakura.origins.entity.ModEntities.UNDEAD_MINION, net.minecraft.client.render.entity.ZombieEntityRenderer::new);
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
-				com.dakura.origins.entity.ModEntities.FEATHER, com.dakura.origins.client.render.FeatherRenderer::new);
-		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
 				com.dakura.origins.entity.ModEntities.GEO_PROJECTILE, com.dakura.origins.client.render.GeoProjectileRenderer::new);
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
 				com.dakura.origins.entity.ModEntities.SOUL_ORB, com.dakura.origins.client.render.SoulOrbRenderer::new);
@@ -97,7 +95,6 @@ public class DakuraOriginsClient implements ClientModInitializer {
 						helper.register(new com.dakura.origins.client.render.FlowerCrownFeature(pr));
 						helper.register(new com.dakura.origins.client.render.FoxEarsFeature(pr));
 						helper.register(new com.dakura.origins.client.render.RaceFeatureRenderer(pr));
-						helper.register(new com.dakura.origins.client.render.LegendFeatureRenderer(pr));
 						helper.register(new com.dakura.origins.client.render.GeoPartsRenderer(pr));
 					}
 				});

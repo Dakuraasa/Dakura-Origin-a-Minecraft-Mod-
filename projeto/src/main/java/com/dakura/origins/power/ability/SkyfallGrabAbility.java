@@ -128,7 +128,6 @@ public final class SkyfallGrabAbility implements Ability {
 			// impacto = o mesmo pisão do dragão (ondas, pedaços do chão e poeira)
 			com.dakura.origins.network.ModNetworking.sendAround(new com.dakura.origins.network.AnimPayload(pl.getId(), "fx:stomp", (int) Math.round(radius * 10)), pl);
 			LegendKit.fxAt(pl.getServerWorld(), "debris", c, (int) Math.round(radius * 7), (float) radius, 0);
-			LegendKit.fxAt(pl.getServerWorld(), "dust", c, (float) radius, 0, 0);
 			ModSounds.play(pl, ModSounds.DRAGON_SLAM, 1.6f, 0.9f);
 		});
 		return true;

@@ -93,6 +93,7 @@ final class ExtraEffects {
 			case "drain" -> DRAIN.put(e.getId(), new int[]{param, 55});
 			case "mirror_hit" -> {
 				Vec3d c = e.getEyePos().add(e.getRotationVec(1f).multiply(1.0)).add(0, -0.3, 0);
+				com.dakura.origins.client.fx.NativeShapes.firework(world, c, 0xFFE27A, 0xFFFFFF, true);
 				for (int i = 0; i < 6; i++) {
 					double a = i * Math.PI / 3;
 					Vec3d[] b = ClientEffects.basis(e.getRotationVec(1f));
@@ -116,20 +117,6 @@ final class ExtraEffects {
 				Vec3d mouth = e.getEyePos().add(e.getRotationVec(1f).multiply(0.4));
 				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.CLOUD, mouth.x, mouth.y, mouth.z,
 						e.getRotationVec(1f).x * 0.3 + rnd.nextGaussian() * 0.05, 0.02, e.getRotationVec(1f).z * 0.3 + rnd.nextGaussian() * 0.05);
-			}
-			case "tempest_cut", "tempest_empowered" -> {
-				boolean big = name.equals("tempest_empowered");
-				Vec3d look = e.getRotationVec(1f), c = base.add(0, e.getHeight() * 0.6, 0);
-				for (int i = 1; i <= (big ? 22 : 12); i++) {
-					Vec3d p = c.add(look.multiply(i * 0.3));
-					world.addParticle(big ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.CRIT, p.x, p.y, p.z, look.x * 0.2, 0.01, look.z * 0.2);
-					if (i % 2 == 0) world.addParticle(ParticleTypes.SWEEP_ATTACK, p.x, p.y, p.z, 0, 0, 0);
-				}
-				if (big) {
-					world.addParticle(ParticleTypes.FLASH, c.x + look.x * 2, c.y, c.z + look.z * 2, 0, 0, 0);
-					for (int i = 0; i < 20; i++) world.addParticle(ParticleTypes.ENCHANTED_HIT, c.x + look.x * 2, c.y, c.z + look.z * 2,
-							rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.3);
-				}
 			}
 			case "gold_fist" -> {
 				Vec3d c = base.add(0, e.getHeight() * 0.55, 0);
@@ -218,13 +205,6 @@ final class ExtraEffects {
 				for (int i = 0; i < 12; i++) world.addParticle(ParticleTypes.END_ROD, base.x + rnd.nextGaussian() * r * 0.4,
 						base.y + 2.5, base.z + rnd.nextGaussian() * r * 0.4, 0, -0.08, 0);
 				expandingRing(base.add(0, 0.1, 0), r, 8, FAIRY_A, 36);
-			}
-			case "perch" -> {
-				Entity host = world.getEntityById(param);
-				if (host != null) for (int i = 0; i <= 10; i++) {
-					Vec3d q = base.lerp(host.getPos().add(0, host.getHeight(), 0), i / 10.0).add(0, Math.sin(i / 10.0 * Math.PI) * 0.5, 0);
-					world.addParticle(i % 2 == 0 ? FAIRY_A : FAIRY_B, q.x, q.y, q.z, 0, 0, 0);
-				}
 			}
 			default -> FinaleEffects.fx(world, name, e, param, rnd);
 		}
@@ -331,11 +311,6 @@ final class ExtraEffects {
 			if (flags.contains("charging") && rnd.nextInt(2) == 0) {
 				world.addParticle(RAGE, pl.getX() + rnd.nextGaussian() * 0.3, pl.getY() + 0.1, pl.getZ() + rnd.nextGaussian() * 0.3, 0, 0, 0);
 				world.addParticle(ParticleTypes.CLOUD, pl.getX(), pl.getY() + 0.2, pl.getZ(), 0, 0.02, 0);
-			}
-			if (flags.contains("gliding") && rnd.nextInt(3) == 0) {
-				Vec3d f = flatLook(pl), side = new Vec3d(-f.z, 0, f.x);
-				Vec3d tip = pl.getPos().add(0, pl.getHeight() * 0.7, 0).add(side.multiply(-1.4)).add(f.multiply(-0.3));
-				world.addParticle(ClientEffects.FEATHER, tip.x, tip.y, tip.z, 0, 0, 0);
 			}
 			if (flags.contains("fairy") && !pl.isOnGround() && rnd.nextInt(2) == 0) {
 				world.addParticle(rnd.nextBoolean() ? FAIRY_A : FAIRY_B, pl.getX() + rnd.nextGaussian() * 0.15,

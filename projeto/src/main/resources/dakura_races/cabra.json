@@ -24,7 +24,7 @@
 		"accent": "#5B6B7D",
 		"muted": "#5E806B"
 	},
-	"description": "Sátiros das montanhas que herdaram tudo da cabra: cascos firmes, chifres duros e lã grossa. Vivem nos picos nevados, onde nenhum tombo os assusta e nenhum frio os alcança. Teimosos e incansáveis, só descansam lá no alto, perto do céu.",
+	"description": "Sátiros das montanhas que herdaram tudo da cabra: cascos firmes e lã grossa. Vivem nos picos nevados, onde nenhum tombo os assusta e nenhum frio os alcança. Teimosos e incansáveis, só descansam lá no alto, perto do céu.",
 	"traits": [
 		{
 			"type": "vantagem",
@@ -153,10 +153,6 @@
 			"operation": "add_multiplied_base",
 			"amount": -0.3,
 			"when": "water"
-		},
-		{
-			"type": "dakura_origins:cosmetic",
-			"feature": "goat_horns"
 		}
 	],
 	"abilities": [
@@ -173,7 +169,7 @@
 		{
 			"type": "dakura_origins:headbutt",
 			"name": "Cabeçada",
-			"description": "Investe com os chifres e arremessa para bem longe o primeiro alvo à frente.",
+			"description": "Investe de cabeça e arremessa para bem longe o primeiro alvo à frente.",
 			"cooldown": 210,
 			"range": 3.5,
 			"damage": 2,

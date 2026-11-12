@@ -38,7 +38,8 @@ final class FinaleEffects {
 	static final DustParticleEffect BLOOD_SOFT = new DustParticleEffect(new Vector3f(1.0f, 0.45f, 0.45f), 0.8f);
 
 	private static final Map<Integer, int[]> THREADS = new HashMap<>();  // boneca → {alvo, ticks}
-	private static final List<int[]> ALTAR = new ArrayList<>();          // opções do Altar Celestial
+	private static final List<int[]> ALTAR = new ArrayList<>();
+	private static final DustParticleEffect ALTAR_GREEN = new DustParticleEffect(new Vector3f(0.45f, 0.85f, 0.4f), 1.2f);
 
 	private FinaleEffects() {}
 
@@ -167,15 +168,21 @@ final class FinaleEffects {
 						base.y + 2 + rnd.nextDouble() * 3, base.z + rnd.nextGaussian() * 1.5, 0, -0.04, 0);
 			}
 			case "altar_opt" -> ALTAR.add(new int[]{param >> 4, param & 15});
-			case "altar_open" -> ALTAR.clear();
+			case "altar_open" -> {
+				if (e == MinecraftClient.getInstance().player && !ALTAR.isEmpty()) {
+					List<int[]> opts = new ArrayList<>(ALTAR);
+					MinecraftClient.getInstance().setScreen(new com.dakura.origins.client.screen.AltarScreen(opts));
+				}
+				ALTAR.clear();
+			}
 			case "altar_ritual" -> {
-				ClientEffects.spiral(world, base, 1.0, 3.0, 2, 30, HOLY_GOLD, ParticleTypes.ENCHANT, rnd);
+				ClientEffects.spiral(world, base, 1.0, 3.0, 2, 30, ALTAR_GREEN, ParticleTypes.HAPPY_VILLAGER, rnd);
 				for (int i = 0; i < 20; i++) world.addParticle(ParticleTypes.ENCHANT, base.x + rnd.nextGaussian() * 1.5,
 						base.y + 2.5, base.z + rnd.nextGaussian() * 1.5, 0, -0.6, 0);
 			}
 			case "altar_done" -> {
 				Vec3d hand = e.getEyePos().add(e.getRotationVec(1f).multiply(0.7)).add(0, -0.4, 0);
-				for (int i = 0; i < 24; i++) world.addParticle(i % 2 == 0 ? HOLY_GOLD : HOLY, hand.x, hand.y, hand.z,
+				for (int i = 0; i < 24; i++) world.addParticle(i % 2 == 0 ? ALTAR_GREEN : ParticleTypes.HAPPY_VILLAGER, hand.x, hand.y, hand.z,
 						rnd.nextGaussian() * 0.15, rnd.nextGaussian() * 0.15, rnd.nextGaussian() * 0.15);
 				world.addParticle(ParticleTypes.FLASH, hand.x, hand.y, hand.z, 0, 0, 0);
 			}

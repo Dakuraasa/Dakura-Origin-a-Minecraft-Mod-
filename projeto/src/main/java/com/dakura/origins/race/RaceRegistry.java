@@ -27,8 +27,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Carrega as raças de resources/dakura_races/*.json de TODOS os mods instalados
- * (o Datura Origins e qualquer addon). Para criar uma raça basta um JSON + um ícone.
+ * Loads races from resources/dakura_races/*.json of every installed mod (Datura Origins and any add-on).
+ * A new race only needs a JSON file and a portrait.
  */
 public final class RaceRegistry {
 	public static final String DEFAULT_RACE = "humano";
@@ -67,15 +67,15 @@ public final class RaceRegistry {
 						if (json.has("variant_of")) VARIANT_OF.put(race.id(), json.get("variant_of").getAsString());
 						if (json.has("tag")) TAGS.put(race.id(), json.get("tag").getAsString());
 						if (RACES.containsKey(race.id())) {
-							DakuraOrigins.LOGGER.warn("Raça '{}' redefinida pelo mod {}", race.id(), mod.getMetadata().getId());
+							DakuraOrigins.LOGGER.warn("Race '{}' overridden by mod {}", race.id(), mod.getMetadata().getId());
 						}
 						RACES.put(race.id(), race);
 					} catch (Exception e) {
-						DakuraOrigins.LOGGER.error("Erro lendo a raça {} ({}): {}", file.getFileName(), mod.getMetadata().getId(), e.getMessage());
+						DakuraOrigins.LOGGER.error("Failed to read race {} ({}): {}", file.getFileName(), mod.getMetadata().getId(), e.getMessage());
 					}
 				}
 			} catch (Exception e) {
-				DakuraOrigins.LOGGER.error("Erro listando raças do mod {}", mod.getMetadata().getId(), e);
+				DakuraOrigins.LOGGER.error("Failed to list races of mod {}", mod.getMetadata().getId(), e);
 			}
 		}
 		List<Race> list = new ArrayList<>(RACES.values());
@@ -176,7 +176,7 @@ public final class RaceRegistry {
 				Identifier type = Identifier.of(pj.get("type").getAsString());
 				PowerRegistry.PowerFactory factory = PowerRegistry.powerType(type);
 				if (factory == null) {
-					DakuraOrigins.LOGGER.error("Raça {}: tipo de poder desconhecido '{}'", id, type);
+					DakuraOrigins.LOGGER.error("Race {}: unknown power type '{}'", id, type);
 					continue;
 				}
 				RacePower made = factory.create(pj);
@@ -195,7 +195,7 @@ public final class RaceRegistry {
 				Ability ability = null;
 				if (!typeStr.isEmpty()) {
 					PowerRegistry.AbilityFactory factory = PowerRegistry.abilityType(Identifier.of(typeStr));
-					if (factory == null) DakuraOrigins.LOGGER.error("Raça {}: tipo de habilidade desconhecido '{}'", id, typeStr);
+					if (factory == null) DakuraOrigins.LOGGER.error("Race {}: unknown ability type '{}'", id, typeStr);
 					else ability = factory.create(a);
 				}
 				abilities.add(new Race.AbilityInfo(typeStr, a.get("name").getAsString(),

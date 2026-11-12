@@ -24,7 +24,7 @@
 		"accent": "#4E6B2E",
 		"muted": "#5E806B"
 	},
-	"description": "Guerreiros da horda, de pele verde e presas à mostra, criados entre cicatrizes e fogueiras de guerra. Não são sutis nem espertos, mas ninguém aguenta uma investida deles. Quando um orc ruge, os aliados se erguem e os inimigos tremem.",
+	"description": "Guerreiros da horda, de pele verde e olhar feroz, criados entre cicatrizes e fogueiras de guerra. Não são sutis nem espertos, mas ninguém aguenta uma investida deles. Quando um orc ruge, os aliados se erguem e os inimigos tremem.",
 	"traits": [
 		{
 			"type": "vantagem",
@@ -60,10 +60,6 @@
 		}
 	],
 	"powers": [
-		{
-			"type": "dakura_origins:cosmetic",
-			"feature": "orc_tusks"
-		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.max_health",

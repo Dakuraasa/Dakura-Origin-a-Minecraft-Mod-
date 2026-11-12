@@ -14,15 +14,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import org.joml.Vector3f;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
-/**
- * Efeitos da última leva: Sereia (ondas, bolhas e canto), Anúbis (balança de Maat, areias do Duat, chacais),
- * Fênix (cometa solar, asas de fogo, renascimento) e Vastaya Coelho (estrelas de desenho animado, meia-lua,
- * cratera de luar). Exagerados e arredondados de propósito, fora do padrão do Minecraft.
- */
+/** Client effects for the Mermaid and the Phoenix (waves, bubbles, song, solar comet, rebirth). */
 final class LegendEffects {
 	// mar
 	static final DustParticleEffect AQUA = new DustParticleEffect(new Vector3f(0.30f, 0.80f, 1.00f), 1.5f);
@@ -47,7 +41,6 @@ final class LegendEffects {
 	static final DustParticleEffect STAR_PINK = new DustParticleEffect(new Vector3f(1.00f, 0.60f, 0.78f), 1.1f);
 
 	private static final ParticleEffect SAND_BLOCK = new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.SAND.getDefaultState());
-	private static final Map<Integer, Long> CHARGE_START = new HashMap<>();
 
 	private LegendEffects() {}
 
@@ -89,20 +82,6 @@ final class LegendEffects {
 		w.addParticle(fx, c.x, c.y, c.z, 0, 0, 0);
 	}
 
-	/** Lua crescente gorda, num plano vertical. */
-	private static void crescentMoon(ClientWorld w, Vec3d c, Vec3d facing, double r, int n) {
-		Vec3d[] b = ClientEffects.basis(facing.normalize());
-		for (int i = 0; i <= n; i++) {
-			double a = Math.PI * 0.15 + Math.PI * 1.7 * i / n;
-			double thick = Math.sin(Math.PI * i / n) * r * 0.45;
-			for (int k = 0; k < 3; k++) {
-				double rr = r - thick * k / 2.0;
-				Vec3d q = c.add(b[0].multiply(Math.cos(a) * rr)).add(b[1].multiply(Math.sin(a) * rr));
-				w.addParticle(k == 0 ? MOON : MOON_BLUE, q.x, q.y, q.z, 0, 0, 0);
-			}
-		}
-	}
-
 	/** Ankh dourado de pé. */
 	private static void ankh(ClientWorld w, Vec3d base, double s, Vec3d facing) {
 		Vec3d[] b = ClientEffects.basis(LegendKitClient.flat(facing));
@@ -132,19 +111,6 @@ final class LegendEffects {
 			if (rnd.nextInt(3) == 0) {
 				Vec3d tip = root.add(dir.multiply(len));
 				w.addParticle(ParticleTypes.FLAME, tip.x, tip.y, tip.z, 0, 0.02, 0);
-			}
-		}
-	}
-
-	/** Disco de luar no chão. */
-	private static void moonDisc(ClientWorld w, Vec3d c, double r, Random rnd) {
-		int rings = Math.max(1, (int) (r * 2));
-		for (int k = 1; k <= rings; k++) {
-			double rr = r * k / rings;
-			int n = (int) (rr * 9) + 6;
-			for (int i = 0; i < n; i += 2) {
-				double a = i * Math.PI * 2 / n + rnd.nextDouble() * 0.3;
-				w.addParticle(k == rings ? MOON : MOON_BLUE, c.x + Math.cos(a) * rr, c.y + 0.06, c.z + Math.sin(a) * rr, 0, 0, 0);
 			}
 		}
 	}
@@ -199,6 +165,12 @@ final class LegendEffects {
 						c.y + rnd.nextDouble() * 2.5, c.z + rnd.nextGaussian() * 1.5, 0, 0.1, 0);
 				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.CLOUD, c.x + rnd.nextGaussian() * 1.5, c.y + 0.4,
 						c.z + rnd.nextGaussian() * 1.5, 0, 0.04, 0);
+				expanding(c.add(0, 0.15, 0), 7.0, 10, PEARL, 56);
+				for (int i = 0; i < 40; i++) {
+					double a2 = rnd.nextDouble() * Math.PI * 2, sp = 0.2 + rnd.nextDouble() * 0.35;
+					world.addParticle(ParticleTypes.SPLASH, c.x, c.y + 0.5, c.z, Math.cos(a2) * sp, 0.3 + rnd.nextDouble() * 0.3, Math.sin(a2) * sp);
+				}
+				world.addParticle(ParticleTypes.FLASH, c.x, c.y + 1, c.z, 0, 0, 0);
 			}
 			// ---------------------------------------------------------------- Anúbis
 			case "scales" -> {
@@ -382,72 +354,6 @@ final class LegendEffects {
 					return false;
 				});
 			}
-			// ---------------------------------------------------------------- Vastaya Coelho
-			case "rabbit_leap" -> {
-				world.addParticle(ParticleTypes.GUST, base.x, base.y + 0.3, base.z, 0, 0, 0);
-				expanding(base.add(0, 0.1, 0), 1.8, 4, MOON, 20);
-				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.CLOUD, base.x + rnd.nextGaussian() * 0.4, base.y + 0.1,
-						base.z + rnd.nextGaussian() * 0.4, rnd.nextGaussian() * 0.05, 0.05, rnd.nextGaussian() * 0.05);
-			}
-			case "kick_star" -> {
-				Vec3d cam = MinecraftClient.getInstance().gameRenderer.getCamera().getPos();
-				Vec3d c = mid.add(rnd.nextGaussian() * 0.35, rnd.nextGaussian() * 0.35, rnd.nextGaussian() * 0.35);
-				star(world, c, cam.subtract(c), 0.45 + (param % 3) * 0.1, param % 2 == 0 ? STAR : STAR_PINK);
-				for (int i = 0; i < 6; i++) world.addParticle(ParticleTypes.CRIT, c.x, c.y, c.z, rnd.nextGaussian() * 0.4, rnd.nextGaussian() * 0.4, rnd.nextGaussian() * 0.4);
-				if (param % 2 == 1) world.addParticle(ParticleTypes.SWEEP_ATTACK, c.x, c.y, c.z, 0, 0, 0);
-			}
-			case "frenzy_hit" -> {
-				Vec3d cam = MinecraftClient.getInstance().gameRenderer.getCamera().getPos();
-				star(world, mid, cam.subtract(mid), 0.25 + param * 0.06, param >= 4 ? STAR_PINK : STAR);
-				for (int i = 0; i < param; i++) {
-					double a = i * Math.PI * 2 / Math.max(1, param);
-					world.addParticle(MOON, mid.x + Math.cos(a) * 0.6, mid.y + 0.7, mid.z + Math.sin(a) * 0.6, 0, 0.02, 0);
-				}
-			}
-			case "moon_kick" -> {
-				Entity atk = world.getEntityById(param);
-				Vec3d dir = atk != null ? LegendKitClient.flat(e.getPos().subtract(atk.getPos())) : new Vec3d(0, 0, 1);
-				Vec3d side = dir.crossProduct(new Vec3d(0, 1, 0)).normalize();
-				ClientEffects.schedule((w, r, age) -> {
-					crescentMoon(w, e.getPos().add(0, e.getHeight() * 0.5, 0), side, 1.2 + age * 0.25, 30);
-					return age < 5;
-				});
-				for (int i = 0; i < 20; i++) {
-					Vec3d d = new Vec3d(rnd.nextGaussian(), rnd.nextGaussian(), rnd.nextGaussian()).normalize();
-					line(world, mid.add(d.multiply(0.8)), mid.add(d.multiply(1.8)), 3, i % 2 == 0 ? MOON : STAR);
-				}
-				Vec3d cam = MinecraftClient.getInstance().gameRenderer.getCamera().getPos();
-				star(world, mid, cam.subtract(mid), 0.9, STAR);
-				world.addParticle(ParticleTypes.FLASH, mid.x, mid.y, mid.z, 0, 0, 0);
-				world.addParticle(ParticleTypes.EXPLOSION, mid.x, mid.y, mid.z, 0, 0, 0);
-			}
-			case "moon_full" -> {
-				moonDisc(world, base, 1.6, rnd);
-				world.addParticle(ParticleTypes.FLASH, base.x, base.y + 0.2, base.z, 0, 0, 0);
-				for (int i = 0; i < 12; i++) world.addParticle(ParticleTypes.END_ROD, base.x + rnd.nextGaussian() * 0.6, base.y + 0.1,
-						base.z + rnd.nextGaussian() * 0.6, 0, 0.12, 0);
-			}
-			case "moon_launch" -> {
-				world.addParticle(ParticleTypes.GUST_EMITTER_SMALL, base.x, base.y + 0.1, base.z, 0, 0, 0);
-				expanding(base.add(0, 0.1, 0), 1.5 + param * 0.25, 6, MOON, 36);
-				for (int i = 0; i < 20; i++) world.addParticle(i % 2 == 0 ? MOON : MOON_BLUE, base.x, base.y + 0.1, base.z,
-						rnd.nextGaussian() * 0.25, 0.2 + rnd.nextDouble() * 0.3, rnd.nextGaussian() * 0.25);
-			}
-			case "moon_crater" -> {
-				double r = param / 10.0;
-				Vec3d c = base.add(0, 0.08, 0);
-				expanding(c, r, 8, MOON, 60);
-				expanding(c.add(0, 0.2, 0), r * 0.75, 7, MOON_BLUE, 44);
-				ClientEffects.stomp(world, e, r, rnd);
-				for (int i = 0; i < 10; i++) {
-					double a = i * Math.PI / 5 + rnd.nextDouble() * 0.3;
-					Vec3d s = c.add(Math.cos(a) * r * 0.6, 0.4 + rnd.nextDouble() * 1.4, Math.sin(a) * r * 0.6);
-					star(world, s, new Vec3d(Math.cos(a), 0, Math.sin(a)), 0.3, i % 2 == 0 ? STAR : MOON);
-				}
-				for (int i = 0; i < 30; i++) world.addParticle(ParticleTypes.END_ROD, c.x, c.y + 0.3, c.z,
-						rnd.nextGaussian() * 0.4, rnd.nextDouble() * 0.5, rnd.nextGaussian() * 0.4);
-				world.addParticle(ParticleTypes.FLASH, c.x, c.y + 0.5, c.z, 0, 0, 0);
-			}
 			default -> com.dakura.origins.client.fx.FxWorld.fx(world, name, e, param, rnd);
 		}
 	}
@@ -536,6 +442,18 @@ final class LegendEffects {
 						if (r.nextInt(4) == 0) w.addParticle(ParticleTypes.CLOUD, col.x, col.y + 0.1, col.z, dir.x * 0.1, 0.02, dir.z * 0.1);
 					}
 					if (age % 3 == 0) w.addParticle(ParticleTypes.NAUTILUS, front.x, front.y + h * 0.6, front.z, 0, 0, 0);
+					// esteira espumosa atrás da onda e borrifo lateral
+					for (int i = 0; i <= across; i += 2) {
+						double t2 = i / (double) across - 0.5;
+						Vec3d wk = front.add(side.multiply(t2 * width)).subtract(dir.multiply(1.2 + r.nextDouble() * 2.5));
+						w.addParticle(r.nextInt(3) == 0 ? ParticleTypes.CLOUD : FOAM, wk.x, wk.y + 0.1 + r.nextDouble() * 0.4, wk.z, -dir.x * 0.05, 0.02, -dir.z * 0.05);
+						if (r.nextInt(3) == 0) w.addParticle(ParticleTypes.SPLASH, wk.x, wk.y + 0.2, wk.z, r.nextGaussian() * 0.1, 0.2, r.nextGaussian() * 0.1);
+					}
+					for (int i = 0; i < 6; i++) {
+						Vec3d top = front.add(side.multiply((r.nextDouble() - 0.5) * width)).add(dir.multiply(h * 0.35)).add(0, h * (0.8 + r.nextDouble() * 0.4), 0);
+						w.addParticle(ParticleTypes.FALLING_WATER, top.x, top.y, top.z, dir.x * 0.15, -0.05, dir.z * 0.15);
+					}
+					if (age % 5 == 0) w.addParticle(ParticleTypes.GLOW, front.x + r.nextGaussian(), front.y + h * 0.5, front.z + r.nextGaussian(), 0, 0, 0);
 					return age + 1 < ticks;
 				});
 			}
@@ -550,16 +468,22 @@ final class LegendEffects {
 		for (PlayerEntity pl : world.getPlayers()) {
 			if (pl.squaredDistanceTo(cam) > 48 * 48) continue;
 			Set<String> flags = EntityFlags.CLIENT.get(pl.getId());
-			if (flags == null || flags.isEmpty()) {
-				CHARGE_START.remove(pl.getId());
-				continue;
-			}
+			if (flags == null || flags.isEmpty()) continue;
 			boolean self = pl == mc.player && mc.options.getPerspective().isFirstPerson();
 			Vec3d pos = pl.getPos();
 			// Sereia
 			if (flags.contains("sea_wet") && pl.isSwimming() && rnd.nextInt(2) == 0) {
 				world.addParticle(ParticleTypes.BUBBLE, pos.x + rnd.nextGaussian() * 0.3, pos.y + 0.3, pos.z + rnd.nextGaussian() * 0.3, 0, 0.05, 0);
 				if (rnd.nextInt(4) == 0) world.addParticle(ParticleTypes.GLOW, pos.x + rnd.nextGaussian() * 0.5, pos.y + 0.3, pos.z + rnd.nextGaussian() * 0.5, 0, 0, 0);
+			}
+			if (flags.contains("sea_wet") && pl.isTouchingWater()) {
+				// brilho de escamas e trilha de bolhas atrás da cauda
+				Vec3d back = pl.getRotationVec(1f).multiply(1, 0, 1).normalize().multiply(-0.9);
+				if (rnd.nextInt(3) == 0) world.addParticle(PEARL, pos.x + back.x + rnd.nextGaussian() * 0.25, pos.y + 0.25 + rnd.nextDouble() * 0.5,
+						pos.z + back.z + rnd.nextGaussian() * 0.25, 0, 0.01, 0);
+				if (pl.getVelocity().horizontalLengthSquared() > 0.004 && rnd.nextInt(2) == 0)
+					world.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, pos.x + back.x * 1.4, pos.y + 0.3, pos.z + back.z * 1.4, 0, 0.08, 0);
+				if (t % 12 == 0) expanding(pos.add(back.multiply(0.6)).add(0, 0.5, 0), 0.9, 3, AQUA, 12);
 			}
 			if (flags.contains("sea_dry") && rnd.nextInt(6) == 0) {
 				world.addParticle(ParticleTypes.WHITE_ASH, pos.x + rnd.nextGaussian() * 0.3, pos.y + 0.4 + rnd.nextDouble(), pos.z + rnd.nextGaussian() * 0.3, 0, 0, 0);
@@ -571,7 +495,20 @@ final class LegendEffects {
 					world.addParticle(ParticleTypes.NOTE, pos.x + Math.cos(a) * 1.1, pos.y + 1.2 + Math.sin(t * 0.1 + i) * 0.4,
 							pos.z + Math.sin(a) * 1.1, ((t / 4 + i * 6) % 24) / 24.0, 0, 0);
 				}
-				if (t % 20 == 0) expanding(pos.add(0, 0.2, 0), 6.0, 10, AQUA, 40);
+				if (t % 20 == 0) {
+					expanding(pos.add(0, 0.2, 0), 6.0, 10, AQUA, 40);
+					expanding(pos.add(0, 0.2, 0), 9.0, 10, PEARL, 48);
+				}
+				// espiral dupla de bolhas e pérolas subindo
+				for (int i = 0; i < 3; i++) {
+					double h = ((t * 0.12 + i * 0.9) % 3.0);
+					double a2 = t * 0.3 + h * 2.4 + i * Math.PI * 2 / 3;
+					double rr = 1.6 - h * 0.25;
+					world.addParticle(i == 0 ? ParticleTypes.BUBBLE_POP : (i == 1 ? PEARL : FOAM), pos.x + Math.cos(a2) * rr, pos.y + 0.2 + h,
+							pos.z + Math.sin(a2) * rr, 0, 0.02, 0);
+				}
+				if (t % 6 == 0) world.addParticle(ParticleTypes.GLOW, pos.x + rnd.nextGaussian() * 2.5, pos.y + 0.3 + rnd.nextDouble() * 2,
+						pos.z + rnd.nextGaussian() * 2.5, 0, 0.02, 0);
 				if (t % 4 == 0) world.addParticle(PEARL, pos.x + rnd.nextGaussian() * 0.6, pos.y + 1.6, pos.z + rnd.nextGaussian() * 0.6, 0, 0.03, 0);
 			}
 			if (flags.contains("surfing")) {
@@ -608,30 +545,6 @@ final class LegendEffects {
 				double a = t * 0.3;
 				world.addParticle(EMBER, pos.x + Math.cos(a) * 0.8, pos.y + 0.2 + (t % 20) / 10.0, pos.z + Math.sin(a) * 0.8, 0, 0.02, 0);
 				world.addParticle(SUN, pos.x - Math.cos(a) * 0.8, pos.y + 0.2 + (t % 20) / 10.0, pos.z - Math.sin(a) * 0.8, 0, 0.02, 0);
-			}
-			if (flags.contains("phoenix_wings") && !self && rnd.nextInt(pl.isOnGround() ? 10 : 2) == 0) {
-				float yaw = (float) Math.toRadians(pl.bodyYaw);
-				Vec3d back = pos.add(Math.sin(yaw) * 0.4, 1.2 + rnd.nextDouble() * 0.6, -Math.cos(yaw) * 0.4);
-				world.addParticle(rnd.nextBoolean() ? EMBER : ParticleTypes.SMALL_FLAME, back.x + rnd.nextGaussian() * 0.6, back.y,
-						back.z + rnd.nextGaussian() * 0.6, 0, -0.02, 0);
-			}
-			// Vastaya Coelho
-			if (flags.contains("moon_charge")) {
-				long st = CHARGE_START.computeIfAbsent(pl.getId(), id -> t);
-				double k = Math.min(1, (t - st) / 40.0);
-				if (t % 2 == 0) moonDisc(world, pos, 0.4 + k * 1.4, rnd);
-				if (k >= 1 && t % 5 == 0) world.addParticle(ParticleTypes.END_ROD, pos.x + rnd.nextGaussian() * 0.4, pos.y + 0.1, pos.z + rnd.nextGaussian() * 0.4, 0, 0.08, 0);
-			} else CHARGE_START.remove(pl.getId());
-			if (flags.contains("moon_air")) {
-				world.addParticle(rnd.nextBoolean() ? MOON : STAR, pos.x + rnd.nextGaussian() * 0.2, pos.y + rnd.nextDouble() * 1.6, pos.z + rnd.nextGaussian() * 0.2, 0, 0, 0);
-				if (rnd.nextInt(4) == 0) world.addParticle(ParticleTypes.END_ROD, pos.x, pos.y + 0.8, pos.z, 0, 0, 0);
-			}
-			if (flags.contains("rushing")) {
-				Vec3d v = pl.getVelocity();
-				for (int i = 0; i < 3; i++) {
-					Vec3d q = pos.add(rnd.nextGaussian() * 0.5, 0.3 + rnd.nextDouble() * 1.4, rnd.nextGaussian() * 0.5);
-					line(world, q, q.subtract(v.multiply(1.5)), 3, MOON);
-				}
 			}
 		}
 	}

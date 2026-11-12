@@ -4,3 +4,10 @@ projeto/run/
 logs/
 builds/
 *.log
+
+# local helper scripts and working files (kept on the developer machine only)
+*.bat
+LEIA-ME.md
+ferramentas/
+arte/
+!projeto/gradlew.bat
