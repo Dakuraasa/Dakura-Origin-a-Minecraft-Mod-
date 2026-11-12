@@ -62,7 +62,7 @@ public final class ClientEffects {
 	private static final Map<Integer, Ball> BALLS = new HashMap<>();
 
 	/** Efeitos curtos que duram alguns ticks (onda do pisão, pilar de almas). */
-	interface Timed {
+	public interface Timed {
 		/** @return false quando acabou */
 		boolean tick(ClientWorld world, Random rnd, int age);
 	}
@@ -70,7 +70,7 @@ public final class ClientEffects {
 	private static final java.util.List<Timed> TIMED = new ArrayList<>();
 	private static final java.util.List<Integer> TIMED_AGE = new ArrayList<>();
 
-	static void schedule(Timed t) {
+	public static void schedule(Timed t) {
 		TIMED.add(t);
 		TIMED_AGE.add(0);
 	}

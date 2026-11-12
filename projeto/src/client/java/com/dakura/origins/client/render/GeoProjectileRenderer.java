@@ -27,7 +27,12 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 	@Override
 	public void render(GeoProjectileEntity e, float yaw, float tickDelta, MatrixStack m, VertexConsumerProvider vcp, int light) {
 		float t = e.age + tickDelta;
-		if (e.kind() == GeoProjectileEntity.MANA || e.kind() == GeoProjectileEntity.DARK) nativeTrail(e);
+		if (e.kind() == GeoProjectileEntity.MANA || e.kind() == GeoProjectileEntity.DARK || e.kind() == GeoProjectileEntity.VIOLET) nativeTrail(e);
+		if (e.kind() == GeoProjectileEntity.VIOLET) {
+			FxGlow.manaOrb(m, vcp, t, e.getVelocity(), e.size(), true);
+			super.render(e, yaw, tickDelta, m, vcp, light);
+			return;
+		}
 		if (e.kind() == GeoProjectileEntity.MANA) {
 			FxGlow.manaOrb(m, vcp, t, e.getVelocity(), e.size());
 			super.render(e, yaw, tickDelta, m, vcp, light);
@@ -69,6 +74,14 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 		var w = e.getWorld();
 		var r = w.random;
 		boolean dark = e.kind() == GeoProjectileEntity.DARK;
+		if (e.kind() == GeoProjectileEntity.VIOLET) {
+			var r0 = w.random;
+			for (int i = 0; i < 4; i++) w.addParticle(i % 2 == 0 ? net.minecraft.particle.ParticleTypes.WITCH : net.minecraft.particle.ParticleTypes.GLOW,
+					e.getX() + r0.nextGaussian() * 0.18, e.getY() + 0.3 + r0.nextGaussian() * 0.18, e.getZ() + r0.nextGaussian() * 0.18,
+					-e.getVelocity().x * 0.05, r0.nextGaussian() * 0.03, -e.getVelocity().z * 0.05);
+			if (r0.nextInt(2) == 0) w.addParticle(net.minecraft.particle.ParticleTypes.REVERSE_PORTAL, e.getX(), e.getY() + 0.3, e.getZ(), 0, 0, 0);
+			return;
+		}
 		for (int i = 0; i < 4; i++) {
 			double x = e.getX() + r.nextGaussian() * 0.18, y = e.getY() + 0.3 + r.nextGaussian() * 0.18, z = e.getZ() + r.nextGaussian() * 0.18;
 			double vx = -e.getVelocity().x * 0.05 + r.nextGaussian() * 0.03, vy = r.nextGaussian() * 0.03, vz = -e.getVelocity().z * 0.05 + r.nextGaussian() * 0.03;

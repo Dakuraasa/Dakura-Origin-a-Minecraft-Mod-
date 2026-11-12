@@ -25,7 +25,7 @@ import java.util.function.BiConsumer;
  * escolhido pelo "kind". O que acontece no impacto é registrado por quem cria o projétil (onImpact).
  */
 public class GeoProjectileEntity extends ProjectileEntity {
-	public static final int CAULDRON = 0, MAGMA = 1, ARCANE = 2, MANA = 3, DARK = 4;
+	public static final int CAULDRON = 0, MAGMA = 1, ARCANE = 2, MANA = 3, DARK = 4, VIOLET = 5;
 	private static final TrackedData<Integer> KIND = DataTracker.registerData(GeoProjectileEntity.class, TrackedDataHandlerRegistry.INTEGER);
 	private static final TrackedData<Float> SIZE = DataTracker.registerData(GeoProjectileEntity.class, TrackedDataHandlerRegistry.FLOAT);
 	/** Reação ao impacto por tipo (registrada pelas habilidades no servidor). */

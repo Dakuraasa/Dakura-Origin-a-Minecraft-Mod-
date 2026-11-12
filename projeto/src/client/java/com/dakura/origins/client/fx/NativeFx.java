@@ -46,6 +46,30 @@ public final class NativeFx {
 		for (int i = 0; i < 8 * s; i++) w.addParticle(ParticleTypes.FIREWORK, c.x, c.y, c.z, r.nextGaussian() * 0.25, r.nextDouble() * 0.3, r.nextGaussian() * 0.25);
 	}
 
+	static final DustColorTransitionParticleEffect VIOLET = new DustColorTransitionParticleEffect(
+			new Vector3f(0.6f, 0.25f, 1f), new Vector3f(0.25f, 0.45f, 1f), 1.4f);
+
+	/** Explosão do Orbe Espiritual da Kitsune Corrompida: roxo e azul. */
+	public static void violetBurst(ClientWorld w, Vec3d c, float size, Random r) {
+		float s = Math.max(0.5f, size) * 1.8f;
+		w.addParticle(ParticleTypes.FLASH, c.x, c.y, c.z, 0, 0, 0);
+		w.addParticle(ParticleTypes.EXPLOSION, c.x, c.y, c.z, 0, 0, 0);
+		int n = (int) (36 * s);
+		for (int i = 0; i < n; i++) {
+			double th = r.nextDouble() * Math.PI * 2, ph = r.nextDouble() * Math.PI - Math.PI / 2, sp = (0.15 + r.nextDouble() * 0.35) * s;
+			double vx = Math.cos(th) * Math.cos(ph) * sp, vy = Math.sin(ph) * sp, vz = Math.sin(th) * Math.cos(ph) * sp;
+			ParticleEffect fx = switch (i % 5) {
+				case 0 -> ParticleTypes.WITCH;
+				case 1 -> ParticleTypes.GLOW;
+				case 2 -> ParticleTypes.REVERSE_PORTAL;
+				case 3 -> MANA;
+				default -> VIOLET;
+			};
+			w.addParticle(fx, c.x, c.y, c.z, vx, vy, vz);
+		}
+		ring(w, c, 1.4 * s, (int) (28 * s), ParticleTypes.PORTAL, 0.12);
+	}
+
 	/** Explosão sombria (Kitsune Corrompida): fumaça negra, almas e faíscas brancas. */
 	public static void darkBurst(ClientWorld w, Vec3d c, float size, Random r) {
 		float s = Math.max(0.5f, size) * 1.8f;

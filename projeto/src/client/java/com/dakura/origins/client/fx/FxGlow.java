@@ -51,23 +51,28 @@ public final class FxGlow {
 
 	/** Esfera de mana da Kitsune: núcleo branco, casca azul pulsando, faíscas violeta e um rastro longo de cometa. */
 	public static void manaOrb(MatrixStack ms, VertexConsumerProvider vcp, float t, Vec3d vel, float size) {
+		manaOrb(ms, vcp, t, vel, size, false);
+	}
+
+	/** violet = Kitsune Corrompida: casca roxa, núcleo lilás, faíscas azuis e rastro roxo/azul. */
+	public static void manaOrb(MatrixStack ms, VertexConsumerProvider vcp, float t, Vec3d vel, float size, boolean violet) {
 		VertexConsumer vc = vcp.getBuffer(RenderLayer.getLightning());
 		Matrix4f m = ms.peek().getPositionMatrix();
 		float pulse = 0.85f + 0.15f * MathHelper.sin(t * 0.8f);
 		float r = 0.42f * size;
-		FxWorld.sphere(m, vc, 0, 0.3f, 0, r * pulse, 0x3F9BFF, 0.42f);
-		FxWorld.sphere(m, vc, 0, 0.3f, 0, r * 0.55f, 0xF2FBFF, 0.9f);
+		FxWorld.sphere(m, vc, 0, 0.3f, 0, r * pulse, violet ? 0x8A3DFF : 0x3F9BFF, 0.42f);
+		FxWorld.sphere(m, vc, 0, 0.3f, 0, r * 0.55f, violet ? 0xE6D2FF : 0xF2FBFF, 0.9f);
 		for (int i = 0; i < 4; i++) {
 			double a = t * 0.35 + i * Math.PI / 2;
 			FxWorld.dot(m, vc, (float) Math.cos(a) * r * 1.2f, 0.3f + MathHelper.sin(t * 0.3f + i) * r * 0.5f, (float) Math.sin(a) * r * 1.2f,
-					0.05f * size, 0xC9B8FF, 0.9f);
+					0.05f * size, violet ? 0x5FA8FF : 0xC9B8FF, 0.9f);
 		}
 		Vec3d back = vel.lengthSquared() > 1e-4 ? vel.normalize().multiply(-1) : new Vec3d(0, 1, 0);
 		for (int i = 1; i <= 10; i++) {
 			float d = i * 0.22f * size;
 			float k = 1 - i / 11f;
 			FxWorld.sphere(m, vc, (float) back.x * d, 0.3f + (float) back.y * d, (float) back.z * d, r * 0.8f * k,
-					i % 2 == 0 ? 0x5FB4FF : 0xB59CFF, 0.42f * k);
+					violet ? (i % 2 == 0 ? 0x9A4DFF : 0x3F7BFF) : (i % 2 == 0 ? 0x5FB4FF : 0xB59CFF), 0.42f * k);
 		}
 	}
 

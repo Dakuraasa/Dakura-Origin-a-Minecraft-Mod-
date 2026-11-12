@@ -24,6 +24,7 @@ public final class SpiritOrbAbility implements Ability {
 	private final double range, speed;
 	private final float damage, radius, returnDamage, returnRadius;
 	private final float[] maturityDamage;
+	private final boolean violet;
 
 	public SpiritOrbAbility(JsonObject json) {
 		this.range = JsonParams.num(json, "range", 14f);
@@ -33,13 +34,14 @@ public final class SpiritOrbAbility implements Ability {
 		this.returnDamage = JsonParams.num(json, "return_damage", 5f);
 		this.returnRadius = JsonParams.num(json, "return_radius", 3.5f);
 		this.maturityDamage = JsonParams.floats(json, "maturity_damage");
+		this.violet = "violet".equals(JsonParams.str(json, "palette", "blue"));
 	}
 
 	@Override
 	public boolean activate(ServerPlayerEntity p) {
 		ServerWorld w = p.getServerWorld();
 		float mult = MaturityPower.multiplier(p, maturityDamage);
-		GeoProjectileEntity orb = new GeoProjectileEntity(w, p, GeoProjectileEntity.MANA, 0, 1, 600);
+		GeoProjectileEntity orb = new GeoProjectileEntity(w, p, violet ? GeoProjectileEntity.VIOLET : GeoProjectileEntity.MANA, 0, 1, 600);
 		orb.scripted = true;
 		orb.setSize(1.3f);
 		Vec3d look = p.getRotationVec(1f);
@@ -63,7 +65,7 @@ public final class SpiritOrbAbility implements Ability {
 				if (victim != null) {
 					hit[0] = true;
 					back[0] = true;
-					blast(pl, w, victim.getPos().add(0, victim.getHeight() * 0.5, 0), radius, damage * mult, victim, 2.2f);
+					blast(pl, w, victim.getPos().add(0, victim.getHeight() * 0.5, 0), radius, damage * mult, victim, 2.2f, violet);
 				} else if (w.raycast(new RaycastContext(pos, next, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, orb))
 						.getType() != HitResult.Type.MISS || pos.distanceTo(start) >= range) {
 					back[0] = true;
@@ -76,7 +78,7 @@ public final class SpiritOrbAbility implements Ability {
 			Vec3d to = home.subtract(pos);
 			double d = to.length();
 			if (d < 1.1) {
-				if (hit[0]) blast(pl, w, home, returnRadius, returnDamage * mult, null, 3.2f);
+				if (hit[0]) blast(pl, w, home, returnRadius, returnDamage * mult, null, 3.2f, violet);
 				orb.discard();
 				return false;
 			}
@@ -114,6 +116,10 @@ public final class SpiritOrbAbility implements Ability {
 	}
 
 	static void blast(ServerPlayerEntity p, ServerWorld w, Vec3d c, float r, float dmg, LivingEntity primary, float fx) {
+		blast(p, w, c, r, dmg, primary, fx, false);
+	}
+
+	static void blast(ServerPlayerEntity p, ServerWorld w, Vec3d c, float r, float dmg, LivingEntity primary, float fx, boolean violet) {
 		if (primary != null) {
 			LegendKit.hurt(p, primary, dmg, false);
 			freeze(primary, 60);
@@ -127,7 +133,7 @@ public final class SpiritOrbAbility implements Ability {
 			e.addVelocity(push.x, 0.2, push.z);
 			e.velocityModified = true;
 		}
-		LegendKit.fxAt(w, "boom_mana", c, fx, 0, 0);
+		LegendKit.fxAt(w, "boom_mana", c, fx, violet ? 1 : 0, 0);
 		ModSounds.play(w, c, ModSounds.MANA_BURST, 1.1f, 0.9f + w.random.nextFloat() * 0.2f);
 	}
 

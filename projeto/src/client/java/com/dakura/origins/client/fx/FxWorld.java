@@ -31,7 +31,7 @@ import java.util.List;
  */
 public final class FxWorld {
 	private enum Kind { ZONE_POISON, ZONE_FIRE, BOOM_GREEN, BOOM_POISON, CRATER, SPORES, CHARGE, DIVE, BREAK, BOOM_GOLD, BOOM_ARCANE,
-		GOLD_TRAIL, SHIELD_FLASH, DUST, WARD_BURST, PUNCH, PUNCH_FINAL, BOOM_MANA, FIRE_FIELD, FLOWER_CIRCLE, BLOOM }
+		GOLD_TRAIL, SHIELD_FLASH, DUST, WARD_BURST, PUNCH, PUNCH_FINAL, BOOM_MANA, BOOM_VIOLET, FIRE_FIELD, FLOWER_CIRCLE, BLOOM }
 
 	private static final class Shape {
 		final Kind kind;
@@ -89,7 +89,15 @@ public final class FxWorld {
 		switch (name) {
 			case "zone_poison" -> SHAPES.add(new Shape(Kind.ZONE_POISON, p, a, (int) b, (int) c, null, rnd.nextFloat() * 100));
 			case "zone_greenfire" -> SHAPES.add(new Shape(Kind.ZONE_FIRE, p, a, (int) b, (int) c, null, rnd.nextFloat() * 100));
-			case "boom_green" -> SHAPES.add(new Shape(Kind.BOOM_GREEN, p, a, 16, 1, null, rnd.nextFloat() * 100));
+			// Dragão Marrom: sem esferas 3D, só partículas do próprio jogo
+			case "boom_green" -> {
+				w.addParticle(net.minecraft.particle.ParticleTypes.EXPLOSION_EMITTER, p.x, p.y, p.z, 0, 0, 0);
+				for (int i = 0; i < 60 * Math.max(1f, a / 3f); i++) {
+					double th = rnd.nextDouble() * Math.PI * 2, ph = rnd.nextDouble() * Math.PI - Math.PI / 2, sp = 0.15 + rnd.nextDouble() * 0.35;
+					w.addParticle(i % 3 == 0 ? net.minecraft.particle.ParticleTypes.SOUL_FIRE_FLAME : i % 3 == 1 ? net.minecraft.particle.ParticleTypes.LARGE_SMOKE : net.minecraft.particle.ParticleTypes.SOUL,
+							p.x, p.y, p.z, Math.cos(th) * Math.cos(ph) * sp, Math.abs(Math.sin(ph)) * sp, Math.sin(th) * Math.cos(ph) * sp);
+				}
+			}
 			case "boom_poison" -> {
 				SHAPES.add(new Shape(Kind.BOOM_POISON, p, a, 18, 1, null, rnd.nextFloat() * 100));
 				w.addParticle(net.minecraft.particle.ParticleTypes.EXPLOSION_EMITTER, p.x, p.y, p.z, 0, 0, 0);
@@ -117,8 +125,10 @@ public final class FxWorld {
 				if (fin) SHAPES.add(new Shape(Kind.DUST, p.add(0, -1, 0), 1.6f, 22, 1, null, rnd.nextFloat() * 100));
 			}
 			case "boom_mana" -> {
-				SHAPES.add(new Shape(Kind.BOOM_MANA, p, a, 16, 1, null, rnd.nextFloat() * 100));
-				NativeFx.manaBurst(w, p, a, rnd);
+				boolean violet = b > 0;
+				SHAPES.add(new Shape(violet ? Kind.BOOM_VIOLET : Kind.BOOM_MANA, p, a, 16, 1, null, rnd.nextFloat() * 100));
+				if (violet) NativeFx.violetBurst(w, p, a, rnd);
+				else NativeFx.manaBurst(w, p, a, rnd);
 			}
 			case "fire_field" -> {
 				// círculo 3D de fogo removido: o fogo no chão agora é de blocos de verdade (servidor)
@@ -134,9 +144,29 @@ public final class FxWorld {
 	/** Efeitos presos a uma entidade. Devolve true se o nome era deste sistema. */
 	public static boolean fx(ClientWorld w, String name, Entity e, int param, Random rnd) {
 		switch (name) {
-			case "charge_green" -> SHAPES.add(new Shape(Kind.CHARGE, e.getPos(), 2.2f, param, 1, e, rnd.nextFloat() * 100));
-			case "dive_green" -> SHAPES.add(new Shape(Kind.DIVE, e.getPos(), 1.4f, 60, 1, e, rnd.nextFloat() * 100));
-			case "grab_break" -> SHAPES.add(new Shape(Kind.BREAK, e.getPos(), 2.5f, 12, 1, e, rnd.nextFloat() * 100));
+			// Dragão Marrom: preparação, mergulho e quebra só com partículas nativas (sem efeitos 3D verdes)
+			case "charge_green" -> com.dakura.origins.client.anim.ClientEffects.schedule((ww, r, age) -> {
+				if (e.isRemoved()) return false;
+				Vec3d c = e.getPos();
+				for (int i = 0; i < 3; i++) {
+					double ang = r.nextDouble() * Math.PI * 2, rr = 1.6 + r.nextDouble();
+					ww.addParticle(net.minecraft.particle.ParticleTypes.SOUL_FIRE_FLAME, c.x + Math.cos(ang) * rr, c.y + 0.2 + r.nextDouble() * 1.8, c.z + Math.sin(ang) * rr,
+							-Math.cos(ang) * 0.12, 0.02, -Math.sin(ang) * 0.12);
+				}
+				return age + 1 < Math.max(10, param);
+			});
+			case "dive_green" -> com.dakura.origins.client.anim.ClientEffects.schedule((ww, r, age) -> {
+				if (e.isRemoved() || e.isOnGround()) return false;
+				Vec3d c = e.getPos();
+				for (int i = 0; i < 4; i++) ww.addParticle(i % 2 == 0 ? net.minecraft.particle.ParticleTypes.SOUL_FIRE_FLAME : net.minecraft.particle.ParticleTypes.CAMPFIRE_COSY_SMOKE,
+						c.x + r.nextGaussian() * 0.4, c.y + r.nextDouble() * 1.8, c.z + r.nextGaussian() * 0.4, 0, 0.05, 0);
+				return age < 60;
+			});
+			case "grab_break" -> {
+				Vec3d c = e.getPos().add(0, 1, 0);
+				for (int i = 0; i < 30; i++) w.addParticle(i % 2 == 0 ? net.minecraft.particle.ParticleTypes.SOUL_FIRE_FLAME : net.minecraft.particle.ParticleTypes.SMOKE, c.x, c.y, c.z,
+						rnd.nextGaussian() * 0.25, rnd.nextGaussian() * 0.2, rnd.nextGaussian() * 0.25);
+			}
 			case "feather_stuck" -> {
 				Random r = Random.create(param);
 				if (STUCK.size() < 160) STUCK.add(new float[]{e.getId(), r.nextFloat() - 0.5f, 0.3f + r.nextFloat() * 0.55f,
@@ -520,6 +550,20 @@ public final class FxWorld {
 					double a = i * 2.39996 + s.seed;
 					float d = s.radius * 1.3f * e, up = (float) Math.sin(i * 1.3) * 0.6f * e;
 					sphere(m, vc, x + (float) Math.cos(a) * d, y + up, z + (float) Math.sin(a) * d, 0.1f * (1 - t) + 0.03f, 0xDDF4FF, 1 - t);
+				}
+			}
+			case BOOM_VIOLET -> {
+				float e = easeOut(t);
+				sphere(m, vc, x, y, z, s.radius * (0.3f + 0.85f * e), 0x8A3DFF, (1 - t) * 0.5f);
+				sphere(m, vc, x, y, z, s.radius * 0.45f * (1 - t * 0.6f), 0xE6D2FF, (1 - t) * 0.95f);
+				ring(m, vc, x, y, z, s.radius * (0.4f + 1.25f * e), 0.28f, 0x5F8BFF, (1 - t) * 0.85f);
+				vring(m, vc, x, y, z, 1, 0, s.radius * (0.3f + 1.1f * e), 0.18f, 0xA35CFF, (1 - t) * 0.6f);
+				vring(m, vc, x, y, z, 0, 1, s.radius * (0.3f + 1.0f * e), 0.18f, 0x4F7BFF, (1 - t) * 0.6f);
+				for (int i = 0; i < 12; i++) {
+					double a = i * 2.39996 + s.seed;
+					float d = s.radius * 1.3f * e, up = (float) Math.sin(i * 1.3) * 0.6f * e;
+					sphere(m, vc, x + (float) Math.cos(a) * d, y + up, z + (float) Math.sin(a) * d, 0.1f * (1 - t) + 0.03f,
+							i % 2 == 0 ? 0xC9A8FF : 0x8FB8FF, 1 - t);
 				}
 			}
 			case FIRE_FIELD -> fireField(m, vc, s, x, y, z, age, fadeOut);

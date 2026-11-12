@@ -211,7 +211,8 @@
 				1.8
 			],
 			"name": "Orbe Espiritual",
-			"description": "Lança uma esfera de mana azul na direção da mira. Se acertar uma criatura, explode com força e volta para a Kitsune, explodindo de novo ao chegar. Se não acertar ninguém, só volta, sem explosões."
+			"description": "Lança uma esfera de mana azul na direção da mira. Se acertar uma criatura, explode com força e volta para a Kitsune, explodindo de novo ao chegar. Se não acertar ninguém, só volta, sem explosões.",
+			"palette": "violet"
 		},
 		{
 			"type": "dakura_origins:dark_comet",

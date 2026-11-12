@@ -378,6 +378,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		n = Math.abs(n);
 		float spreadMax = n <= 1 ? 0 : n <= 3 ? 0.75f : n <= 6 ? 1.15f : 1.45f;
 		float glow = Emissive.pulse(t, 0.08f, 0.2f, 0.32f);
+		boolean grounded = e.isOnGround() || !e.getWorld().isSpaceEmpty(e, e.getBoundingBox().offset(0, -0.6, 0));
 		m.push();
 		getContextModel().body.rotate(m);
 		m.translate(0, -1.6f / 16f, 0);
@@ -392,10 +393,23 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 			// correndo, as caudas se esticam para trás acompanhando o corpo; no ar sobem; ao aterrissar afundam e quicam
 			float stretch = MathHelper.clamp(v * 3.2f, 0f, 1f);
 			float pitch = 0.14f - 0.1f * Math.abs(k) + layer + st[0] * 0.55f - stretch * 0.75f + st[4] * 0.45f - (fan ? 0.3f : 0);
-			g.turn("tail", pitch, yaw * (1f - stretch * 0.35f), k * 0.25f);
+			float tailYaw = yaw * (1f - stretch * 0.35f);
+			g.turn("tail", pitch, tailYaw, k * 0.25f);
 			for (int s = 1; s < 10; s++) {
 				float wave = MathHelper.sin(ph - s * 0.55f) * (0.045f + v * 0.18f) * (1f - stretch * 0.5f);
 				g.turn("fox_" + s, wave * 0.5f + st[4] * 0.04f - stretch * 0.04f, wave + st[2] * 0.05f + st[5] * 0.04f, 0);
+			}
+			// Kitsune: perto do chão, a cauda sobe o necessário para não entrar nos blocos (suave, sem tremer)
+			if (n > 1 && grounded) {
+				float lift = 0f;
+				for (int it = 0; it < 14 && lowestPoint(g, pivotScale, scale) > FLOOR; it++) {
+					lift += 0.08f;
+					g.turn("tail", pitch + lift, tailYaw, k * 0.25f);
+				}
+				// suaviza a subida entre quadros (cada cauda guarda a sua)
+				float[] lf = TAIL_LIFT.computeIfAbsent(e.getId() * 16 + i, x -> new float[1]);
+				lf[0] = lift > lf[0] ? lift : MathHelper.lerp(0.15f, lf[0], lift);
+				g.turn("tail", pitch + lf[0], tailYaw, k * 0.25f);
 			}
 			m.push();
 			// mais redondas e volumosas: engrossa a cauda sem alongar
@@ -410,6 +424,34 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 			m.pop();
 		}
 		m.pop();
+	}
+
+	/** Chão no espaço do corpo (pés = 24 px abaixo do pescoço), com folga para a espessura da cauda. */
+	private static final float FLOOR = 1.5f - 0.22f;
+	private static final Map<Integer, float[]> TAIL_LIFT = new HashMap<>();
+	private static final String[] TAIL_CHAIN = {"tail", "fox_0", "fox_1", "fox_2", "fox_3", "fox_4", "fox_5", "fox_6", "fox_7", "fox_8", "fox_9"};
+
+	/** Ponto mais baixo da cauda (y para baixo, espaço do corpo), seguindo a mesma escala usada no desenho. */
+	private static float lowestPoint(GeoModel g, boolean pivotScale, float scale) {
+		MatrixStack ms = new MatrixStack();
+		ms.translate(0, -1.6f / 16f, 0);
+		if (pivotScale) {
+			ms.translate(0, (10.8f - 10.5f + 1.6f) / 16f, 0);
+			ms.translate(0, 10.5f / 16f, 2f / 16f);
+			ms.scale(scale * 1.18f, scale * 1.18f, scale);
+			ms.translate(0, -10.5f / 16f, -2f / 16f);
+		} else ms.scale(scale * 1.18f, scale * 1.18f, scale);
+		g.root.rotate(ms);
+		float low = -99f;
+		org.joml.Vector3f v = new org.joml.Vector3f();
+		for (String b : TAIL_CHAIN) {
+			if (!g.has(b)) continue;
+			g.bone(b).rotate(ms);
+			v.set(0, 0, 0);
+			ms.peek().getPositionMatrix().transformPosition(v);
+			low = Math.max(low, v.y);
+		}
+		return low;
 	}
 
 	// ------------------------------------------------------------------ coelha
