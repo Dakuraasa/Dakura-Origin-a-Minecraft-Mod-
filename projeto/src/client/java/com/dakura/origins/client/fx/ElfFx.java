@@ -96,19 +96,67 @@ public final class ElfFx {
 		if (r.nextInt(5) == 0) w.addParticle(ParticleTypes.SQUID_INK, at.x, at.y, at.z, 0, 0, 0);
 	}
 
-	/** A lua do Elfo da Lua: esfera branca grande e luminosa (estrutura das esferas da Kitsune). */
+	private static final net.minecraft.util.Identifier MOON_TEX = com.dakura.origins.DakuraOrigins.id("textures/entity/moon_cube.png");
+	private static final net.minecraft.util.Identifier SPIRIT_TEX = com.dakura.origins.DakuraOrigins.id("textures/entity/spirit_cube.png");
+	private static final net.minecraft.util.Identifier DARK_SPIRIT_TEX = com.dakura.origins.DakuraOrigins.id("textures/entity/dark_spirit_cube.png");
+
 	public static void moon(MatrixStack ms, VertexConsumerProvider vcp, float t, float size) {
-		VertexConsumer vc = vcp.getBuffer(RenderLayer.getLightning());
-		Matrix4f m = ms.peek().getPositionMatrix();
-		float pulse = 0.94f + 0.06f * MathHelper.sin(t * 0.2f);
-		float r = 0.5f * size;
-		FxWorld.sphere(m, vc, 0, 0.3f, 0, r * pulse, 0xFFFFFF, 0.9f);
-		FxWorld.sphere(m, vc, 0, 0.3f, 0, r * 1.25f, 0xE6ECFF, 0.35f);
-		FxWorld.sphere(m, vc, 0, 0.3f, 0, r * 1.7f * pulse, 0xB8C4FF, 0.14f);
-		for (int i = 0; i < 8; i++) {
-			double a = t * 0.05 + i * Math.PI / 4;
-			FxWorld.dot(m, vc, (float) Math.cos(a) * r * 1.9f, 0.3f + MathHelper.sin(t * 0.07f + i) * r * 0.5f, (float) Math.sin(a) * r * 1.9f,
-					0.08f * size, i % 2 == 0 ? 0xF25ABF : 0x6A5CFF, 0.7f);
+		cube(ms, vcp, MOON_TEX, t, 1.1f * size, 0xEEF2FF, 0.35f, 0.8f);
+	}
+
+	public static void spiritCube(MatrixStack ms, VertexConsumerProvider vcp, float t, float size, boolean dark) {
+		cube(ms, vcp, dark ? DARK_SPIRIT_TEX : SPIRIT_TEX, t, 0.75f * size, dark ? 0x3A1450 : 0x9FD4FF, dark ? 0.3f : 0.32f, 2.2f);
+	}
+
+	private static void cube(MatrixStack ms, VertexConsumerProvider vcp, net.minecraft.util.Identifier tex, float t, float side, int glow, float glowA, float spin) {
+		float h = side / 2;
+		ms.push();
+		ms.translate(0, 0.3f, 0);
+		ms.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(t * 3.1f * spin));
+		ms.multiply(RotationAxis.POSITIVE_X.rotationDegrees(t * 2.3f * spin));
+		ms.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(t * 1.7f * spin));
+		MatrixStack.Entry e = ms.peek();
+		VertexConsumer vc = vcp.getBuffer(RenderLayer.getEntityTranslucentEmissive(tex));
+		texBox(e, vc, -h, -h, -h, h, h, h);
+		VertexConsumer g = vcp.getBuffer(RenderLayer.getLightning());
+		float pulse = 0.85f + 0.15f * MathHelper.sin(t * 0.25f);
+		glowBox(e.getPositionMatrix(), g, h * 1.12f, glow, glowA * pulse);
+		glowBox(e.getPositionMatrix(), g, h * 1.3f, glow, glowA * 0.45f * pulse);
+		ms.pop();
+	}
+
+	private static final float[][] FACES = {
+			{0, 0, -1, -1, 0, 0, 0, 1, 0}, {0, 0, 1, 1, 0, 0, 0, 1, 0}, {-1, 0, 0, 0, 0, 1, 0, 1, 0},
+			{1, 0, 0, 0, 0, -1, 0, 1, 0}, {0, 1, 0, 1, 0, 0, 0, 0, -1}, {0, -1, 0, 1, 0, 0, 0, 0, 1}};
+
+	private static void texBox(MatrixStack.Entry e, VertexConsumer vc, float x0, float y0, float z0, float x1, float y1, float z1) {
+		Matrix4f m = e.getPositionMatrix();
+		float h = (x1 - x0) / 2;
+		float[][] uv = {{0, 1}, {1, 1}, {1, 0}, {0, 0}};
+		for (float[] f : FACES) {
+			float[][] c = corners(f, h);
+			for (int k = 0; k < 4; k++)
+				vc.vertex(m, c[k][0], c[k][1], c[k][2]).color(255, 255, 255, 255).texture(uv[k][0], uv[k][1])
+						.overlay(OverlayTexture.DEFAULT_UV).light(0xF000F0).normal(e, f[0], f[1], f[2]);
 		}
+	}
+
+	private static void glowBox(Matrix4f m, VertexConsumer vc, float h, int rgb, float a) {
+		int r = rgb >> 16 & 255, gg = rgb >> 8 & 255, b = rgb & 255, al = (int) (MathHelper.clamp(a, 0, 1) * 255);
+		for (float[] f : FACES) {
+			float[][] c = corners(f, h);
+			for (int k = 0; k < 4; k++) vc.vertex(m, c[k][0], c[k][1], c[k][2]).color(r, gg, b, al);
+		}
+	}
+
+	private static float[][] corners(float[] f, float h) {
+		Vector3f n = new Vector3f(f[0], f[1], f[2]), u = new Vector3f(f[3], f[4], f[5]), v = new Vector3f(f[6], f[7], f[8]);
+		float[][] out = new float[4][];
+		float[][] s = {{-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+		for (int k = 0; k < 4; k++) {
+			Vector3f p = new Vector3f(n).mul(h).add(new Vector3f(u).mul(s[k][0] * h)).add(new Vector3f(v).mul(s[k][1] * h));
+			out[k] = new float[] {p.x, p.y, p.z};
+		}
+		return out;
 	}
 }

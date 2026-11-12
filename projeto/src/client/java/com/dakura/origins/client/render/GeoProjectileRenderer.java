@@ -43,12 +43,12 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 			return;
 		}
 		if (e.kind() == GeoProjectileEntity.VIOLET) {
-			FxGlow.manaOrb(m, vcp, t, e.getVelocity(), e.size(), true);
+			com.dakura.origins.client.fx.ElfFx.spiritCube(m, vcp, t, e.size(), true);
 			super.render(e, yaw, tickDelta, m, vcp, light);
 			return;
 		}
 		if (e.kind() == GeoProjectileEntity.MANA) {
-			FxGlow.manaOrb(m, vcp, t, e.getVelocity(), e.size());
+			com.dakura.origins.client.fx.ElfFx.spiritCube(m, vcp, t, e.size(), false);
 			super.render(e, yaw, tickDelta, m, vcp, light);
 			return;
 		}

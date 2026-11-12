@@ -271,10 +271,6 @@
 	"dakura_origins.race.dama_cogumelo.ability.0.description": "Hurls an iron cauldron in an arc. Where it lands it bursts and stays planted in the ground for 10 s, leaking a purple poison that spreads up to 10 blocks: continuous damage, blindness and slowness.",
 	"dakura_origins.race.dama_cogumelo.ability.1.name": "Emergency Mushroom",
 	"dakura_origins.race.dama_cogumelo.ability.1.description": "Automatic: when she drops to 4 hearts, a burst of purple poison pushes enemies away, a giant mushroom sprouts from the ground and the Dame is carried to the top, regenerating for 10 s. Recharges in 3 minutes.",
-	"dakura_origins.race.demonio.ability.0.name": "Blood Aegis",
-	"dakura_origins.race.demonio.ability.0.description": "Opens a blood pentagram in front of him that blocks blows from the front. Two chains burst from it, each binding an enemy up to 5 blocks away: for 5 seconds they burn, take constant damage and have their life drained to heal the Demon (stronger with each maturity phase).",
-	"dakura_origins.race.demonio.ability.1.name": "Metamorphosis",
-	"dakura_origins.race.demonio.ability.1.description": "Keeps the last creature you killed. Tap to become it (and again to change back); hold to release the stored form. Flyers can fly and water creatures breathe underwater.",
 	"dakura_origins.race.draconica.trait.0": "Dragon wings: it can fly now.",
 	"dakura_origins.race.draconica.trait.1": "Colossal yet agile body: starts at 2.5 blocks, grows up to 3.5 as it matures, and walks a little faster than a human.",
 	"dakura_origins.race.draconica.trait.2": "Natural plating equal to a full set of iron armor, and far more health.",
@@ -637,5 +633,9 @@
 	"dakura_origins.race.demonio.trait.10": "Eats only meat.",
 	"dakura_origins.race.demonio.trait.11": "Water weakens him.",
 	"dakura_origins.race.demonio.trait.12": "Holy repulsion: carrying any enchanted item in the inventory hurts.",
-	"entity.dakura_origins.soul_orb": "Soul"
+	"entity.dakura_origins.soul_orb": "Soul",
+	"dakura_origins.race.demonio.trait.13": "Demonic strength: blows far heavier than any human's.",
+	"dakura_origins.race.demonio.trait.14": "Infernal body: 2 extra hearts and skin tough as armor.",
+	"dakura_origins.race.demonio.trait.15": "Unshakable: barely knocked back by blows and explosions.",
+	"dakura_origins.race.demonio.trait.16": "Ember claws: his blows set enemies ablaze."
 }

@@ -59,15 +59,15 @@ public final class MoonfallAbility implements Ability {
 		GeoProjectileEntity moon = new GeoProjectileEntity(w, p, GeoProjectileEntity.MOON, 0, 1, 600);
 		moon.scripted = true;
 		moon.setSize(0.4f);
-		Vec3d top = p.getPos().add(0, p.getHeight() + 3.5, 0);
+		Vec3d top = p.getPos().add(0, p.getHeight() + 4.5, 0);
 		moon.setPosition(top.x, top.y, top.z);
 		w.spawnEntity(moon);
 		LegendKit.run(p, "moonfall_cast", windup, (pl, age) -> {
 			if (moon.isRemoved()) return false;
-			Vec3d at = pl.getPos().add(0, pl.getHeight() + 3.5, 0);
+			Vec3d at = pl.getPos().add(0, pl.getHeight() + 4.5, 0);
 			moon.setPosition(at.x, at.y, at.z);
 			moon.setVelocity(Vec3d.ZERO);
-			moon.setSize(0.4f + 2.6f * age / windup);
+			moon.setSize(0.4f + 3.6f * age / windup);
 			if (age % 4 == 0) w.spawnParticles(ParticleTypes.END_ROD, at.x, at.y, at.z, 4, 1.2, 1.2, 1.2, 0.02);
 			if (age % 10 == 0) NightFx.burst(w, pl.getPos().add(0, 1, 0), 3, 0.6);
 			return true;

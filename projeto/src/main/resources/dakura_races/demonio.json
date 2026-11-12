@@ -77,6 +77,22 @@
 		{
 			"type": "desvantagem",
 			"text": "Repulsa sagrada: carregar qualquer item encantado no inventário causa dano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Força demoníaca: golpes muito mais pesados que os de qualquer humano."
+		},
+		{
+			"type": "vantagem",
+			"text": "Corpo infernal: 2 corações extras e pele dura como armadura."
+		},
+		{
+			"type": "vantagem",
+			"text": "Inabalável: quase não é empurrado por golpes e explosões."
+		},
+		{
+			"type": "vantagem",
+			"text": "Garras em brasa: seus golpes incendeiam os inimigos."
 		}
 	],
 	"powers": [
@@ -88,7 +104,7 @@
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.attack_damage",
 			"operation": "add_value",
-			"amount": 2.0
+			"amount": 4.0
 		},
 		{
 			"type": "dakura_origins:attribute",
@@ -201,10 +217,10 @@
 			"amount": 0,
 			"stage_values": [
 				0,
-				1,
-				2,
-				3.5,
-				5
+				1.5,
+				3,
+				5,
+				7
 			]
 		},
 		{
@@ -237,33 +253,30 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#7A0A1C",
 			"when": "max_maturity"
-		}
-	],
-	"abilities": [
-		{
-			"type": "dakura_origins:blood_shield",
-			"name": "Égide de Sangue",
-			"cooldown": 600,
-			"duration": 100,
-			"range": 5,
-			"every": 10,
-			"damage": 1.5,
-			"heal": 0.6,
-			"burn": 3,
-			"maturity_damage": [
-				1,
-				1.25,
-				1.5,
-				1.8,
-				2.2
-			],
-			"description": "Abre à sua frente um pentagrama de sangue que bloqueia os golpes vindos da frente. Dele saem duas correntes, cada uma presa a um inimigo a até 5 blocos: por 5 segundos eles queimam, levam dano contínuo e têm a vida drenada para curar o Demônio (mais forte a cada fase de maturidade)."
 		},
 		{
-			"type": "dakura_origins:morph",
-			"name": "Metamorfose",
-			"description": "Guarda a última criatura que você matou. Toque para virar ela (e de novo para voltar); segure para liberar a forma guardada. As voadoras voam e as aquáticas respiram na água.",
-			"cooldown": 150
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 4.0
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.knockback_resistance",
+			"operation": "add_value",
+			"amount": 0.5
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "fire",
+			"seconds": 3
 		}
-	]
+	],
+	"abilities": []
 }

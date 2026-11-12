@@ -271,10 +271,6 @@
 	"dakura_origins.race.dama_cogumelo.ability.0.description": "Arremessa um caldeirão de ferro em arco. Onde cai, ele estoura e fica plantado no chão por 10 s, vazando um veneno roxo que se espalha até 10 blocos: dano contínuo, cegueira e lentidão.",
 	"dakura_origins.race.dama_cogumelo.ability.1.name": "Cogumelo de Emergência",
 	"dakura_origins.race.dama_cogumelo.ability.1.description": "Automática: ao cair para 4 corações, uma explosão de veneno roxo empurra os inimigos, um cogumelo gigante brota do chão e a Dama é levada ao topo, regenerando por 10 s. Volta em 3 minutos.",
-	"dakura_origins.race.demonio.ability.0.name": "Égide de Sangue",
-	"dakura_origins.race.demonio.ability.0.description": "Abre à sua frente um pentagrama de sangue que bloqueia os golpes vindos da frente. Dele saem duas correntes, cada uma presa a um inimigo a até 5 blocos: por 5 segundos eles queimam, levam dano contínuo e têm a vida drenada para curar o Demônio (mais forte a cada fase de maturidade).",
-	"dakura_origins.race.demonio.ability.1.name": "Metamorfose",
-	"dakura_origins.race.demonio.ability.1.description": "Guarda a última criatura que você matou. Toque para virar ela (e de novo para voltar); segure para liberar a forma guardada. As voadoras voam e as aquáticas respiram na água.",
 	"dakura_origins.race.draconica.trait.0": "Asas de dragão: agora voa.",
 	"dakura_origins.race.draconica.trait.1": "Corpo colossal, mas ágil: começa com 2,5 blocos, cresce até 3,5 conforme amadurece e anda um pouco mais rápido que um humano.",
 	"dakura_origins.race.draconica.trait.2": "Couraça natural equivalente a uma armadura de ferro completa, e muito mais vida.",
@@ -637,5 +633,9 @@
 	"dakura_origins.race.demonio.trait.10": "Só come carne.",
 	"dakura_origins.race.demonio.trait.11": "A água o enfraquece.",
 	"dakura_origins.race.demonio.trait.12": "Repulsa sagrada: carregar qualquer item encantado no inventário causa dano.",
-	"entity.dakura_origins.soul_orb": "Alma"
+	"entity.dakura_origins.soul_orb": "Alma",
+	"dakura_origins.race.demonio.trait.13": "Força demoníaca: golpes muito mais pesados que os de qualquer humano.",
+	"dakura_origins.race.demonio.trait.14": "Corpo infernal: 2 corações extras e pele dura como armadura.",
+	"dakura_origins.race.demonio.trait.15": "Inabalável: quase não é empurrado por golpes e explosões.",
+	"dakura_origins.race.demonio.trait.16": "Garras em brasa: seus golpes incendeiam os inimigos."
 }
