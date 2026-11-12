@@ -39,7 +39,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 			DWINGS_RED = tex("dragon_wings"), DWINGS_BROWN = tex("dragon_wings_brown"), DTAIL_RED = tex("dragon_tail"),
 			DTAIL_BROWN = tex("dragon_tail_brown"), DHORNS = tex("dragon_horns"), FAIRY = tex("fairy_wings"),
 			FOX_FIRE = tex("fox_tail"), FOX_SNOW = tex("fox_tail_snow"), FOX_WHITE = tex("fox_tail_white"), FOX_DARK = tex("fox_tail_dark"),
-			BUNNY = tex("bunny_ears"), PHOENIX = tex("phoenix_wing");
+			BUNNY = tex("bunny_ears"), BUNNY_TAIL = tex("bunny_tail"), PHOENIX = tex("phoenix_wing");
 	private static Identifier wing(String n) {
 		return DakuraOrigins.id("textures/entity/wings/" + n + ".png");
 	}
@@ -48,7 +48,6 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 	/** Física de capa por jogador: {balanço frente/trás, velocidade, balanço lateral, velocidade, quique}. */
 	private static final Map<Integer, float[]> PHYS = new HashMap<>();
 	/** Física das orelhas: {pitch, vel, yaw, vel, headYaw anterior, headPitch anterior}. */
-	private static final Map<Integer, float[]> EARS = new HashMap<>();
 	/** Abertura suave das asas (0 = recolhidas, 1 = abertas) por jogador e peça. */
 	private static final Map<Long, Float> OPEN = new HashMap<>();
 
@@ -498,40 +497,28 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 
 	// ------------------------------------------------------------------ coelha
 
-	/** Orelhas de coelho selvagem: pesadas e tombadas para trás, com inércia à cabeça, aos saltos e às corridas. */
+	/** Orelhas de coelho menores e paradas, e um pompom na traseira que treme de vez em quando. */
 	private void bunny(MatrixStack m, VertexConsumerProvider vcp, int light, AbstractClientPlayerEntity e, float t) {
-		float[] st = EARS.computeIfAbsent(e.getId(), k -> new float[]{0, 0, 0, 0, e.headYaw, e.getPitch()});
-		double dx = e.getX() - e.prevX, dz = e.getZ() - e.prevZ, dy = e.getY() - e.prevY;
-		double yawR = Math.toRadians(e.bodyYaw);
-		double fwd = -dx * Math.sin(yawR) + dz * Math.cos(yawR), side = dx * Math.cos(yawR) + dz * Math.sin(yawR);
-		float dHead = MathHelper.wrapDegrees(e.headYaw - st[4]), dPitch = e.getPitch() - st[5];
-		st[4] = e.headYaw;
-		st[5] = e.getPitch();
-		// alvo: correndo ficam mais deitadas; subindo num salto ficam para baixo (atrasam); caindo, se erguem
-		float targetP = (float) MathHelper.clamp(-fwd * 2.4 - dy * 1.8, -0.8, 0.7) - dPitch * 0.01f;
-		float targetY = (float) MathHelper.clamp(side * 2.0, -0.5, 0.5) - MathHelper.clamp(dHead * 0.02f, -0.5f, 0.5f);
-		st[1] += ((targetP - st[0]) * 0.25f - st[1] * 0.16f) * 0.5f;
-		st[0] += st[1] * 0.5f;
-		st[3] += ((targetY - st[2]) * 0.25f - st[3] * 0.16f) * 0.5f;
-		st[2] += st[3] * 0.5f;
-		boolean charge = EntityFlags.clientHas(e, "moon_charge") || EntityFlags.clientHas(e, "barrage");
-		boolean rush = EntityFlags.clientHas(e, "rushing") || EntityFlags.clientHas(e, "moon_air");
 		GeoModel g = GeoModel.get("bunny_ears");
 		g.reset();
-		for (int s = 1; s >= -1; s -= 2) {
-			String sn = s > 0 ? "l" : "r";
-			float twitch = ((int) (t + s * 37) % 131) < 3 ? MathHelper.sin(t * 2.2f) * 0.12f : 0f;
-			g.turn("ear_" + sn, st[0] * 0.45f + (rush ? -0.4f : 0) + (charge ? -0.2f : 0) + MathHelper.sin(t * 0.06f + s) * 0.02f,
-					st[2] * 0.35f, s * st[2] * 0.25f + s * twitch);
-			for (int k = 1; k < 5; k++) {
-				// cada gomo cai um pouco mais, com atraso: a ponta é a parte mais pesada
-				float lag = MathHelper.sin(t * 0.08f + s - k * 0.6f) * 0.025f;
-				g.turn("ear_" + sn + "_" + k, st[0] * 0.18f * k / 4f - st[1] * 0.3f + lag + (rush ? -0.08f : 0), st[2] * 0.08f, 0);
-			}
-		}
 		m.push();
 		getContextModel().getHead().rotate(m);
+		m.translate(0, -0.5f, 0);
+		m.scale(0.65f, 0.65f, 0.65f);
+		m.translate(0, 0.5f, 0);
 		g.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(BUNNY)), light);
+		m.pop();
+		GeoModel tail = GeoModel.get("bunny_tail");
+		tail.reset();
+		float cyc = (t + e.getId() * 13) % 80f;
+		if (cyc > 72f) {
+			float k = (80f - cyc) / 8f;
+			float w = MathHelper.sin(cyc * 3.2f) * 0.14f * k;
+			tail.turn("tail", 0, w, w * 0.75f);
+		}
+		m.push();
+		getContextModel().body.rotate(m);
+		tail.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(BUNNY_TAIL)), light);
 		m.pop();
 	}
 

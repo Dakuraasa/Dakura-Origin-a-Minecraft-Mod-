@@ -20,7 +20,16 @@ git push -u origin main >> logs\github-log.txt 2>&1
 type logs\github-log.txt
 echo.
 where gh >nul 2>&1 || (echo gh nao encontrado: crie a release v%VER% pelo site e anexe builds\datura-origins-%VER%.jar. & pause & exit /b 1)
-gh release view v%VER% -R %REPO% >nul 2>&1 || gh release create v%VER% "builds\datura-origins-%VER%.jar" -R %REPO% --title "Datura Origins %VER% (Minecraft 1.21.1 / Fabric)" --notes "Datura Origins %VER% para Minecraft 1.21.1 (Fabric). Requer Fabric API. Criado por Daturaasa."
+set "JAR=builds\datura-origins-%VER%.jar"
+if not exist "%JAR%" (echo Nao achei %JAR%. Rode o COMPILAR.bat antes. & pause & exit /b 1)
+gh release view v%VER% -R %REPO% >nul 2>&1
+if errorlevel 1 (
+    gh release create v%VER% "%JAR%" -R %REPO% --title "Datura Origins %VER% (Minecraft 1.21.1 / Fabric)" --notes "Datura Origins %VER% para Minecraft 1.21.1 (Fabric). Requer Fabric API. Criado por Daturaasa." >> logs\github-log.txt 2>&1
+) else (
+    gh release upload v%VER% "%JAR%" -R %REPO% --clobber >> logs\github-log.txt 2>&1
+)
+if errorlevel 1 (echo  [X] A release falhou. Detalhes: & type logs\github-log.txt & pause & exit /b 1)
+echo  [OK] Release v%VER% publicada com %JAR%
 echo.
 echo Apagando as releases antigas (fica so a v%VER%)...
 for /f "delims=" %%t in ('gh release list -R %REPO% --limit 200 --json tagName --jq ".[].tagName"') do (
