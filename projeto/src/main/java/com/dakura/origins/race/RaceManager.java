@@ -50,7 +50,8 @@ public final class RaceManager {
 				ServerPlayNetworking.send(player, new SelectionResultPayload(true, race.get().id()));
 			}
 		} else {
-			if (player.getAttached(RaceAttachments.RACE) != null) player.removeAttached(RaceAttachments.RACE);
+			RaceAccess.IN_NETHER.remove(player.getUuid());
+		if (player.getAttached(RaceAttachments.RACE) != null) player.removeAttached(RaceAttachments.RACE);
 			requestSelection(player, "");
 		}
 	}
@@ -70,10 +71,37 @@ public final class RaceManager {
 		serverTicks++;
 		for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
 			if (!player.isAlive()) continue;
+			netherCheck(player);
 			Optional<Race> race = getRace(player);
 			if (race.isEmpty()) continue;
 			for (RacePower power : race.get().powers()) power.tick(player);
 			if (serverTicks % 40 == 0 && NO_COOLDOWN.contains(player.getUuid())) resetPassives(player, race.get());
+		}
+	}
+
+	/** Dríade, Morto-Vivo e Espectro: no Nether perdem vantagens e habilidades; tudo volta ao sair (maturidade intacta). */
+	private static void netherCheck(ServerPlayerEntity player) {
+		if (RaceAccess.BORROWED.containsKey(player.getUuid())) return;
+		String id = player.getAttached(RaceAttachments.RACE);
+		Optional<Race> weak = RaceRegistry.netherForm(id);
+		boolean should = weak.isPresent() && player.getWorld().getRegistryKey() == net.minecraft.world.World.NETHER;
+		boolean now = RaceAccess.IN_NETHER.contains(player.getUuid());
+		if (should == now) return;
+		Optional<Race> full = RaceRegistry.get(id);
+		if (should) {
+			full.ifPresent(r -> {
+				removeAbilities(player, r);
+				for (RacePower power : r.powers()) if (!weak.get().powers().contains(power)) power.onRemove(player);
+			});
+			RaceAccess.IN_NETHER.add(player.getUuid());
+			player.sendMessage(Text.translatable("dakura_origins.message.nether_weak").formatted(Formatting.DARK_RED), true);
+		} else {
+			RaceAccess.IN_NETHER.remove(player.getUuid());
+			Optional<Race> w = RaceRegistry.netherForm(id);
+			full.ifPresent(r -> {
+				for (RacePower power : r.powers()) if (w.isEmpty() || !w.get().powers().contains(power)) power.onApply(player);
+			});
+			player.sendMessage(Text.translatable("dakura_origins.message.nether_restored").formatted(Formatting.GREEN), true);
 		}
 	}
 
@@ -114,6 +142,7 @@ public final class RaceManager {
 			removeAbilities(player, r);
 			for (RacePower power : r.powers()) power.onRemove(player);
 		});
+		RaceAccess.IN_NETHER.remove(player.getUuid());
 		if (player.getAttached(RaceAttachments.RACE) != null) player.removeAttached(RaceAttachments.RACE);
 		COOLDOWNS.remove(player.getUuid());
 		sendCooldown(player, CooldownPayload.reset());
@@ -151,6 +180,10 @@ public final class RaceManager {
 		if (!player.isAlive() || (player.isSpectator() && !com.dakura.origins.power.ability.PhaseAbility.isPhased(player))) return;
 		Optional<Race> race = getRace(player);
 		if (race.isEmpty() || slot < 0 || slot >= race.get().abilities().size()) return;
+		if (com.dakura.origins.power.Control.isLocked(player)) {
+			player.sendMessage(Text.translatable("dakura_origins.message.locked").formatted(Formatting.GRAY), true);
+			return;
+		}
 		Race.AbilityInfo info = race.get().abilities().get(slot);
 
 		long[] ready = COOLDOWNS.computeIfAbsent(player.getUuid(), u -> new long[2]);
@@ -198,7 +231,7 @@ public final class RaceManager {
 		for (RacePower pw : race.powers()) {
 			if (pw instanceof com.dakura.origins.power.types.SecondChancePower || pw instanceof com.dakura.origins.power.types.RebirthPower
 					|| pw instanceof com.dakura.origins.power.types.DollLeapPower || pw instanceof com.dakura.origins.power.types.DevourPower
-					|| pw instanceof com.dakura.origins.power.types.SoryePower || pw instanceof com.dakura.origins.power.types.FungalEmergencyPower
+					|| pw instanceof com.dakura.origins.power.types.FungalEmergencyPower
 					|| (pw instanceof com.dakura.origins.power.types.GoldenWardPower && !com.dakura.origins.power.EntityFlags.has(player, com.dakura.origins.power.types.GoldenWardPower.FLAG))) {
 				pw.onRemove(player);
 				pw.onApply(player);

@@ -16,21 +16,20 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 
 /**
- * "dakura_origins:dark_comet" — Cometa Negro (Kitsune Corrompida): esfera negra muito veloz. Ao acertar, causa dano,
- * prende o alvo (imobilização real) e o acorrenta à Kitsune. As correntes duram mais que a imobilização: solto, o
- * alvo continua preso por elas, puxado de volta se fugir longe e tomando dano contínuo até elas se partirem.
- * { "speed": 2.6, "range": 40, "damage": 6, "root": 60, "chain": 160, "tick_damage": 1.5, "leash": 9, "maturity_damage": [1,1.3,1.6] }
+ * "dakura_origins:dark_comet" — Prisão de Correntes (Kitsune Corrompida): acorrenta na hora os inimigos mais próximos num
+ * raio de 10 blocos (3, 6 ou 9 conforme a maturidade). Cada um leva dano, fica imobilizado por "root" ticks e depois
+ * segue acorrentado: se passar de "leash" blocos é puxado de volta, tomando dano contínuo até as correntes se partirem.
+ * { "radius": 10, "damage": 6, "root": 60, "chain": 160, "tick_damage": 1.5, "leash": 10, "maturity_damage": [1,1.3,1.6] }
  */
 public final class DarkCometAbility implements Ability {
-	private final double speed, range, leash;
+	private final double radius, leash;
 	private final float damage, tickDamage;
 	private final int root, chain;
 	private final float[] maturityDamage;
 
 	public DarkCometAbility(JsonObject json) {
-		speed = JsonParams.num(json, "speed", 2.6f);
-		range = JsonParams.num(json, "range", 40f);
-		leash = JsonParams.num(json, "leash", 9f);
+		radius = JsonParams.num(json, "radius", 10f);
+		leash = JsonParams.num(json, "leash", 10f);
 		damage = JsonParams.num(json, "damage", 6f);
 		tickDamage = JsonParams.num(json, "tick_damage", 1.5f);
 		root = JsonParams.integer(json, "root", 60);
@@ -42,58 +41,38 @@ public final class DarkCometAbility implements Ability {
 	public boolean activate(ServerPlayerEntity p) {
 		ServerWorld w = p.getServerWorld();
 		float mult = MaturityPower.multiplier(p, maturityDamage);
-		GeoProjectileEntity orb = new GeoProjectileEntity(w, p, GeoProjectileEntity.DARK, 0, 1, 200);
-		orb.scripted = true;
-		orb.setSize(1.1f);
-		orb.setVelocity(p.getRotationVec(1f).multiply(speed));
-		w.spawnEntity(orb);
+		int max = ManaOrbsAbility.count(p);
+		java.util.List<LivingEntity> targets = new java.util.ArrayList<>(LegendKit.enemies(p, p.getPos(), radius));
+		targets.removeIf(e -> e.getPos().squaredDistanceTo(p.getPos()) > radius * radius || !p.canSee(e));
+		targets.sort(java.util.Comparator.comparingDouble(e -> e.squaredDistanceTo(p)));
+		if (targets.isEmpty()) {
+			p.sendMessage(net.minecraft.text.Text.translatable("dakura_origins.message.no_target").formatted(net.minecraft.util.Formatting.GRAY), true);
+			return false;
+		}
 		LegendKit.anim(p, "cast", 8);
 		ModSounds.play(p, ModSounds.DARK_COMET, 1f, 1f);
-		Vec3d start = orb.getPos();
-		LegendKit.run(p, "dark_comet", (int) Math.ceil(range / speed) + 4, (pl, age) -> {
-			if (orb.isRemoved()) return false;
-			Vec3d pos = orb.getPos(), next = pos.add(orb.getVelocity());
-			LivingEntity victim = null;
-			for (LivingEntity e : w.getEntitiesByClass(LivingEntity.class, orb.getBoundingBox().stretch(orb.getVelocity()).expand(0.5),
-					e -> e.isAlive() && e != pl && !e.isSpectator() && LegendKit.enemy(pl, e))) {
-				victim = e;
-				break;
-			}
-			if (victim != null) {
-				orb.discard();
-				bind(pl, victim, mult);
-				return false;
-			}
-			if (w.raycast(new RaycastContext(pos, next, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, orb))
-					.getType() != HitResult.Type.MISS || pos.distanceTo(start) >= range) {
-				LegendKit.fxAt(w, "dark_burst", pos, 0.6f, 0, 0);
-				SpiritOrbAbility.breakBlocks(w, pl, pos, 1.6f);
-				orb.discard();
-				return false;
-			}
-			return true;
-		}, pl -> {
-			if (!orb.isRemoved()) orb.discard();
-		});
+		LegendKit.fxAt(w, "dark_burst", p.getPos().add(0, 1, 0), 0.8f, 0, 0);
+		for (int i = 0; i < Math.min(max, targets.size()); i++) bind(p, targets.get(i), mult);
 		return true;
 	}
 
 	private void bind(ServerPlayerEntity p, LivingEntity t, float mult) {
 		ServerWorld w = p.getServerWorld();
-		LegendKit.stop(p, "dark_chain");
+		String key = "dark_chain#" + t.getId();
+		LegendKit.stop(p, key);
 		LegendKit.hurt(p, t, damage * mult, false);
 		SpiritOrbAbility.freeze(t, root);
-		SpiritOrbAbility.breakBlocks(w, p, t.getPos().add(0, t.getHeight() * 0.5, 0), 1.6f);
 		Vec3d mid = t.getPos().add(0, t.getHeight() * 0.5, 0);
 		LegendKit.fxAt(w, "dark_burst", mid, 1.4f, 0, 0);
 		ModSounds.play(w, mid, ModSounds.CHAIN_BIND, 1.2f, 0.9f);
 		String flag = "chain#" + t.getId();
 		EntityFlags.set(p, flag, true);
 		Vec3d anchor = t.getPos();
-		LegendKit.run(p, "dark_chain", chain, (pl, age) -> {
+		LegendKit.run(p, key, chain, (pl, age) -> {
 			if (!t.isAlive() || t.isRemoved() || t.getWorld() != pl.getWorld() || t.squaredDistanceTo(pl) > 40 * 40) return false;
 			if (age < root) {
 				FistBarrageAbility.pin(t, anchor);
+				com.dakura.origins.power.Control.lock(t, 2, anchor);
 				if (t instanceof MobEntity mob) mob.setAiDisabled(true);
 			} else {
 				if (age == root && t instanceof MobEntity mob) mob.setAiDisabled(false);
@@ -121,7 +100,6 @@ public final class DarkCometAbility implements Ability {
 
 	@Override
 	public void onRemove(ServerPlayerEntity p) {
-		LegendKit.stop(p, "dark_comet");
-		LegendKit.stop(p, "dark_chain");
+		LegendKit.stopPrefix(p, "dark_chain#");
 	}
 }

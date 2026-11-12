@@ -69,6 +69,14 @@
 		{
 			"type": "desvantagem",
 			"text": "Corpo pesado: bem mais lento dentro da água."
+		},
+		{
+			"type": "vanilla",
+			"text": "Garras escavadoras: quebra blocos mais rápido."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Sono de dragão: só consegue dormir com um teto sólido a até 6 blocos acima."
 		}
 	],
 	"powers": [
@@ -134,9 +142,9 @@
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.attack_damage",
 			"stage_values": [
+				1.0,
 				2.0,
-				3.5,
-				5.0
+				3.0
 			]
 		},
 		{
@@ -230,6 +238,16 @@
 			"type": "dakura_origins:flight",
 			"speed": 0.03,
 			"exhaustion": 0.02
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:player.block_break_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.35
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "needs_roof"
 		}
 	],
 	"abilities": [
@@ -237,7 +255,7 @@
 			"type": "dakura_origins:fireball",
 			"name": "Bola de Fogo",
 			"description": "Dispara uma esfera de fogo dracônico que explode com a força de uma TNT, empurra sem exagero e incendeia de verdade quem estiver perto e o chão em volta.",
-			"cooldown": 200,
+			"cooldown": 300,
 			"speed": 1.6,
 			"life": 50,
 			"explosion_power": 4.0,
@@ -245,24 +263,24 @@
 			"fire_count": 12,
 			"fire_radius": 3,
 			"maturity_damage": [
-				0.88,
-				1.23,
-				1.58
+				0.6,
+				0.85,
+				1.1
 			]
 		},
 		{
 			"type": "dakura_origins:stomp",
 			"name": "Pisão Dracônico",
 			"description": "Ergue a pata e desce com todo o peso: a onda de choque arremessa para cima tudo num raio de 4 blocos e causa dano pesado.",
-			"cooldown": 240,
+			"cooldown": 360,
 			"radius": 4,
-			"damage": 8.0,
+			"damage": 6.0,
 			"launch": 0.9,
 			"windup": 9,
 			"maturity_damage": [
 				1.0,
-				1.4,
-				1.8
+				1.2,
+				1.4
 			]
 		}
 	]

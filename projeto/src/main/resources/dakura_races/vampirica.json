@@ -31,7 +31,7 @@
 			"text": "Força e velocidade sobre-humanas."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "Visão noturna: a escuridão não esconde nada."
 		},
 		{
@@ -120,7 +120,7 @@
 			"type": "dakura_origins:vampire_bite",
 			"name": "Mordida Vampírica",
 			"description": "Agarra a presa à sua frente num abraço predatório e bebe sua vida por 1,5 s, curando-se e saciando a fome. Sangue de monstro é podre: envenena.",
-			"cooldown": 160,
+			"cooldown": 240,
 			"range": 3.0,
 			"duration": 40,
 			"hits": 7,
@@ -140,7 +140,7 @@
 			"type": "dakura_origins:bat_form",
 			"name": "Forma de Morcego",
 			"description": "Desfaz-se em fumaça e vira morcego: voo livre, sem limite de tempo. Aperte de novo para voltar.",
-			"cooldown": 20,
+			"cooldown": 30,
 			"fly_speed": 0.06
 		}
 	]

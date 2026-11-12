@@ -5,14 +5,18 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"ArmorSlotMixin",
+		"BrewingStandMixin",
+		"CreeperEntityMixin",
 		"EntityMixin",
+		"FarmlandBlockMixin",
 		"FleeEntityGoalMixin",
 		"FoxEntityAccessor",
 		"LivingEntityMixin",
 		"MobEntityMixin",
 		"PlayerEntityMixin",
 		"PowderSnowBlockMixin",
-		"VillagerEntityMixin"
+		"VillagerEntityMixin",
+		"WardenEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

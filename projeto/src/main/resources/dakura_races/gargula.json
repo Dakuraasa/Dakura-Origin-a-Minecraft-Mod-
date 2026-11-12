@@ -1,6 +1,6 @@
 {
 	"id": "gargula",
-	"order": 10,
+	"order": 11,
 	"tag": "mixed",
 	"name": "Gárgula",
 	"epithet": "A Sentinela de Pedra",
@@ -61,6 +61,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Sob o sol, a pedra pesa: mais lenta de dia."
+		},
+		{
+			"type": "vanilla",
+			"text": "Olhos de pedra: enxerga no escuro."
 		}
 	],
 	"powers": [
@@ -147,6 +151,10 @@
 			"type": "dakura_origins:flag",
 			"flag": "fireproof",
 			"when": "always"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
 		}
 	],
 	"abilities": [
@@ -154,7 +162,7 @@
 			"type": "dakura_origins:meteor",
 			"name": "Meteoro",
 			"description": "Salta altíssimo, vira pedra e despenca: o impacto fere tudo em volta e arremessa os inimigos para longe. Sem dano de queda.",
-			"cooldown": 500,
+			"cooldown": 750,
 			"launch": 1.9,
 			"fall": 2.6,
 			"radius": 4.5,

@@ -403,7 +403,7 @@ public class RaceSelectionScreen extends Screen {
 
 		if (state == State.OPEN) backdrop.renderPageEdges(ctx);
 		if (!viewOnly) drawRibbons(ctx, mouseX, mouseY, t, newRace, newToc, interactive);
-		boolean tagHover = !newToc && drawTag(ctx, mouseX, mouseY, newRace, newPal, interactive);
+		boolean tagHover = false; // selos de categoria (combate, suporte...) removidos
 		ctx.getMatrices().pop();
 		if (tagHover) ctx.drawTooltip(textRenderer, Text.translatable("dakura_origins.tag." + RaceRegistry.tagOf(newRace.id())), mouseX, mouseY);
 

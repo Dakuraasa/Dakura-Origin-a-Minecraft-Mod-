@@ -133,8 +133,11 @@ public final class PowerRegistry {
 		com.dakura.origins.power.types.PacifistPower.bootstrap();
 		com.dakura.origins.power.types.ToolRestrictionPower.bootstrap();
 		com.dakura.origins.power.types.GreedPower.bootstrap();
-		registerPowerType(DakuraOrigins.id("sorye"), com.dakura.origins.power.types.SoryePower::new);
-		com.dakura.origins.power.types.SoryePower.bootstrap();
+		registerPowerType(DakuraOrigins.id("vanilla_perk"), com.dakura.origins.power.types.VanillaPerkPower::new);
+		com.dakura.origins.power.types.VanillaPerkPower.bootstrap();
+		registerPowerType(DakuraOrigins.id("moon_mark"), com.dakura.origins.power.types.MoonMarkPower::new);
+		com.dakura.origins.power.types.MoonMarkPower.bootstrap();
+		com.dakura.origins.power.Control.bootstrap();
 		registerPowerType(DakuraOrigins.id("devour"), com.dakura.origins.power.types.DevourPower::new);
 		com.dakura.origins.power.types.DevourPower.bootstrap();
 		com.dakura.origins.power.types.SleepAltitudePower.bootstrap();
@@ -195,8 +198,6 @@ public final class PowerRegistry {
 		registerAbilityType(DakuraOrigins.id("waterfowl_dance"), com.dakura.origins.power.ability.WaterfowlDanceAbility::new);
 		registerAbilityType(DakuraOrigins.id("foxfire"), com.dakura.origins.power.ability.FoxfireAbility::new);
 		registerAbilityType(DakuraOrigins.id("nine_tails"), com.dakura.origins.power.ability.NineTailsBlessingAbility::new);
-		registerAbilityType(DakuraOrigins.id("seraph_blessing"), com.dakura.origins.power.ability.SeraphBlessingAbility::new);
-		registerAbilityType(DakuraOrigins.id("celestial_altar"), com.dakura.origins.power.ability.CelestialAltarAbility::new);
 		registerAbilityType(DakuraOrigins.id("tidal_song"), com.dakura.origins.power.ability.TidalSongAbility::new);
 		registerAbilityType(DakuraOrigins.id("tsunami"), com.dakura.origins.power.ability.TsunamiAbility::new);
 		registerAbilityType(DakuraOrigins.id("solar_dive"), com.dakura.origins.power.ability.SolarDiveAbility::new);
@@ -229,6 +230,11 @@ public final class PowerRegistry {
 		com.dakura.origins.power.ability.MirrorShieldAbility.bootstrap();
 		com.dakura.origins.power.ability.ShadowOrbAbility.bootstrap();
 		com.dakura.origins.power.ability.DrainKissAbility.bootstrap();
+		registerAbilityType(DakuraOrigins.id("night_swords"), com.dakura.origins.power.ability.NightSwordsAbility::new);
+		registerAbilityType(DakuraOrigins.id("moon_beam"), com.dakura.origins.power.ability.MoonBeamAbility::new);
+		registerAbilityType(DakuraOrigins.id("moonfall"), com.dakura.origins.power.ability.MoonfallAbility::new);
+		com.dakura.origins.power.ability.NightSwordsAbility.bootstrap();
+		com.dakura.origins.power.ability.MoonfallAbility.bootstrap();
 		com.dakura.origins.power.ability.MimicAbility.bootstrap();
 		com.dakura.origins.power.ability.BrutalChargeAbility.bootstrap();
 		com.dakura.origins.power.ability.FairyPerchAbility.bootstrap();

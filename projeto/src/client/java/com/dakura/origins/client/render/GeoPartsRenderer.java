@@ -258,7 +258,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		m.push();
 		getContextModel().getHead().rotate(m);
 		m.translate(0, -8f / 16f, 0);
-		m.scale(0.62f, 0.62f, 0.62f);
+		m.scale(0.67f, 0.63f, 0.71f); // chifres um pouco mais grossos, mesmo formato e posição
 		m.translate(0, 8f / 16f, 0);
 		h.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(DHORNS)), light);
 		m.pop();
@@ -338,8 +338,12 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		float v = Math.min(0.35f, speed(e));
 		float freq = 0.07f + v * 1.5f, amp = 0.05f + v * 0.85f;
 		// no voo o corpo fica deitado: a cauda desce ao longo dele, apontando para os pés
-		float lift = MathHelper.lerp(o, 0f, -1.0f);
-		amp *= 1f - 0.6f * o;
+		// dormindo: a cauda repousa deitada ao longo do corpo, quase parada
+		boolean sleeping = e.isSleeping();
+		float rest = sleeping ? 1f : o;
+		float lift = MathHelper.lerp(rest, 0f, -1.35f);
+		amp *= 1f - 0.6f * rest;
+		if (sleeping) amp *= 0.3f;
 		float tph = phase(e, 41, freq, t), tph2 = phase(e, 42, freq * 2f, t);
 		for (int k = 0; k < 12; k++) {
 			float yaw = MathHelper.sin(tph - k * 0.55f) * amp * (0.3f + k * 0.06f) + st[2] * 0.07f + st[5] * 0.12f * (k + 1) / 12f;
@@ -401,14 +405,20 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 			}
 			// Kitsune: perto do chão, a cauda sobe o necessário para não entrar nos blocos (suave, sem tremer)
 			if (n > 1 && grounded) {
-				float lift = 0f;
-				for (int it = 0; it < 14 && lowestPoint(g, pivotScale, scale) > FLOOR; it++) {
-					lift += 0.08f;
-					g.turn("tail", pitch + lift, tailYaw, k * 0.25f);
+				float lift = 0f, low = lowestPoint(g, pivotScale, scale);
+				if (low > FLOOR) {
+					// descobre para que lado a cauda sobe e vai girando até sair do chão
+					g.turn("tail", pitch + 0.08f, tailYaw, k * 0.25f);
+					float dir = lowestPoint(g, pivotScale, scale) < low ? 1f : -1f;
+					for (int it = 0; it < 14 && low > FLOOR; it++) {
+						lift += 0.08f * dir;
+						g.turn("tail", pitch + lift, tailYaw, k * 0.25f);
+						low = lowestPoint(g, pivotScale, scale);
+					}
 				}
 				// suaviza a subida entre quadros (cada cauda guarda a sua)
 				float[] lf = TAIL_LIFT.computeIfAbsent(e.getId() * 16 + i, x -> new float[1]);
-				lf[0] = lift > lf[0] ? lift : MathHelper.lerp(0.15f, lf[0], lift);
+				lf[0] = Math.abs(lift) > Math.abs(lf[0]) ? lift : MathHelper.lerp(0.15f, lf[0], lift);
 				g.turn("tail", pitch + lf[0], tailYaw, k * 0.25f);
 			}
 			m.push();

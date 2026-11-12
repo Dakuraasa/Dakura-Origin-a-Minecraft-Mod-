@@ -40,10 +40,20 @@ public final class RaceRegistry {
 	/** Perfil da raça ("tag" no JSON): combat, exploration, casual, support, mixed. Variantes herdam da base. */
 	private static final Map<String, String> TAGS = new java.util.HashMap<>();
 
+	/** Raças que perdem os poderes no Nether ("nether_suppressed"): a versão enfraquecida, só com o que não é vantagem. */
+	private static final Map<String, Race> NETHER = new java.util.HashMap<>();
+	private static final java.util.Set<String> NETHER_KEEP = java.util.Set.of("maturity", "cosmetic", "restricted_diet", "damage_multiplier",
+			"environment_damage", "inverted_potions", "nature_oath", "sunlight_damage");
+
 	private RaceRegistry() {}
+
+	public static Optional<Race> netherForm(String id) {
+		return Optional.ofNullable(NETHER.get(id));
+	}
 
 	public static void load() {
 		RACES.clear();
+		NETHER.clear();
 		VARIANT_OF.clear();
 		TAGS.clear();
 		for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
@@ -150,6 +160,7 @@ public final class RaceRegistry {
 				JsonObject t = e.getAsJsonObject();
 				Race.TraitKind kind = switch (str(t, "type", "neutro").toLowerCase(Locale.ROOT)) {
 					case "vantagem", "pro" -> Race.TraitKind.VANTAGEM;
+					case "vanilla" -> Race.TraitKind.VANILLA;
 					case "desvantagem", "con" -> Race.TraitKind.DESVANTAGEM;
 					default -> Race.TraitKind.NEUTRO;
 				};
@@ -158,6 +169,7 @@ public final class RaceRegistry {
 		}
 
 		List<RacePower> powers = new ArrayList<>();
+		List<RacePower> kept = new ArrayList<>();
 		if (o.has("powers")) {
 			for (JsonElement e : o.getAsJsonArray("powers")) {
 				JsonObject pj = e.getAsJsonObject();
@@ -167,7 +179,11 @@ public final class RaceRegistry {
 					DakuraOrigins.LOGGER.error("Raça {}: tipo de poder desconhecido '{}'", id, type);
 					continue;
 				}
-				powers.add(factory.create(pj));
+				RacePower made = factory.create(pj);
+				powers.add(made);
+				String path = type.getPath();
+				if (NETHER_KEEP.contains(path) || (path.equals("conditional_attribute") && pj.has("amount") && pj.get("amount").getAsDouble() < 0)
+						|| "keep".equals(str(pj, "nether", ""))) kept.add(made);
 			}
 		}
 
@@ -188,6 +204,10 @@ public final class RaceRegistry {
 			}
 		}
 
+		if (o.has("nether_suppressed") && o.get("nether_suppressed").getAsBoolean()) {
+			NETHER.put(id, new Race(id, order, name, epithet, icon, iw, ih, palette,
+					str(o, "description", ""), List.copyOf(traits), List.copyOf(kept), List.of()));
+		}
 		return new Race(id, order, name, epithet, icon, iw, ih, palette,
 				str(o, "description", ""), List.copyOf(traits), List.copyOf(powers), List.copyOf(abilities));
 	}

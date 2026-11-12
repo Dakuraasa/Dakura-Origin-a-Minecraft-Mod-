@@ -1,6 +1,6 @@
 {
 	"id": "vastaya_felina",
-	"order": 13,
+	"order": 14,
 	"name": "Vastaya Felina",
 	"epithet": "Garras Silenciosas",
 	"icon": "dakura_origins:textures/race/vastaya_felina.png",
@@ -48,6 +48,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Longe da natureza: mais fraca no Nether."
+		},
+		{
+			"type": "vanilla",
+			"text": "Rainha dos felinos: gatos não fogem dela e os creepers mantêm distância."
 		}
 	],
 	"powers": [
@@ -102,6 +106,10 @@
 			"operation": "add_value",
 			"amount": -1.5,
 			"when": "nether"
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "creeper_fear"
 		}
 	],
 	"abilities": [
@@ -109,7 +117,7 @@
 			"type": "dakura_origins:keen_sight",
 			"name": "Sentidos Aguçados",
 			"description": "Por 10 segundos sente monstros e jogadores por perto e ao longe (até 48 blocos), mesmo atrás de paredes.",
-			"cooldown": 700,
+			"cooldown": 1050,
 			"duration": 200,
 			"radius": 48
 		},
@@ -117,7 +125,7 @@
 			"type": "dakura_origins:buff_mode",
 			"name": "Corrida Felina",
 			"description": "Por 8 segundos corre muito rápido, dá saltos enormes e não toma dano de queda.",
-			"cooldown": 500,
+			"cooldown": 750,
 			"duration": 160,
 			"flag": "prowl",
 			"fall_immune": true,

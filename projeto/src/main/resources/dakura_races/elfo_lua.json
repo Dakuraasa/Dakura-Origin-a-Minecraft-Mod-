@@ -1,0 +1,175 @@
+{
+	"id": "elfo_lua",
+	"order": 7,
+	"variant_of": "elfo_noturno",
+	"name": "Elfo da Lua",
+	"epithet": "Graça do Luar",
+	"icon": "dakura_origins:textures/race/elfo_lua.png",
+	"icon_size": [
+		384,
+		145
+	],
+	"palette": {
+		"ink": [
+			"#05060F",
+			"#121633",
+			"#27306B",
+			"#5B5FB8",
+			"#C7C9F5",
+			"#F7F7FF"
+		],
+		"sky": "#030410",
+		"glow": "#F2F3FF",
+		"text": "#123524",
+		"accent": "#4B4FA8",
+		"muted": "#5E806B"
+	},
+	"description": "Elfos graciosos que dançam sob o luar. De dia são delicados, mas quando a lua nasce tornam-se lâminas puras: aprisionam inimigos num feixe de eclipse e fazem a própria lua cair sobre eles. Até o Warden reconhece sua harmonia com a escuridão.",
+	"traits": [
+		{
+			"type": "vantagem",
+			"text": "Graça lunar: à noite fica muito mais forte, rápido e resistente."
+		},
+		{
+			"type": "vantagem",
+			"text": "Visão noturna e passos silenciosos."
+		},
+		{
+			"type": "vantagem",
+			"text": "Harmonia natural: os animais não fogem dele."
+		},
+		{
+			"type": "vantagem",
+			"text": "Filho da noite profunda: o Warden não o ataca nem o fere."
+		},
+		{
+			"type": "vantagem",
+			"text": "Lâmina do luar: seus golpes causam decomposição (Wither)."
+		},
+		{
+			"type": "vantagem",
+			"text": "Passiva — Marca do Eclipse: à noite, a cada 3 golpes no mesmo alvo um clarão lunar explode nele, com dano extra e cegueira."
+		},
+		{
+			"type": "vanilla",
+			"text": "Sorte do luar: à noite tem muito mais sorte (pesca e baús que ele abre rendem melhor)."
+		},
+		{
+			"type": "desvantagem",
+			"text": "De dia perde parte da força."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Corpo esguio: 9 corações."
+		},
+		{
+			"type": "desvantagem",
+			"text": "O fogo causa 50% mais dano."
+		}
+	],
+	"powers": [
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 5.0,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.2,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 4.0,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "silent_steps",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "animal_friend"
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "warden_friend"
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "wither",
+			"seconds": 3
+		},
+		{
+			"type": "dakura_origins:moon_mark",
+			"hits": 3,
+			"damage": 5
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.luck",
+			"operation": "add_value",
+			"amount": 3.0,
+			"when": "night"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": -2.0,
+			"when": "day"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": -2.0
+		},
+		{
+			"type": "dakura_origins:damage_multiplier",
+			"damage_tag": "minecraft:is_fire",
+			"multiplier": 1.5
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#B8BCFF",
+			"when": "night"
+		}
+	],
+	"abilities": [
+		{
+			"type": "dakura_origins:moon_beam",
+			"name": "Prisão do Eclipse",
+			"cooldown": 900,
+			"range": 7.5,
+			"duration": 100,
+			"damage": 2.0,
+			"every": 10,
+			"strike": 4.0,
+			"description": "Escolhe um inimigo a cerca de 7 blocos, estende as duas mãos e canaliza um feixe contínuo de luz azul, rosa, roxa e negra. Um raio cai no alvo, que fica totalmente preso por 5 segundos, levando dano constante, cegueira e decomposição. Mais forte à noite."
+		},
+		{
+			"type": "dakura_origins:moonfall",
+			"name": "Queda da Lua",
+			"cooldown": 4800,
+			"windup": 50,
+			"radius": 10,
+			"damage": 22,
+			"blast": 6,
+			"crater": 4.5,
+			"range": 40,
+			"description": "Ergue os braços e invoca uma lua branca enorme: todos por perto ficam cegos e muito lentos, e ele não pode atacar durante a invocação. Depois a lua cai lenta e teleguiada sobre o alvo, abrindo uma cratera e causando dano altíssimo."
+		}
+	]
+}

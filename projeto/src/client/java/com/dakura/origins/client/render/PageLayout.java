@@ -31,7 +31,7 @@ public final class PageLayout {
 	private static final int LINE_H = 11;
 	private static final int TEXT_INDENT = 13;
 	/** Caixa padrão de todos os ícones de raça (em pixels de interface). */
-	public static final int ICON_BOX_W = 134, ICON_BOX_H = 144; // olhos maiores, sempre limitados à largura da folha
+	public static final int ICON_BOX_W = 156, ICON_BOX_H = 164; // olhos maiores, sempre limitados à largura da folha
 
 	/**
 	 * Dados extras da página de consulta (só na tela "sua raça").
@@ -42,10 +42,19 @@ public final class PageLayout {
 
 	public enum Role { TEXT, ACCENT, MUTED, PRO, CON, NEUTRAL, JADE }
 
-	private sealed interface Op permits TextOp, ImageOp, StarOp {}
+	private sealed interface Op permits TextOp, ImageOp, StarOp, IconOp {}
 	private record TextOp(Text text, int x, int y, Role role, float scale) implements Op {}
 	private record ImageOp(Identifier texture, int x, int y, int w, int h, int texW, int texH) implements Op {}
 	private record StarOp(int x, int y, Role role) implements Op {}
+
+	/** Marcador em pixel art das listas: maçã (vantagem), bigorna (vantagem vanilla), poção (desvantagem). */
+	private record IconOp(Identifier tex, int x, int y, int w, int h, int texW, int texH) implements Op {}
+
+	public static final Identifier ICON_PRO = DakuraOrigins.id("textures/gui/icon_pro.png");
+	public static final Identifier ICON_VANILLA = DakuraOrigins.id("textures/gui/icon_vanilla.png");
+	public static final Identifier ICON_CON = DakuraOrigins.id("textures/gui/icon_con.png");
+	public static final Identifier FEATHER = DakuraOrigins.id("textures/gui/feather.png");
+	private static final int FEATHER_W = 24, FEATHER_H = 22;
 
 	private final List<Op> ops = new ArrayList<>();
 	private final TextRenderer tr;
@@ -112,9 +121,8 @@ public final class PageLayout {
 			ops.add(new TextOp(ep, (innerW - tr.getWidth(ep)) / 2, y, Role.MUTED, 1f));
 			y += LINE_H + 2;
 		}
-		int dw = Math.min(DIVIDER_W, innerW);
-		ops.add(new ImageOp(DIVIDER, (innerW - dw) / 2, y, dw, DIVIDER_H, DIVIDER_W, DIVIDER_H));
-		y += DIVIDER_H + 6;
+		ops.add(new ImageOp(FEATHER, (innerW - FEATHER_W) / 2, y, FEATHER_W, FEATHER_H, FEATHER_W, FEATHER_H));
+		y += FEATHER_H + 6;
 
 		boolean first = true;
 		for (String paragraph : race.descriptionText().getString().split("\\n")) {
@@ -143,10 +151,12 @@ public final class PageLayout {
 
 		if (details == null && part != 2) {
 			// página de escolha: lista única, a cor da ✦ diz se é vantagem ou fraqueza
-			for (Race.Trait trait : race.traits()) y = trait(trait, y);
+			for (Race.TraitKind k : Race.TraitKind.values())
+				for (Race.Trait trait : race.traits()) if (trait.kind() == k) y = trait(trait, y);
 		} else {
 			// livro aberto e página de consulta: agrupada
 			y = traitGroup(race, Race.TraitKind.VANTAGEM, "page.advantages", y);
+			y = traitGroup(race, Race.TraitKind.VANILLA, "page.vanilla", y);
 			y = traitGroup(race, Race.TraitKind.DESVANTAGEM, "page.weaknesses", y);
 			y = traitGroup(race, Race.TraitKind.NEUTRO, "page.traits", y);
 		}
@@ -194,9 +204,8 @@ public final class PageLayout {
 		}
 
 		y = Math.max(y + 2, iconH + 4);
-		int dw = Math.min(DIVIDER_W, innerW);
-		ops.add(new ImageOp(DIVIDER, (innerW - dw) / 2, y, dw, DIVIDER_H, DIVIDER_W, DIVIDER_H));
-		return y + DIVIDER_H + 7;
+		ops.add(new ImageOp(FEATHER, (innerW - FEATHER_W) / 2, y, FEATHER_W, FEATHER_H, FEATHER_W, FEATHER_H));
+		return y + FEATHER_H + 7;
 	}
 
 	private void composeAbilities(Race race, List<Text> abilityKeys, @Nullable Details details, int y) {
@@ -248,12 +257,12 @@ public final class PageLayout {
 	}
 
 	private int trait(Race.Trait trait, int y) {
-		Role role = switch (trait.kind()) {
-			case VANTAGEM -> Role.PRO;
-			case DESVANTAGEM -> Role.CON;
-			case NEUTRO -> Role.NEUTRAL;
-		};
-		ops.add(new StarOp(colStart(y), y + 1, role));
+		switch (trait.kind()) {
+			case VANTAGEM -> ops.add(new IconOp(ICON_PRO, colStart(y), y - 1, 9, 10, 12, 14));
+			case VANILLA -> ops.add(new IconOp(ICON_VANILLA, colStart(y) - 2, y + 1, 12, 7, 28, 16));
+			case DESVANTAGEM -> ops.add(new IconOp(ICON_CON, colStart(y) + 1, y - 1, 7, 10, 10, 14));
+			case NEUTRO -> ops.add(new StarOp(colStart(y), y + 1, Role.NEUTRAL));
+		}
 		return flow(trait.asText().getString(), y, Role.TEXT, false, TEXT_INDENT) + 3;
 	}
 
@@ -264,7 +273,7 @@ public final class PageLayout {
 			if (!any) {
 				MutableText h = DakuraFonts.heading(tr(titleKey));
 				ops.add(new TextOp(h, colStart(y), y, kind == Race.TraitKind.DESVANTAGEM ? Role.CON
-						: kind == Race.TraitKind.VANTAGEM ? Role.PRO : Role.MUTED, 1.1f));
+						: kind == Race.TraitKind.VANTAGEM || kind == Race.TraitKind.VANILLA ? Role.PRO : Role.MUTED, 1.1f));
 				y += LINE_H + 3;
 				any = true;
 			}
@@ -392,6 +401,8 @@ public final class PageLayout {
 				}
 			} else if (op instanceof ImageOp i) {
 				ctx.drawTexture(i.texture, originX + i.x, originY + i.y, i.w, i.h, 0f, 0f, i.texW, i.texH, i.texW, i.texH);
+			} else if (op instanceof IconOp ic) {
+				ctx.drawTexture(ic.tex, originX + ic.x, originY + ic.y, ic.w, ic.h, 0f, 0f, ic.texW, ic.texH, ic.texW, ic.texH);
 			} else if (op instanceof StarOp s) {
 				PaperPage.tint(ctx, color(s.role, pal));
 				ctx.drawTexture(STAR, originX + s.x, originY + s.y, STAR_SIZE, STAR_SIZE, 0f, 0f, STAR_SIZE, STAR_SIZE, STAR_SIZE, STAR_SIZE);

@@ -35,8 +35,8 @@
 			"text": "Fotossíntese: sob o sol, regenera mais rápido e a fome se enche sozinha."
 		},
 		{
-			"type": "vantagem",
-			"text": "Plantações por perto crescem muito mais rápido."
+			"type": "vanilla",
+			"text": "Plantações por perto crescem mais rápido, e muito mais quando ela fica parada perto delas (desde que tenham luz, água e solo certos)."
 		},
 		{
 			"type": "vantagem",
@@ -73,6 +73,10 @@
 		{
 			"type": "neutro",
 			"text": "Ao morrer, flores brotam pelo chão ao redor."
+		},
+		{
+			"type": "desvantagem",
+			"text": "No Nether perde todas as vantagens e habilidades da raça (tudo volta ao sair, sem perder progresso)."
 		}
 	],
 	"powers": [
@@ -174,12 +178,16 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#FFE27A",
 			"when": "day"
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "crop_growth"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:natural_growth",
-			"cooldown": 6000,
+			"cooldown": 9000,
 			"radius": 20,
 			"height": 8,
 			"max_steps": 12,
@@ -190,7 +198,7 @@
 			"type": "dakura_origins:solar_beam",
 			"name": "Raio Solar",
 			"description": "Só de dia: ergue um braço, junta uma esfera de luz do sol e dispara um raio enorme que abre um túnel nos blocos à frente.",
-			"cooldown": 1200,
+			"cooldown": 1800,
 			"charge": 30,
 			"fire": 30,
 			"range": 24,
@@ -199,5 +207,6 @@
 			"break_interval": 2,
 			"max_hardness": 5.0
 		}
-	]
+	],
+	"nether_suppressed": true
 }

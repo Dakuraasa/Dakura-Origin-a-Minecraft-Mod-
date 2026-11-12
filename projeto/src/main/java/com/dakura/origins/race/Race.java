@@ -48,7 +48,7 @@ public record Race(
 		return Text.translatableWithFallback(key(id, "description"), description);
 	}
 
-	public enum TraitKind { VANTAGEM, DESVANTAGEM, NEUTRO }
+	public enum TraitKind { VANTAGEM, VANILLA, DESVANTAGEM, NEUTRO }
 
 	/** Uma linha da lista com ✦ (só texto, para a página). */
 	public record Trait(TraitKind kind, String text, String key) {

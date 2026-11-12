@@ -57,6 +57,10 @@
 		{
 			"type": "desvantagem",
 			"text": "O calor do Nether o enfraquece."
+		},
+		{
+			"type": "vanilla",
+			"text": "Harmonia natural: os animais não fogem dele."
 		}
 	],
 	"powers": [
@@ -110,6 +114,10 @@
 			"operation": "add_value",
 			"amount": -1.5,
 			"when": "nether"
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "animal_friend"
 		}
 	],
 	"abilities": [
@@ -117,7 +125,7 @@
 			"type": "dakura_origins:dash",
 			"name": "Recuo Ágil",
 			"description": "Salta para trás com agilidade e, no meio do salto, dispara para a frente uma esfera de energia arcana que explode em luz azul ao acertar (sem fogo).",
-			"cooldown": 100,
+			"cooldown": 150,
 			"power": 1.3,
 			"lift": 0.45,
 			"orb": true,
@@ -128,7 +136,7 @@
 			"type": "dakura_origins:keen_sight",
 			"name": "Olhar de Caçador",
 			"description": "Por 10 segundos, enxerga o contorno de toda criatura num raio de 40 blocos, até atrás de paredes.",
-			"cooldown": 900,
+			"cooldown": 1350,
 			"duration": 200,
 			"radius": 40
 		}

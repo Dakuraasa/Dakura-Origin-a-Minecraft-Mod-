@@ -1,6 +1,6 @@
 {
 	"id": "vastaya_cao",
-	"order": 13,
+	"order": 14,
 	"name": "Vastaya Cão",
 	"epithet": "Faro da Matilha",
 	"icon": "dakura_origins:textures/race/vastaya_cao.png",
@@ -48,6 +48,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Longe da natureza: mais fraca no Nether."
+		},
+		{
+			"type": "vanilla",
+			"text": "Alma de matilha: domestica lobos com um único osso, e os seus cães ganham cura contínua e mais força perto dele."
 		}
 	],
 	"powers": [
@@ -102,6 +106,10 @@
 			"operation": "add_value",
 			"amount": -1.5,
 			"when": "nether"
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "tame_instant"
 		}
 	],
 	"abilities": [
@@ -109,7 +117,7 @@
 			"type": "dakura_origins:keen_sight",
 			"name": "Sentidos Aguçados",
 			"description": "Por 10 segundos sente monstros e jogadores por perto e ao longe (até 48 blocos), mesmo atrás de paredes.",
-			"cooldown": 700,
+			"cooldown": 1050,
 			"duration": 200,
 			"radius": 48
 		},
@@ -117,7 +125,7 @@
 			"type": "dakura_origins:buff_mode",
 			"name": "Caçada",
 			"description": "Entra em modo de caça por 10 segundos: rosna, fica mais forte e mais rápido.",
-			"cooldown": 500,
+			"cooldown": 750,
 			"duration": 200,
 			"flag": "hunt",
 			"sound": "wolf",

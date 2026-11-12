@@ -1,6 +1,5 @@
 package com.dakura.origins.client.anim;
 
-import com.dakura.origins.client.screen.SeraphAltarScreen;
 import com.dakura.origins.power.EntityFlags;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
@@ -168,14 +167,7 @@ final class FinaleEffects {
 						base.y + 2 + rnd.nextDouble() * 3, base.z + rnd.nextGaussian() * 1.5, 0, -0.04, 0);
 			}
 			case "altar_opt" -> ALTAR.add(new int[]{param >> 4, param & 15});
-			case "altar_open" -> {
-				if (e == MinecraftClient.getInstance().player && !ALTAR.isEmpty()) {
-					List<int[]> opts = new ArrayList<>(ALTAR);
-					ALTAR.clear();
-					MinecraftClient.getInstance().setScreen(new SeraphAltarScreen(opts));
-				}
-				ALTAR.clear();
-			}
+			case "altar_open" -> ALTAR.clear();
 			case "altar_ritual" -> {
 				ClientEffects.spiral(world, base, 1.0, 3.0, 2, 30, HOLY_GOLD, ParticleTypes.ENCHANT, rnd);
 				for (int i = 0; i < 20; i++) world.addParticle(ParticleTypes.ENCHANT, base.x + rnd.nextGaussian() * 1.5,

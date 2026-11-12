@@ -39,7 +39,7 @@
 			"text": "Um pouco mais forte que um humano, porém mais frágil: só 8 corações."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "Monstros não o atacam, a menos que ele ataque primeiro."
 		},
 		{
@@ -56,7 +56,7 @@
 		},
 		{
 			"type": "desvantagem",
-			"text": "O Nether é o inferno: lá ele se desfaz como na chuva."
+			"text": "O Nether é o inferno: lá ele se desfaz como na chuva e perde todas as vantagens e habilidades (tudo volta ao sair, sem perder progresso)."
 		},
 		{
 			"type": "desvantagem",
@@ -136,7 +136,8 @@
 			"type": "dakura_origins:phase",
 			"name": "Forma Espectral",
 			"description": "Fica invisível e atravessa paredes, como um espectador, sem limite de tempo. Aperte de novo para voltar a ser visível.",
-			"cooldown": 20
+			"cooldown": 30
 		}
-	]
+	],
+	"nether_suppressed": true
 }

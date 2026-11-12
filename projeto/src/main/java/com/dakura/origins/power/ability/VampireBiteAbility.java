@@ -232,6 +232,7 @@ public final class VampireBiteAbility implements Ability {
 	private void holdInPlace(Session s) {
 		ServerPlayerEntity v = s.vampire;
 		LivingEntity prey = s.victim;
+		com.dakura.origins.power.Control.lock(prey, 3);
 		float yaw = v.getYaw();
 		Vec3d forward = Vec3d.fromPolar(0f, yaw);
 		double gap = 0.45 + prey.getWidth() * 0.5;

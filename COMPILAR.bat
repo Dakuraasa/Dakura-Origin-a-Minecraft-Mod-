@@ -2,6 +2,13 @@
 chcp 65001 >nul
 title Dakura Origins - Compilar
 cd /d "%~dp0projeto"
+rem arquivos de raças/poderes removidos (Serafim e a passiva Sorye) - apaga as sobras antigas
+del /q "src\main\resources\dakura_races\serafim.json" 2>nul
+del /q "src\main\resources\assets\dakura_origins\textures\race\serafim.png" 2>nul
+del /q "src\main\java\com\dakura\origins\power\types\SoryePower.java" 2>nul
+del /q "src\main\java\com\dakura\origins\power\ability\SeraphBlessingAbility.java" 2>nul
+del /q "src\main\java\com\dakura\origins\power\ability\CelestialAltarAbility.java" 2>nul
+del /q "src\client\java\com\dakura\origins\client\screen\SeraphAltarScreen.java" 2>nul
 if not exist "..\logs" mkdir "..\logs"
 if not exist "..\builds" mkdir "..\builds"
 

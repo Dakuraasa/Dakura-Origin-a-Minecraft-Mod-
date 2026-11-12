@@ -1,6 +1,6 @@
 {
 	"id": "fada",
-	"order": 15,
+	"order": 16,
 	"tag": "support",
 	"name": "Fada",
 	"epithet": "A Luz Entre as Folhas",
@@ -39,7 +39,7 @@
 			"text": "Come como um passarinho: cada alimento enche e sacia o dobro, e a fome cai pela metade."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "Regenera aos poucos e faz as plantas por perto crescerem."
 		},
 		{
@@ -167,13 +167,13 @@
 	"abilities": [
 		{
 			"type": "dakura_origins:fairy_perch",
-			"cooldown": 20,
+			"cooldown": 30,
 			"name": "Pouso no Ombro",
 			"description": "Pousa no ombro do jogador mais próximo: enquanto estiver lá, os dois regeneram e ele ganha o dobro de experiência. Use de novo (ou agache) para sair."
 		},
 		{
 			"type": "dakura_origins:flower_sanctuary",
-			"cooldown": 700,
+			"cooldown": 1050,
 			"radius": 10,
 			"duration": 400,
 			"heal": 2.0,

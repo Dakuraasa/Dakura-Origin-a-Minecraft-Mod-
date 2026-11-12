@@ -1,6 +1,6 @@
 {
 	"id": "cabra",
-	"order": 8,
+	"order": 9,
 	"tag": "exploration",
 	"name": "Cabra",
 	"epithet": "Os Cascos das Montanhas",
@@ -39,7 +39,7 @@
 			"text": "Mais rápido, e a fome cai devagar."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "Os cascos andam sobre neve fofa e blocos de magma sem se ferir."
 		},
 		{
@@ -164,7 +164,7 @@
 			"type": "dakura_origins:charged_jump",
 			"name": "Salto da Montanha",
 			"description": "Segure a tecla para carregar e solte para saltar, como um cavalo, mas muito mais alto. Quanto mais carga, mais alto e mais longe.",
-			"cooldown": 60,
+			"cooldown": 90,
 			"max_charge": 30,
 			"min_power": 0.6,
 			"max_power": 1.55,
@@ -174,7 +174,7 @@
 			"type": "dakura_origins:headbutt",
 			"name": "Cabeçada",
 			"description": "Investe com os chifres e arremessa para bem longe o primeiro alvo à frente.",
-			"cooldown": 140,
+			"cooldown": 210,
 			"range": 3.5,
 			"damage": 2,
 			"knockback": 2.6,

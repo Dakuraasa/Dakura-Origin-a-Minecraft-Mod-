@@ -141,19 +141,35 @@ public class RaceFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEnt
 	}
 
 	/** Chave de corda da Boneca nas costas (gira sem parar) + juntas de boneca nos ombros. */
+	/**
+	 * Chave de corda da Boneca: haste com anéis, cubo central e as duas "asas" da borboleta com cantos arredondados
+	 * (degraus de cubos) e um miolo escuro vazado. Gira no eixo da haste.
+	 */
 	private static ModelPart dollKey() {
 		ModelData md = new ModelData();
 		ModelPartData root = md.getRoot();
-		ModelPartData key = root.addChild("key", box(BRASS, -0.5f, -0.5f, 0, 1, 1, 3), ModelTransform.of(0, 4.5f, 2.0f, 0, 0, 0));
-		ModelPartData head = key.addChild("head", box(BRASS, -0.5f, -0.6f, 2.6f, 1, 1.2f, 1), ModelTransform.NONE);
+		ModelPartData key = root.addChild("key", box(BRASS, -0.45f, -0.45f, 0, 0.9f, 0.9f, 3.2f), ModelTransform.of(0, 4.5f, 2.0f, 0, 0, 0));
+		key.addChild("collar", box(STONE_DK, -0.8f, -0.8f, 0.2f, 1.6f, 1.6f, 0.5f), ModelTransform.NONE);
+		key.addChild("ring", box(BRASS, -0.65f, -0.65f, 1.5f, 1.3f, 1.3f, 0.35f), ModelTransform.NONE);
+		ModelPartData head = key.addChild("head", box(BRASS, -0.75f, -0.75f, 2.9f, 1.5f, 1.5f, 1.2f), ModelTransform.NONE);
+		head.addChild("cap", box(STONE_DK, -0.4f, -0.4f, 4.05f, 0.8f, 0.8f, 0.25f), ModelTransform.NONE);
 		for (int s = -1; s <= 1; s += 2) {
-			head.addChild(s > 0 ? "l" : "r", box(BRASS, s > 0 ? 0.3f : -3.3f, -1.6f, 2.5f, 3, 3.2f, 1.2f), ModelTransform.NONE);
-			head.addChild(s > 0 ? "lh" : "rh", box(STONE_DK, s > 0 ? 1.1f : -2.5f, -0.6f, 2.45f, 1.4f, 1.2f, 1.3f), ModelTransform.NONE);
+			String n = s > 0 ? "l" : "r";
+			head.addChild(n + "_core", box(BRASS, x(s, 0.7f, 2.6f), -1.3f, 3.0f, 2.6f, 2.6f, 0.9f), ModelTransform.NONE);
+			head.addChild(n + "_top", box(BRASS, x(s, 1.0f, 2.0f), -1.8f, 3.0f, 2.0f, 0.5f, 0.9f), ModelTransform.NONE);
+			head.addChild(n + "_bot", box(BRASS, x(s, 1.0f, 2.0f), 1.3f, 3.0f, 2.0f, 0.5f, 0.9f), ModelTransform.NONE);
+			head.addChild(n + "_out", box(BRASS, x(s, 3.3f, 0.5f), -0.9f, 3.0f, 0.5f, 1.8f, 0.9f), ModelTransform.NONE);
+			head.addChild(n + "_hole", box(STONE_DK, x(s, 1.5f, 1.2f), -0.6f, 2.95f, 1.2f, 1.2f, 1.0f), ModelTransform.NONE);
 		}
 		for (int s = -1; s <= 1; s += 2) {
 			root.addChild(s > 0 ? "jl" : "jr", box(STONE_DK, -1.1f, -1.1f, -1.1f, 2.2f, 2.2f, 2.2f), ModelTransform.of(s * 4.6f, 1.6f, 0, 0, 0.78f, 0));
 		}
 		return TexturedModelData.of(md, 128, 64).createModel();
+	}
+
+	/** Início em x de um cubo espelhado para o lado s (distância "from" do centro, largura w). */
+	private static float x(int s, float from, float w) {
+		return s > 0 ? from : -from - w;
 	}
 
 	@Override

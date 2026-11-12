@@ -58,6 +58,14 @@
 		{
 			"type": "desvantagem",
 			"text": "Lento na água."
+		},
+		{
+			"type": "vanilla",
+			"text": "Garras escavadoras: quebra blocos mais rápido."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Sono de dragão: só consegue dormir com um teto sólido a até 6 blocos acima."
 		}
 	],
 	"powers": [
@@ -100,9 +108,9 @@
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.attack_damage",
 			"stage_values": [
+				0.5,
 				1.0,
-				1.5,
-				2.0
+				1.5
 			]
 		},
 		{
@@ -142,6 +150,16 @@
 			"operation": "add_multiplied_base",
 			"amount": -0.35,
 			"when": "water"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:player.block_break_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.35
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "needs_roof"
 		}
 	],
 	"abilities": [
@@ -149,7 +167,7 @@
 			"type": "dakura_origins:fireball",
 			"name": "Bola de Fogo Verde",
 			"description": "A mesma bola de fogo do Dracônico, em chamas verdes e azuis: explode, empurra sem exagero e incendeia de verdade quem estiver perto e o chão em volta.",
-			"cooldown": 200,
+			"cooldown": 300,
 			"speed": 1.6,
 			"life": 50,
 			"explosion_power": 4.0,
@@ -157,22 +175,22 @@
 			"fire_count": 12,
 			"fire_radius": 3,
 			"maturity_damage": [
-				0.88,
-				1.23,
-				1.58
+				0.6,
+				0.85,
+				1.1
 			],
 			"palette": "green"
 		},
 		{
 			"type": "dakura_origins:skyfall_grab",
 			"name": "Queda do Céu",
-			"cooldown": 900,
+			"cooldown": 1350,
 			"range": 4.5,
 			"windup": 60,
 			"rise": 16,
-			"damage": 18,
+			"damage": 13,
 			"radius": 5,
-			"splash": 8,
+			"splash": 6,
 			"description": "Agarra o inimigo à frente e abre as asas por 3 s (se levar dano nesse tempo, solta o alvo). Depois voa para o alto com ele e mergulha contra o chão: explosão verde, cratera e fogo verde no local, com dano enorme."
 		}
 	]

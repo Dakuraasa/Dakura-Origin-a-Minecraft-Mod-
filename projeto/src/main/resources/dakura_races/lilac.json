@@ -1,6 +1,6 @@
 {
 	"id": "lilac",
-	"order": 16,
+	"order": 17,
 	"tag": "casual",
 	"name": "Lilac",
 	"epithet": "A Gênia da Própria Ganância",
@@ -31,8 +31,8 @@
 			"text": "Bem mais forte e resistente que um humano."
 		},
 		{
-			"type": "vantagem",
-			"text": "Sorte de garimpeira: minérios às vezes rendem o dobro e dão mais experiência."
+			"type": "vanilla",
+			"text": "Fortuna natural: os minérios que ela quebra caem como se a ferramenta tivesse Fortuna II, mesmo sem encantamento (só para ela)."
 		},
 		{
 			"type": "vantagem",
@@ -57,10 +57,6 @@
 		{
 			"type": "neutro",
 			"text": "Viciada em apostas."
-		},
-		{
-			"type": "vantagem",
-			"text": "Passiva — Sorye: baús rendem mais e melhor, piglins deixam mais coisas e aldeões dão desconto, tudo dentro do que o jogo já permitiria. A cada 5 min, bater num baú já aberto joga os dados e gera o conteúdo de novo, com mais sorte (uma vez por baú)."
 		}
 	],
 	"powers": [
@@ -84,7 +80,7 @@
 		},
 		{
 			"type": "dakura_origins:greed",
-			"ore_chance": 0.25,
+			"ore_chance": 0.0,
 			"midas_chance": 0.3
 		},
 		{
@@ -121,29 +117,22 @@
 			"when": "always"
 		},
 		{
-			"type": "dakura_origins:sorye",
-			"chest_chance": 0.35,
-			"piglin_chance": 0.4,
-			"reroll_cooldown": 6000,
-			"reroll_luck": 3
-		},
-		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.luck",
 			"operation": "add_value",
 			"amount": 2.0
 		},
 		{
-			"type": "dakura_origins:marker",
-			"kind": "lucky_discount"
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "fortune"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:golden_fist",
 			"name": "Punho de Ouro",
-			"description": "Um soco pesado com o punho coberto de ouro. Com uma chance pequena acerta o JACKPOT: dano triplo e festa de cassino.",
-			"cooldown": 160,
+			"description": "Um soco pesado com o punho coberto de ouro. Com uma chance pequena acerta o JACKPOT: dano triplo, explosão dourada e fogos de artifício.",
+			"cooldown": 240,
 			"range": 4,
 			"damage": 7,
 			"jackpot_chance": 0.2,
@@ -153,7 +142,7 @@
 			"type": "dakura_origins:casino",
 			"name": "Cassino",
 			"description": "Aposta o item da mão numa roda da sorte: pode perder tudo, empatar ou multiplicar por 2, 3 ou até 5. Quanto mais raro o item, mais difícil ganhar.",
-			"cooldown": 6000,
+			"cooldown": 9000,
 			"spin": 70
 		}
 	]

@@ -1,6 +1,6 @@
 {
 	"id": "vastaya",
-	"order": 13,
+	"order": 14,
 	"tag": "exploration",
 	"name": "Vastaya Ave",
 	"epithet": "Plumas de Caça",
@@ -31,7 +31,7 @@
 			"text": "Mais rápido e mais forte que um humano; quedas ferem pouco."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "Os animais não fogem dele."
 		},
 		{
@@ -126,7 +126,7 @@
 			"type": "dakura_origins:keen_sight",
 			"name": "Sentidos Aguçados",
 			"description": "Por 10 segundos sente monstros e jogadores por perto e ao longe (até 48 blocos), mesmo atrás de paredes.",
-			"cooldown": 700,
+			"cooldown": 1050,
 			"duration": 200,
 			"radius": 48
 		},
@@ -134,7 +134,7 @@
 			"type": "dakura_origins:feather_barrage",
 			"name": "Rajada de Penas",
 			"description": "Dispara uma rajada de penas-adaga, as flechas próprias da raça: elas se cravam no corpo do alvo, causam fraqueza e acumulam dano no mesmo alvo.",
-			"cooldown": 400,
+			"cooldown": 600,
 			"shots": 12,
 			"interval": 4,
 			"speed": 2.2,

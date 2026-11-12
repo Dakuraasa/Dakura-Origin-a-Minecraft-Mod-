@@ -1,6 +1,6 @@
 {
 	"id": "vastaya_coelho",
-	"order": 13,
+	"order": 14,
 	"tag": "combat",
 	"name": "Vastaya Coelho",
 	"epithet": "A Lebre da Lua Cheia",
@@ -49,6 +49,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Corpo pequeno: só 9 corações."
+		},
+		{
+			"type": "vanilla",
+			"text": "Colheita farta: plantações maduras que ela colhe às vezes rendem em dobro."
 		}
 	],
 	"powers": [
@@ -112,13 +116,17 @@
 			"attribute": "minecraft:generic.max_health",
 			"operation": "add_value",
 			"amount": -2.0
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "harvest_bonus"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:rabbit_rush",
 			"name": "Chuva de Chutes",
-			"cooldown": 300,
+			"cooldown": 450,
 			"range": 12,
 			"kicks": 8,
 			"damage": 2.5,
@@ -127,7 +135,7 @@
 		},
 		{
 			"type": "dakura_origins:fist_barrage",
-			"cooldown": 360,
+			"cooldown": 540,
 			"range": 10,
 			"punches": 10,
 			"damage": 2.0,

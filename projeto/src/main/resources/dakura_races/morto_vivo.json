@@ -1,6 +1,6 @@
 {
 	"id": "morto_vivo",
-	"order": 11,
+	"order": 12,
 	"tag": "combat",
 	"name": "Morto-vivo",
 	"epithet": "O Que Voltou por Vingança",
@@ -31,7 +31,7 @@
 			"text": "Não precisa comer."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "Zumbis, esqueletos e outros mortos-vivos o ignoram, a menos que ele ataque."
 		},
 		{
@@ -61,6 +61,10 @@
 		{
 			"type": "desvantagem",
 			"text": "O sol o deixa lento."
+		},
+		{
+			"type": "desvantagem",
+			"text": "No Nether perde todas as vantagens e habilidades da raça (tudo volta ao sair, sem perder progresso)."
 		}
 	],
 	"powers": [
@@ -136,9 +140,10 @@
 			"type": "dakura_origins:summon_undead",
 			"name": "Exército dos Mortos",
 			"description": "Ergue 5 zumbis de cota de malha que atacam quem você atacar (ou quem te atacar) por 30 segundos. Com mais níveis ganham espadas e armaduras melhores, até ferro encantado.",
-			"cooldown": 1200,
+			"cooldown": 1800,
 			"count": 5,
 			"duration": 600
 		}
-	]
+	],
+	"nether_suppressed": true
 }

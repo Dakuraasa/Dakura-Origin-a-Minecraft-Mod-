@@ -1,6 +1,6 @@
 {
 	"id": "succubus",
-	"order": 12,
+	"order": 13,
 	"variant_of": "demonio",
 	"name": "Succubus",
 	"epithet": "O Encanto que Cobra Tudo",
@@ -31,7 +31,7 @@
 			"text": "Mesma força, velocidade e resistências de um Demônio."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "O desconto com aldeões vem do encanto: aldeões encantados fazem preços baixíssimos."
 		},
 		{
@@ -185,7 +185,7 @@
 			"type": "dakura_origins:drain_kiss",
 			"name": "Beijo Drenante",
 			"description": "Prende o alvo num beijo que drena tudo: vida (que você absorve), armadura e experiência. Ao fim, ele fica encantado por você.",
-			"cooldown": 400,
+			"cooldown": 600,
 			"range": 4.5,
 			"duration": 50,
 			"pulses": 5,
@@ -197,7 +197,7 @@
 			"type": "dakura_origins:mimic",
 			"name": "Metamorfose",
 			"description": "Copia a aparência de um jogador na mira e rouba fisicamente os atributos dele (vida, armadura vestida, força, tamanho...), mas não as habilidades. Dura 1 minuto; use de novo para desfazer.",
-			"cooldown": 100,
+			"cooldown": 150,
 			"range": 24,
 			"duration": 1200
 		}

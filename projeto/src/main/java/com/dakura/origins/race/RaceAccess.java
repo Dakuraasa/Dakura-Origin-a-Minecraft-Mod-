@@ -19,13 +19,21 @@ public final class RaceAccess {
 	/** Succubus transformada: raça composta (poderes e 1ª habilidade da raça copiada + a destransformação). */
 	public static final java.util.Map<UUID, Race> BORROWED = new java.util.concurrent.ConcurrentHashMap<>();
 
+	/** Jogadores de raça "nether_suppressed" que estão no Nether agora (controlado pelo RaceManager). */
+	public static final java.util.Set<UUID> IN_NETHER = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
 	public static Optional<Race> getRace(PlayerEntity player) {
 		if (player.getWorld().isClient) {
 			return player.getUuid().equals(clientPlayerId) ? RaceRegistry.get(clientRaceId) : Optional.empty();
 		}
 		Race b = BORROWED.get(player.getUuid());
 		if (b != null) return Optional.of(b);
-		return RaceRegistry.get(player.getAttached(RaceAttachments.RACE));
+		String id = player.getAttached(RaceAttachments.RACE);
+		if (IN_NETHER.contains(player.getUuid())) {
+			Optional<Race> weak = RaceRegistry.netherForm(id);
+			if (weak.isPresent()) return weak;
+		}
+		return RaceRegistry.get(id);
 	}
 
 	/** A raça escolhida de verdade (ignora a transformação). */

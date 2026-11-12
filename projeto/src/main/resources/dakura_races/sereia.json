@@ -1,6 +1,6 @@
 {
 	"id": "sereia",
-	"order": 21,
+	"order": 22,
 	"tag": "support",
 	"name": "Sereia",
 	"epithet": "A Voz das Marés",
@@ -61,6 +61,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Cauda sempre: em terra não anda, só rasteja devagar."
+		},
+		{
+			"type": "vanilla",
+			"text": "Mineradora das profundezas: debaixo d'água quebra blocos na velocidade normal."
 		}
 	],
 	"powers": [
@@ -134,13 +138,19 @@
 			"type": "dakura_origins:flag",
 			"flag": "mermaid_crawl",
 			"when": "always"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:player.submerged_mining_speed",
+			"operation": "add_value",
+			"amount": 0.8
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:tidal_song",
 			"name": "Canto das Marés",
-			"cooldown": 600,
+			"cooldown": 900,
 			"radius": 16,
 			"duration": 240,
 			"heal": 3,
@@ -149,7 +159,7 @@
 		{
 			"type": "dakura_origins:tsunami",
 			"name": "Maremoto",
-			"cooldown": 400,
+			"cooldown": 600,
 			"length": 26,
 			"width": 10,
 			"damage": 13,

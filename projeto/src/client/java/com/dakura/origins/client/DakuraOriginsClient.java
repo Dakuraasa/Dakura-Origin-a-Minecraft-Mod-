@@ -63,6 +63,7 @@ public class DakuraOriginsClient implements ClientModInitializer {
 				com.dakura.origins.entity.ModEntities.GEO_PROJECTILE, com.dakura.origins.client.render.GeoProjectileRenderer::new);
 		com.dakura.origins.client.fx.FxWorld.init();
 		com.dakura.origins.client.fx.DarkFx.init();
+		com.dakura.origins.client.fx.ElfFx.init();
 		// opção "Aparências de raça" na tela de Personalização da skin (fica salva em config/dakura_origins.json)
 		ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
 			if (!(screen instanceof net.minecraft.client.gui.screen.option.SkinOptionsScreen)) return;

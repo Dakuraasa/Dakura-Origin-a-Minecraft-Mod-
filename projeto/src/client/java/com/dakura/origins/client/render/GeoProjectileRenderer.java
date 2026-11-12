@@ -28,6 +28,21 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 	public void render(GeoProjectileEntity e, float yaw, float tickDelta, MatrixStack m, VertexConsumerProvider vcp, int light) {
 		float t = e.age + tickDelta;
 		if (e.kind() == GeoProjectileEntity.MANA || e.kind() == GeoProjectileEntity.DARK || e.kind() == GeoProjectileEntity.VIOLET) nativeTrail(e);
+		if (e.kind() == GeoProjectileEntity.SWORD) {
+			m.push();
+			m.translate(0, 0.25, 0);
+			com.dakura.origins.client.fx.ElfFx.sword(m, vcp, e.getVelocity(), t, false);
+			m.pop();
+			if (e.getWorld().random.nextInt(2) == 0) e.getWorld().addParticle(e.getWorld().random.nextBoolean()
+					? net.minecraft.particle.ParticleTypes.WITCH : net.minecraft.particle.ParticleTypes.SQUID_INK, e.getX(), e.getY() + 0.25, e.getZ(), 0, 0, 0);
+			super.render(e, yaw, tickDelta, m, vcp, light);
+			return;
+		}
+		if (e.kind() == GeoProjectileEntity.MOON) {
+			com.dakura.origins.client.fx.ElfFx.moon(m, vcp, t, e.size());
+			super.render(e, yaw, tickDelta, m, vcp, light);
+			return;
+		}
 		if (e.kind() == GeoProjectileEntity.VIOLET) {
 			FxGlow.manaOrb(m, vcp, t, e.getVelocity(), e.size(), true);
 			super.render(e, yaw, tickDelta, m, vcp, light);

@@ -57,7 +57,8 @@ public final class SteelTempestAbility implements Ability {
 		Vec3d eye = p.getEyePos();
 		boolean hitAny = false;
 		for (LivingEntity t : w.getEntitiesByClass(LivingEntity.class, p.getBoundingBox().stretch(look.multiply(range)).expand(1.2),
-				e -> e != p && e.isAlive() && LegendKit.enemy(p, e))) {
+				e -> e != p && e.isAlive() && !e.isSpectator() && !(e instanceof net.minecraft.entity.decoration.ArmorStandEntity)
+						&& !(e instanceof net.minecraft.entity.passive.TameableEntity tm && p.getUuid().equals(tm.getOwnerUuid())))) {
 			Vec3d to = t.getPos().add(0, t.getHeight() * 0.5, 0).subtract(eye);
 			double along = to.dotProduct(look);
 			if (along < 0 || along > range) continue;

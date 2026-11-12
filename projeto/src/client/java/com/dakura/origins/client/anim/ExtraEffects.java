@@ -135,42 +135,40 @@ final class ExtraEffects {
 				Vec3d c = base.add(0, e.getHeight() * 0.55, 0);
 				ClientEffects.ring(world, c, 0.6, 16, GOLD);
 				// explosão luxuosa: ouro, laranja e azul em camadas
-				expandingRing(c, 1.8, 5, GOLD, 22);
-				expandingRing(c, 1.3, 4, ORANGE_LUX, 16);
-				for (int i = 0; i < 26; i++) {
+				expandingRing(c, 1.8, 3, GOLD, 16);
+				for (int i = 0; i < 10; i++) {
 					double th = rnd.nextDouble() * Math.PI * 2, ph = rnd.nextDouble() * Math.PI - Math.PI / 2, sp = 0.15 + rnd.nextDouble() * 0.3;
 					world.addParticle(i % 3 == 0 ? BLUE_LUX : i % 3 == 1 ? ORANGE_LUX : GOLD_SOFT, c.x, c.y, c.z, 0, 0, 0);
 					world.addParticle(i % 2 == 0 ? ParticleTypes.END_ROD : ParticleTypes.WAX_ON, c.x, c.y, c.z,
 							Math.cos(th) * Math.cos(ph) * sp, Math.sin(ph) * sp, Math.sin(th) * Math.cos(ph) * sp);
 				}
 				world.addParticle(ParticleTypes.FLASH, c.x, c.y, c.z, 0, 0, 0);
-				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.WAX_ON, c.x, c.y, c.z,
+				for (int i = 0; i < 4; i++) world.addParticle(ParticleTypes.WAX_ON, c.x, c.y, c.z,
 						rnd.nextGaussian() * 0.3, rnd.nextDouble() * 0.3, rnd.nextGaussian() * 0.3);
 				if (param == 1) {
-					expandingRing(c, 3.0, 7, GOLD, 30);
-					world.addParticle(ParticleTypes.FLASH, c.x, c.y, c.z, 0, 0, 0);
-					for (int i = 0; i < 16; i++) world.addParticle(ParticleTypes.FIREWORK, c.x, c.y, c.z,
+					expandingRing(c, 3.0, 4, GOLD, 22);
+					for (int i = 0; i < 6; i++) world.addParticle(ParticleTypes.FIREWORK, c.x, c.y, c.z,
 							rnd.nextGaussian() * 0.25, rnd.nextGaussian() * 0.25, rnd.nextGaussian() * 0.25);
 				}
 			}
 			case "jackpot" -> {
 				FloatingText.add(e.getId(), param > 1 ? "×" + param + "!" : "JACKPOT", 0xFFD84A, 50);
 				// fogos de artifício (só partículas do cliente: não causam dano)
-				for (int i = 0; i < 4; i++) {
+				for (int i = 0; i < 2; i++) {
 					final int k = i;
 					ClientEffects.schedule((w, r, age) -> {
 						if (age < k * 6) return true;
 						Vec3d f = e.getPos().add(r.nextGaussian() * 2, 3.5 + r.nextDouble() * 2, r.nextGaussian() * 2);
 						w.addFireworkParticle(f.x, f.y, f.z, 0, 0, 0, java.util.List.of(new net.minecraft.component.type.FireworkExplosionComponent(
 								k % 2 == 0 ? net.minecraft.component.type.FireworkExplosionComponent.Type.LARGE_BALL : net.minecraft.component.type.FireworkExplosionComponent.Type.STAR,
-								it.unimi.dsi.fastutil.ints.IntList.of(0xFFD23A, 0xFF8A1E, 0x4FA8FF), it.unimi.dsi.fastutil.ints.IntList.of(0xFFF3B0), true, true)));
+								it.unimi.dsi.fastutil.ints.IntList.of(0xFFD23A, 0xFF8A1E, 0x4FA8FF), it.unimi.dsi.fastutil.ints.IntList.of(0xFFF3B0), false, false)));
 						return false;
 					});
 				}
 				Vec3d top = base.add(0, e.getHeight() + 0.3, 0);
-				for (int i = 0; i < 24; i++) world.addParticle(i % 2 == 0 ? ParticleTypes.WAX_ON : ParticleTypes.FIREWORK, top.x, top.y, top.z,
+				for (int i = 0; i < 10; i++) world.addParticle(i % 2 == 0 ? ParticleTypes.WAX_ON : ParticleTypes.FIREWORK, top.x, top.y, top.z,
 						rnd.nextGaussian() * 0.18, 0.15 + rnd.nextDouble() * 0.25, rnd.nextGaussian() * 0.18);
-				expandingRing(base.add(0, 0.1, 0), 2.2, 6, GOLD, 26);
+				expandingRing(base.add(0, 0.1, 0), 2.2, 4, GOLD, 20);
 			}
 			case "dice_hud" -> {
 				if (e == MinecraftClient.getInstance().player) com.dakura.origins.client.hud.DiceHud.start(param);

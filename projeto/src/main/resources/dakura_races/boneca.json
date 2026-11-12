@@ -1,6 +1,6 @@
 {
 	"id": "boneca",
-	"order": 17,
+	"order": 18,
 	"tag": "combat",
 	"name": "Boneca",
 	"epithet": "A Marionete Amaldiçoada",
@@ -53,6 +53,10 @@
 		{
 			"type": "desvantagem",
 			"text": "A água enferruja as engrenagens: lenta na água."
+		},
+		{
+			"type": "vanilla",
+			"text": "Pés de pano: nunca pisoteia a terra arada nem estraga as plantações."
 		}
 	],
 	"powers": [
@@ -121,12 +125,16 @@
 			"type": "dakura_origins:doll_leap",
 			"health": 6,
 			"cooldown": 600
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "no_trample"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:steel_tempest",
-			"cooldown": 16,
+			"cooldown": 60,
 			"range": 5,
 			"damage": 5,
 			"dash": 0.9,

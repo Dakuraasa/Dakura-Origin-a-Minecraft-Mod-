@@ -1,6 +1,6 @@
 {
 	"id": "huli_jing",
-	"order": 7,
+	"order": 8,
 	"tag": "mixed",
 	"name": "Raposa Mística",
 	"epithet": "A Raposa que Não Divide Nada",
@@ -43,7 +43,7 @@
 			"text": "Passos silenciosos; parada por 3 segundos, fica invisível e nenhum monstro a percebe."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "As raposas não fogem dela e até a seguem por um tempo."
 		},
 		{
@@ -146,7 +146,7 @@
 			"type": "dakura_origins:fox_form",
 			"name": "Forma de Raposa",
 			"description": "Vira uma raposa veloz que dá saltos enormes. Nessa forma os inimigos a ignoram e ela não ataca: o botão de ataque libera uma explosão de fogo que quebra blocos e devolve a forma humana.",
-			"cooldown": 200,
+			"cooldown": 300,
 			"snow": false,
 			"speed": 0.35,
 			"jump": 0.9
@@ -155,7 +155,7 @@
 			"type": "dakura_origins:fox_clones",
 			"name": "Ilusões de Raposa",
 			"description": "Cria três ilusões de raposa que lutam ao seu lado, sem limite de tempo (novas ilusões substituem as antigas).",
-			"cooldown": 900,
+			"cooldown": 1350,
 			"count": 3,
 			"duration": 200,
 			"snow": false

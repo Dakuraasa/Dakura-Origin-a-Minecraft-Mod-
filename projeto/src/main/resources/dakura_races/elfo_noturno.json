@@ -1,13 +1,12 @@
 {
 	"id": "elfo_noturno",
-	"order": 6,
-	"variant_of": "elfo",
+	"order": 7,
 	"name": "Elfo Noturno",
 	"epithet": "Filho da Lua Escura",
 	"icon": "dakura_origins:textures/race/elfo_noturno.png",
 	"icon_size": [
 		384,
-		145
+		158
 	],
 	"palette": {
 		"ink": [
@@ -24,7 +23,7 @@
 		"accent": "#5C3F8C",
 		"muted": "#5E806B"
 	},
-	"description": "Elfos que trocaram o sol pelas sombras. Caçam em silêncio quando a lua sobe, enxergam no escuro e somem entre as trevas. Sua magia é feita de sombra pura: uma esfera que apaga a visão do inimigo e um passo que atravessa a escuridão.",
+	"description": "Elfos que trocaram o sol pelas sombras: assassinos silenciosos. Caçam quando a lua sobe, enxergam no escuro, atravessam a escuridão num piscar e deixam a decomposição em cada corte. Até os animais o temem.",
 	"traits": [
 		{
 			"type": "vantagem",
@@ -36,11 +35,19 @@
 		},
 		{
 			"type": "vantagem",
-			"text": "Passos silenciosos, de dia e de noite."
+			"text": "Assassino silencioso: passos sem som, de dia e de noite."
 		},
 		{
 			"type": "vantagem",
 			"text": "Cai de alturas maiores sem se ferir."
+		},
+		{
+			"type": "vantagem",
+			"text": "Lâmina sombria: seus golpes causam decomposição (Wither)."
+		},
+		{
+			"type": "vanilla",
+			"text": "Caçador de almas: ganha 50% mais experiência."
 		},
 		{
 			"type": "desvantagem",
@@ -53,6 +60,10 @@
 		{
 			"type": "desvantagem",
 			"text": "O fogo causa 50% mais dano."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Assassino conhecido: os animais fogem dele."
 		}
 	],
 	"powers": [
@@ -107,25 +118,40 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#9B5CFF",
 			"when": "night"
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "wither",
+			"seconds": 3
+		},
+		{
+			"type": "dakura_origins:xp_multiplier",
+			"factor": 1.5
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "scare_animals"
 		}
 	],
 	"abilities": [
 		{
-			"type": "dakura_origins:shadow_orb",
-			"name": "Orbe Sombria",
-			"description": "Dispara uma esfera de sombra ondulante: quem for atingido leva dano e fica cego por muito tempo.",
-			"cooldown": 400,
-			"speed": 0.9,
-			"damage": 5,
-			"blind": 200
+			"type": "dakura_origins:night_swords",
+			"name": "Lâminas da Meia-Noite",
+			"cooldown": 600,
+			"duration": 400,
+			"damage": 7,
+			"range": 24,
+			"wither": 5,
+			"description": "Três espadas de ferro envoltas em aura roxa e rosa flutuam sobre sua cabeça, pontas para a frente. No próximo golpe (ou usando de novo, na mira) disparam teleguiadas contra o alvo, com dano alto e decomposição (Wither)."
 		},
 		{
 			"type": "dakura_origins:shadow_step",
 			"name": "Passo Sombrio",
-			"description": "Dissolve-se em sombra e reaparece até 10 blocos à frente, invisível por um instante.",
-			"cooldown": 160,
-			"range": 10,
-			"invis": 60
+			"cooldown": 240,
+			"range": 32,
+			"invis": 60,
+			"description": "Dissolve-se em sombra e reaparece em qualquer chão firme que estiver enxergando, até 32 blocos, invisível por um instante. Nunca atravessa paredes."
 		}
-	]
+	],
+	"tag": "combat"
 }

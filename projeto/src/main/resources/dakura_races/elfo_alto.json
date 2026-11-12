@@ -39,7 +39,7 @@
 			"text": "Educação real: ganha 50% mais experiência."
 		},
 		{
-			"type": "vantagem",
+			"type": "vanilla",
 			"text": "Encantar itens custa só 1 nível."
 		},
 		{
@@ -69,6 +69,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Luxo custa caro: a fome cai mais rápido."
+		},
+		{
+			"type": "vantagem",
+			"text": "Harmonia natural: os animais não fogem dela."
 		}
 	],
 	"powers": [
@@ -146,6 +150,10 @@
 			"push": 1.6,
 			"min": 6,
 			"max": 12
+		},
+		{
+			"type": "dakura_origins:marker",
+			"kind": "animal_friend"
 		}
 	],
 	"abilities": [
@@ -153,7 +161,7 @@
 			"type": "dakura_origins:tether",
 			"name": "Laço Áureo",
 			"description": "Um feixe dourado agarra o alvo na mira e o mantém suspenso à sua frente por até 10 s, seguindo seu olhar (a câmera fica livre). A rodinha aproxima ou afasta. Ataque para arremessá-lo com força na direção da mira: ele sofre dano ao bater no chão, em paredes ou em outras criaturas. Use de novo para soltar.",
-			"cooldown": 900,
+			"cooldown": 1350,
 			"range": 20,
 			"duration": 200,
 			"throw": 2.8,
@@ -163,7 +171,7 @@
 			"type": "dakura_origins:mirror_shield",
 			"name": "Égide Espelhada",
 			"description": "Abre à frente um grande círculo rúnico dourado que gira sem parar. Por alguns segundos todo golpe de um inimigo é absorvido e devolvido a ele como num espelho.",
-			"cooldown": 600,
+			"cooldown": 900,
 			"duration": 60,
 			"reflect": 1.0
 		}

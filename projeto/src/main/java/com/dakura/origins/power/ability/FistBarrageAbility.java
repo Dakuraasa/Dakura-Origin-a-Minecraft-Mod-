@@ -104,6 +104,7 @@ public final class FistBarrageAbility implements Ability {
 
 	/** Prende o alvo: sem movimento, sem pulo, sem ataque. Jogadores são teleportados de volta ao ponto. */
 	static void pin(LivingEntity tg, Vec3d at) {
+		com.dakura.origins.power.Control.lock(tg, 3);
 		tg.setVelocity(Vec3d.ZERO);
 		tg.velocityModified = true;
 		if (tg instanceof ServerPlayerEntity sp) {

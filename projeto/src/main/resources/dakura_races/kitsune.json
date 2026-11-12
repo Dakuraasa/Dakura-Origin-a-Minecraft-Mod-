@@ -1,6 +1,6 @@
 {
 	"id": "kitsune",
-	"order": 18,
+	"order": 19,
 	"tag": "mixed",
 	"name": "Kitsune",
 	"epithet": "A Raposa Celestial de Nove Caudas",
@@ -44,7 +44,7 @@
 		},
 		{
 			"type": "neutro",
-			"text": "Maturidade espiritual: não usa a barra de experiência; toda a experiência que ganha vira maturidade. A barra muda de cor a cada estágio e demora bastante para encher."
+			"text": "Maturidade espiritual: não usa a barra de experiência; cresce derrotando monstros. A barra muda de cor a cada estágio e demora bastante para encher."
 		},
 		{
 			"type": "desvantagem",
@@ -60,11 +60,15 @@
 		},
 		{
 			"type": "vantagem",
-			"text": "Fogo de raposa e gelo espiritual: os golpes queimam e congelam, e ela é imune a fogo e gelo."
+			"text": "Fogo de raposa e gelo espiritual: os golpes queimam e congelam, e ela é imune ao gelo (o fogo a fere normalmente)."
 		},
 		{
 			"type": "vantagem",
 			"text": "Ágil: corre mais rápido e pula mais alto."
+		},
+		{
+			"type": "vanilla",
+			"text": "Patas leves: anda sobre a neve fofa sem afundar."
 		}
 	],
 	"powers": [
@@ -111,16 +115,16 @@
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.attack_damage",
 			"stage_values": [
-				1.0,
-				2.0,
-				3.0
+				0.5,
+				1.5,
+				2.5
 			]
 		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.movement_speed",
 			"operation": "add_multiplied_base",
-			"amount": 0.22
+			"amount": 0.18
 		},
 		{
 			"type": "dakura_origins:status_effect",
@@ -146,7 +150,7 @@
 			"type": "dakura_origins:conditional_attribute",
 			"attribute": "minecraft:generic.movement_speed",
 			"operation": "add_multiplied_base",
-			"amount": -0.3,
+			"amount": 0.18,
 			"when": "water"
 		},
 		{
@@ -159,7 +163,12 @@
 			"attribute": "minecraft:generic.attack_damage",
 			"operation": "add_value",
 			"amount": -1.0,
-			"when": "day"
+			"when": "day",
+			"stage_values": [
+				0.5,
+				1.5,
+				2.5
+			]
 		},
 		{
 			"type": "dakura_origins:flag",
@@ -181,16 +190,7 @@
 		},
 		{
 			"type": "dakura_origins:damage_immunity",
-			"damage_tag": "minecraft:is_fire"
-		},
-		{
-			"type": "dakura_origins:damage_immunity",
 			"damage_tag": "minecraft:is_freezing"
-		},
-		{
-			"type": "dakura_origins:flag",
-			"flag": "fireproof",
-			"when": "always"
 		},
 		{
 			"type": "dakura_origins:attribute",
@@ -203,15 +203,18 @@
 			"attribute": "minecraft:generic.safe_fall_distance",
 			"operation": "add_value",
 			"amount": 3.0
+		},
+		{
+			"type": "dakura_origins:powder_snow_walker"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:spirit_orb",
-			"cooldown": 120,
+			"cooldown": 180,
 			"range": 14,
 			"speed": 1.1,
-			"damage": 6,
+			"damage": 5,
 			"radius": 2.5,
 			"return_damage": 5,
 			"return_radius": 3.5,
@@ -225,9 +228,9 @@
 		},
 		{
 			"type": "dakura_origins:mana_orbs",
-			"cooldown": 500,
+			"cooldown": 750,
 			"duration": 400,
-			"damage": 4,
+			"damage": 3.5,
 			"range": 24,
 			"maturity_damage": [
 				1.0,

@@ -80,6 +80,13 @@ public final class LegendKit {
 		}
 	}
 
+	/** Para todas as tarefas do jogador cuja chave começa com o prefixo (ex.: várias correntes ao mesmo tempo). */
+	public static void stopPrefix(ServerPlayerEntity p, String prefix) {
+		List<Running> gone = new ArrayList<>();
+		for (Running r : TASKS) if (r.owner.equals(p.getUuid()) && r.key.startsWith(prefix)) gone.add(r);
+		for (Running r : gone) if (TASKS.remove(r)) r.task.end(p);
+	}
+
 	private static void tickAll(MinecraftServer server) {
 		if (TASKS.isEmpty()) return;
 		List<Running> copy = new ArrayList<>(TASKS);

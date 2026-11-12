@@ -74,6 +74,18 @@ public abstract class LivingEntityRendererMixin {
 		}
 	}
 
+	/** Invisível: nada do que o jogador carrega aparece (armadura, itens nas mãos, capa, asas, caudas, acessórios). */
+	@org.spongepowered.asm.mixin.injection.Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/feature/FeatureRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/Entity;FFFFFF)V"),
+			require = 0)
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private void dakura$hideGearWhenInvisible(net.minecraft.client.render.entity.feature.FeatureRenderer feature, MatrixStack matrices,
+			VertexConsumerProvider vcp, int light, net.minecraft.entity.Entity entity, float limbAngle, float limbDistance, float tickDelta,
+			float animationProgress, float headYaw, float headPitch) {
+		if (entity instanceof net.minecraft.entity.player.PlayerEntity && entity.isInvisible()) return;
+		feature.render(matrices, vcp, light, entity, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch);
+	}
+
 	/** Cor do modelo com 60% de opacidade. */
 	@ModifyArg(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;III)V"),

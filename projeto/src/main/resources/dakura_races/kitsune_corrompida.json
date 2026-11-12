@@ -1,6 +1,6 @@
 {
 	"id": "kitsune_corrompida",
-	"order": 19,
+	"order": 20,
 	"tag": "combat",
 	"name": "Kitsune Corrompida",
 	"epithet": "A Raposa que Devora",
@@ -28,7 +28,7 @@
 	"traits": [
 		{
 			"type": "vantagem",
-			"text": "Caudas que crescem: começa com 3 caudas e ganha mais 3 a cada estágio de maturidade, até 9. Vida, força, dano e o número de esferas crescem junto."
+			"text": "Caudas sombrias: começa com 3 caudas e ganha mais 3 a cada estágio, até 9. Vida, força e dano crescem mais que na Kitsune comum."
 		},
 		{
 			"type": "vantagem",
@@ -44,7 +44,7 @@
 		},
 		{
 			"type": "neutro",
-			"text": "Maturidade espiritual: não usa a barra de experiência; toda a experiência que ganha vira maturidade. A barra muda de cor a cada estágio e demora bastante para encher."
+			"text": "Passiva — Devorar e Evoluir: agachada, golpeie uma criatura enfraquecida para devorá-la (a cada 5 min). A maturidade só cresce assim: animais rendem quase nada, monstros pouco, chefões muito. Cada jogador só rende uma vez."
 		},
 		{
 			"type": "desvantagem",
@@ -60,7 +60,11 @@
 		},
 		{
 			"type": "vantagem",
-			"text": "Fogo de raposa e gelo espiritual: os golpes queimam e congelam, e ela é imune a fogo e gelo."
+			"text": "Fogo de raposa e gelo espiritual: os golpes queimam e congelam, e ela é imune ao gelo (o fogo a fere normalmente)."
+		},
+		{
+			"type": "vanilla",
+			"text": "Patas leves: anda sobre a neve fofa sem afundar."
 		}
 	],
 	"powers": [
@@ -98,18 +102,18 @@
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.max_health",
 			"stage_values": [
-				3,
-				5,
-				8
+				2,
+				4,
+				7
 			]
 		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.attack_damage",
 			"stage_values": [
-				2.0,
-				3.5,
-				5.0
+				1.5,
+				3.0,
+				4.5
 			]
 		},
 		{
@@ -155,7 +159,12 @@
 			"attribute": "minecraft:generic.attack_damage",
 			"operation": "add_value",
 			"amount": -1.0,
-			"when": "day"
+			"when": "day",
+			"stage_values": [
+				1.5,
+				3.0,
+				4.5
+			]
 		},
 		{
 			"type": "dakura_origins:flag",
@@ -183,25 +192,19 @@
 		},
 		{
 			"type": "dakura_origins:damage_immunity",
-			"damage_tag": "minecraft:is_fire"
-		},
-		{
-			"type": "dakura_origins:damage_immunity",
 			"damage_tag": "minecraft:is_freezing"
 		},
 		{
-			"type": "dakura_origins:flag",
-			"flag": "fireproof",
-			"when": "always"
+			"type": "dakura_origins:powder_snow_walker"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:spirit_orb",
-			"cooldown": 120,
+			"cooldown": 180,
 			"range": 14,
 			"speed": 1.1,
-			"damage": 6,
+			"damage": 5,
 			"radius": 2.5,
 			"return_damage": 5,
 			"return_radius": 3.5,
@@ -216,21 +219,20 @@
 		},
 		{
 			"type": "dakura_origins:dark_comet",
-			"cooldown": 400,
-			"speed": 2.6,
-			"range": 40,
-			"damage": 6,
+			"cooldown": 600,
+			"damage": 5,
 			"root": 60,
 			"chain": 160,
 			"tick_damage": 1.5,
-			"leash": 9,
+			"leash": 10,
 			"maturity_damage": [
 				1.0,
 				1.3,
 				1.6
 			],
-			"name": "Cometa Negro",
-			"description": "Dispara uma esfera negra veloz como um cometa. Quem for atingido toma dano, fica preso no lugar e é acorrentado à Kitsune. Depois de solto, continua acorrentado por mais um tempo, tomando dano e sendo puxado de volta se tentar fugir."
+			"name": "Prisão de Correntes",
+			"description": "Correntes negras saltam dela e prendem na hora os inimigos mais próximos num raio de 10 blocos: 3, 6 ou 9, conforme a maturidade. Presos, levam dano e ficam imóveis; depois seguem acorrentados, puxados de volta se passarem de 10 blocos e tomando dano contínuo até as correntes se partirem.",
+			"radius": 10
 		}
 	],
 	"variant_of": "kitsune"

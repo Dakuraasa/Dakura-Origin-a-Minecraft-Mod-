@@ -1,6 +1,6 @@
 {
 	"id": "orc",
-	"order": 14,
+	"order": 15,
 	"tag": "combat",
 	"name": "Orc",
 	"epithet": "O Punho da Horda",
@@ -53,6 +53,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Pesado: um pouco mais lento."
+		},
+		{
+			"type": "vanilla",
+			"text": "Açougueiro: animais abatidos por ele deixam o dobro de carne e couro."
 		}
 	],
 	"powers": [
@@ -115,6 +119,10 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#FF6A2A",
 			"when": "low_health"
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "butcher"
 		}
 	],
 	"abilities": [
@@ -122,7 +130,7 @@
 			"type": "dakura_origins:war_cry",
 			"name": "Grito de Guerra",
 			"description": "Um rugido que estremece o chão: aliados por perto ganham força e resistência; monstros são empurrados, enfraquecidos e ficam lentos.",
-			"cooldown": 900,
+			"cooldown": 1350,
 			"radius": 10,
 			"duration": 160
 		},
@@ -130,7 +138,7 @@
 			"type": "dakura_origins:brutal_charge",
 			"name": "Investida Brutal",
 			"description": "Dispara em linha reta atropelando e arremessando tudo no caminho, e termina com uma pancada no chão.",
-			"cooldown": 300,
+			"cooldown": 450,
 			"ticks": 14,
 			"speed": 0.95,
 			"damage": 7,

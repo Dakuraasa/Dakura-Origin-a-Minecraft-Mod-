@@ -1,6 +1,6 @@
 {
 	"id": "demonio",
-	"order": 12,
+	"order": 13,
 	"tag": "support",
 	"name": "Demônio",
 	"epithet": "O Que Sempre Cobra o Preço",
@@ -31,8 +31,8 @@
 			"text": "Mais força e velocidade que um humano; ainda mais forte no Nether."
 		},
 		{
-			"type": "vantagem",
-			"text": "Grande desconto com aldeões, que diminui cada vez que você bate neles."
+			"type": "vanilla",
+			"text": "Lábia infernal: aldeões dão desconto sem precisar apanhar. Aldeões que ele encantou ficam desconfiados e o desconto cai."
 		},
 		{
 			"type": "vantagem",
@@ -52,7 +52,7 @@
 		},
 		{
 			"type": "desvantagem",
-			"text": "Armas encantadas causam muito mais dano nele, e ele não pode usar nem vestir nada encantado."
+			"text": "Armas encantadas causam muito mais dano nele, e ele não pode usar nem vestir nada encantado. Maldições (Vínculo e Desaparecimento) não o afetam."
 		},
 		{
 			"type": "desvantagem",
@@ -65,6 +65,10 @@
 		{
 			"type": "desvantagem",
 			"text": "A água o enfraquece."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Repulsa sagrada: carregar qualquer item encantado no inventário causa dano."
 		}
 	],
 	"powers": [
@@ -163,7 +167,7 @@
 			"type": "dakura_origins:charm",
 			"name": "Encanto",
 			"description": "Encanta o alvo na mira e o faz te seguir sem te atacar. Monstros de porte normal, aldeões e animais ficam encantados sem limite; os demais, só 3 segundos.",
-			"cooldown": 1200,
+			"cooldown": 1800,
 			"range": 16,
 			"short": 60,
 			"max": 4
@@ -172,7 +176,7 @@
 			"type": "dakura_origins:morph",
 			"name": "Metamorfose",
 			"description": "Guarda a última criatura que você matou. Toque para virar ela (e de novo para voltar); segure para liberar a forma guardada. As voadoras voam e as aquáticas respiram na água.",
-			"cooldown": 100
+			"cooldown": 150
 		}
 	]
 }

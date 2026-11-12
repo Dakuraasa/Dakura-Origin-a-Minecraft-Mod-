@@ -1,6 +1,6 @@
 {
 	"id": "fenix",
-	"order": 23,
+	"order": 24,
 	"tag": "mixed",
 	"name": "Fênix",
 	"epithet": "A Chama que Nunca se Apaga",
@@ -40,7 +40,7 @@
 		},
 		{
 			"type": "neutro",
-			"text": "Passiva — Renascimento: ao morrer, vira um ovo de chamas e renasce com a vida cheia, explodindo em fogo (a cada 15 minutos)."
+			"text": "Passiva — Renascimento: ao morrer, vira um ovo de chamas e renasce com a vida cheia, explodindo em fogo (a cada 3 minutos)."
 		},
 		{
 			"type": "desvantagem",
@@ -53,6 +53,14 @@
 		{
 			"type": "desvantagem",
 			"text": "Corpo leve de ave: só 8 corações."
+		},
+		{
+			"type": "vanilla",
+			"text": "Toque da forja: os minérios que ela quebra já caem fundidos."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Ninho coberto: só consegue dormir com um teto sólido a até 6 blocos acima."
 		}
 	],
 	"powers": [
@@ -112,13 +120,21 @@
 			"type": "dakura_origins:flag",
 			"flag": "fireproof",
 			"when": "always"
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "autosmelt"
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "needs_roof"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:solar_dive",
 			"name": "Mergulho Solar",
-			"cooldown": 400,
+			"cooldown": 600,
 			"radius": 5,
 			"damage": 9,
 			"rise": 1.3,
@@ -127,7 +143,7 @@
 		{
 			"type": "dakura_origins:dawn_wings",
 			"name": "Asas da Aurora",
-			"cooldown": 900,
+			"cooldown": 1350,
 			"radius": 9,
 			"heal": 6,
 			"damage": 5,

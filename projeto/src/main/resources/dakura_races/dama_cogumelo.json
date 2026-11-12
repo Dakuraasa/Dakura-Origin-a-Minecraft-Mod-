@@ -58,6 +58,10 @@
 		{
 			"type": "desvantagem",
 			"text": "O fogo causa o dobro de dano."
+		},
+		{
+			"type": "vanilla",
+			"text": "Alquimista dos fungos: as poções que ela mesma prepara no suporte de poções saem em dobro."
 		}
 	],
 	"powers": [
@@ -147,13 +151,17 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#B066FF",
 			"when": "night"
+		},
+		{
+			"type": "dakura_origins:vanilla_perk",
+			"mode": "brew_double"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:toxic_cauldron",
 			"name": "Caldeirão Venenoso",
-			"cooldown": 400,
+			"cooldown": 600,
 			"speed": 1.15,
 			"radius": 10,
 			"duration": 200,
