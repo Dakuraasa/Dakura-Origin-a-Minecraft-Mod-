@@ -35,8 +35,41 @@ public final class RaceCommand {
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
 								CommandRegistryAccess registryAccess,
 								CommandManager.RegistrationEnvironment environment) {
-		dispatcher.register(build("raca", "trocar", "definir", "lista", "jogador", "raca"));
-		dispatcher.register(build("race", "change", "set", "list", "player", "race"));
+		// prefixo oficial: /do (Dakura Origins). Os antigos /raca e /race não existem mais.
+		dispatcher.register(CommandManager.literal("do")
+				.then(build("race", "change", "set", "list", "player", "race"))
+				.then(CommandManager.literal("full").requires(src -> src.hasPermissionLevel(2)).then(CommandManager.literal("maturity")
+						.executes(ctx -> fullMaturity(ctx.getSource(), ctx.getSource().getPlayerOrThrow()))))
+				.then(CommandManager.literal("reset").requires(src -> src.hasPermissionLevel(2)).then(CommandManager.literal("cooldown")
+						.executes(ctx -> resetCooldown(ctx.getSource(), ctx.getSource().getPlayerOrThrow()))))
+				.then(CommandManager.literal("no").requires(src -> src.hasPermissionLevel(2)).then(CommandManager.literal("cooldown")
+						.executes(ctx -> noCooldown(ctx.getSource(), ctx.getSource().getPlayerOrThrow())))));
+	}
+
+	private static int fullMaturity(ServerCommandSource source, ServerPlayerEntity p) {
+		if (!com.dakura.origins.power.types.MaturityPower.maxOut(p)) {
+			source.sendError(Text.translatable("dakura_origins.command.no_maturity"));
+			return 0;
+		}
+		RaceManager.snapAttributes(p);
+		p.calculateDimensions();
+		source.sendFeedback(() -> Text.translatable("dakura_origins.command.full_maturity").formatted(Formatting.GOLD), false);
+		return 1;
+	}
+
+	private static int resetCooldown(ServerCommandSource source, ServerPlayerEntity p) {
+		RaceManager.resetCooldowns(p);
+		source.sendFeedback(() -> Text.translatable("dakura_origins.command.reset_cooldown").formatted(Formatting.AQUA), false);
+		return 1;
+	}
+
+	private static int noCooldown(ServerCommandSource source, ServerPlayerEntity p) {
+		boolean on = RaceManager.NO_COOLDOWN.add(p.getUuid());
+		if (!on) RaceManager.NO_COOLDOWN.remove(p.getUuid());
+		else RaceManager.resetCooldowns(p);
+		source.sendFeedback(() -> Text.translatable(on ? "dakura_origins.command.no_cooldown_on" : "dakura_origins.command.no_cooldown_off")
+				.formatted(on ? Formatting.GREEN : Formatting.GRAY), false);
+		return 1;
 	}
 
 	private static LiteralArgumentBuilder<ServerCommandSource> build(String root, String change, String set, String list,

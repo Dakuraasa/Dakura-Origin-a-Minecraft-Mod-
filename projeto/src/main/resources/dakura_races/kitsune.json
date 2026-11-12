@@ -57,6 +57,14 @@
 		{
 			"type": "desvantagem",
 			"text": "Criatura da noite: um pouco mais fraca de dia."
+		},
+		{
+			"type": "vantagem",
+			"text": "Fogo de raposa e gelo espiritual: os golpes queimam e congelam, e ela é imune a fogo e gelo."
+		},
+		{
+			"type": "vantagem",
+			"text": "Ágil: corre mais rápido e pula mais alto."
 		}
 	],
 	"powers": [
@@ -75,18 +83,20 @@
 		{
 			"type": "dakura_origins:maturity",
 			"thresholds": [
-				1500,
-				5000
+				3750,
+				12500
 			],
-			"from_xp": true,
-			"from_kills": false,
+			"from_xp": false,
+			"from_kills": true,
 			"style": "kitsune",
 			"grow_message": "dakura_origins.message.kitsune_grow",
 			"colors": [
 				"#7FD6FF",
 				"#9C8CFF",
 				"#FF8FD8"
-			]
+			],
+			"only_monsters": true,
+			"points_per_health": 0.5
 		},
 		{
 			"type": "dakura_origins:attribute",
@@ -110,7 +120,7 @@
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.movement_speed",
 			"operation": "add_multiplied_base",
-			"amount": 0.1
+			"amount": 0.22
 		},
 		{
 			"type": "dakura_origins:status_effect",
@@ -127,7 +137,10 @@
 		{
 			"type": "dakura_origins:second_chance",
 			"cooldown": 12000,
-			"regen_seconds": 6
+			"regen_seconds": 6,
+			"burst_damage": 8,
+			"burst_radius": 5,
+			"burst_push": 1.8
 		},
 		{
 			"type": "dakura_origins:conditional_attribute",
@@ -155,6 +168,41 @@
 		},
 		{
 			"type": "dakura_origins:fox_friend"
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "fire",
+			"seconds": 4
+		},
+		{
+			"type": "dakura_origins:hit_effect",
+			"mode": "frost",
+			"seconds": 4
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fire"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_freezing"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "fireproof",
+			"when": "always"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.jump_strength",
+			"operation": "add_value",
+			"amount": 0.15
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.safe_fall_distance",
+			"operation": "add_value",
+			"amount": 3.0
 		}
 	],
 	"abilities": [

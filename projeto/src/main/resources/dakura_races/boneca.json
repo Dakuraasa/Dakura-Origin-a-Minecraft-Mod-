@@ -35,8 +35,8 @@
 			"text": "Graça de palco: mais rápida e cai de alturas maiores sem se ferir."
 		},
 		{
-			"type": "neutro",
-			"text": "Passiva — Fios do Teatro: a cada 5 golpes seguidos, o próximo libera um corte de energia amaldiçoada."
+			"type": "vantagem",
+			"text": "Passiva — Salto da Boneca: com pouca vida, salta para longe e se reposiciona (a cada 30 s)."
 		},
 		{
 			"type": "desvantagem",
@@ -96,11 +96,6 @@
 			]
 		},
 		{
-			"type": "dakura_origins:cursed_rhythm",
-			"hits": 5,
-			"bonus": 4
-		},
-		{
 			"type": "dakura_origins:damage_multiplier",
 			"damage_tag": "minecraft:is_fire",
 			"multiplier": 2.0
@@ -121,28 +116,24 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#3A2C9A",
 			"when": "low_health"
+		},
+		{
+			"type": "dakura_origins:doll_leap",
+			"health": 6,
+			"cooldown": 600
 		}
 	],
 	"abilities": [
 		{
-			"type": "dakura_origins:cursed_threads",
-			"name": "Fios da Marionete",
-			"cooldown": 240,
-			"range": 12,
-			"targets": 3,
-			"damage": 3,
-			"bind": 40,
-			"description": "Fios de energia amaldiçoada saem dos dedos e prendem até 3 inimigos à frente: puxa todos para perto e os deixa presos por um instante."
-		},
-		{
-			"type": "dakura_origins:waterfowl_dance",
-			"name": "Dança das Aves Aquáticas",
-			"cooldown": 700,
-			"duration": 44,
-			"radius": 4.5,
-			"damage": 1.4,
-			"interval": 3,
-			"description": "Salta e gira numa dança veloz, pairando no ar, e avança só duas vezes enquanto uma chuva de cortes amaldiçoados rasga tudo em volta. Os cortes quebram blocos frágeis."
+			"type": "dakura_origins:steel_tempest",
+			"cooldown": 16,
+			"range": 5,
+			"damage": 5,
+			"dash": 0.9,
+			"empower_after": 3,
+			"reset_ticks": 100,
+			"name": "Tempestade de Aço",
+			"description": "Um corte rápido e pontudo para a frente que impulsiona a Boneca. Recarrega quase na hora. Depois de 3 cortes seguidos, o próximo ignora armadura, desgasta armaduras e escudos, causa mais dano quanto menos vida o alvo tem e aplica um efeito aleatório: congelar, veneno, fraqueza, lentidão ou Wither."
 		}
 	]
 }

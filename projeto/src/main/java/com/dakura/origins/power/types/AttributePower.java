@@ -120,7 +120,7 @@ public final class AttributePower extends ConditionalPower {
 		}
 
 		double want = target(player);
-		double have = current == null ? (smooth ? 0 : Double.NaN) : current.value();
+		double have = current == null ? Double.NaN : current.value();
 		if (smooth && !Double.isNaN(have)) {
 			double delta = want - have;
 			if (Math.abs(delta) > smoothStep) want = have + Math.signum(delta) * smoothStep;
@@ -128,10 +128,18 @@ public final class AttributePower extends ConditionalPower {
 		if (current != null && Math.abs(current.value() - want) < 1e-4) return;
 
 		// crescer só se o corpo novo couber no lugar
-		if (checkSpace && (current == null ? want > 0 : want > current.value()) && !fits(player, inst, want)) return;
+		if (checkSpace && current != null && want > current.value() && !fits(player, inst, want)) return;
 
 		if (current != null) inst.removeModifier(modifierId);
 		inst.addTemporaryModifier(new EntityAttributeModifier(modifierId, want, operation));
+	}
+
+	/** Aplica o valor final na hora (sem crescimento gradual), ex.: /do full maturity. */
+	public void snap(ServerPlayerEntity player) {
+		EntityAttributeInstance inst = player.getAttributeInstance(attribute);
+		if (inst == null) return;
+		inst.removeModifier(modifierId);
+		if (isActive(player)) inst.addTemporaryModifier(new EntityAttributeModifier(modifierId, target(player), operation));
 	}
 
 	/** Testa se a caixa de colisão com a nova escala cabe sem encostar em blocos. */

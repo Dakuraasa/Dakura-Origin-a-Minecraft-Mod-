@@ -16,10 +16,20 @@ public final class RaceAccess {
 
 	private RaceAccess() {}
 
+	/** Succubus transformada: raça composta (poderes e 1ª habilidade da raça copiada + a destransformação). */
+	public static final java.util.Map<UUID, Race> BORROWED = new java.util.concurrent.ConcurrentHashMap<>();
+
 	public static Optional<Race> getRace(PlayerEntity player) {
 		if (player.getWorld().isClient) {
 			return player.getUuid().equals(clientPlayerId) ? RaceRegistry.get(clientRaceId) : Optional.empty();
 		}
+		Race b = BORROWED.get(player.getUuid());
+		if (b != null) return Optional.of(b);
+		return RaceRegistry.get(player.getAttached(RaceAttachments.RACE));
+	}
+
+	/** A raça escolhida de verdade (ignora a transformação). */
+	public static Optional<Race> baseRace(PlayerEntity player) {
 		return RaceRegistry.get(player.getAttached(RaceAttachments.RACE));
 	}
 }

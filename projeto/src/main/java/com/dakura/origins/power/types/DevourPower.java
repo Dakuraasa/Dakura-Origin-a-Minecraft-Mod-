@@ -106,6 +106,7 @@ public final class DevourPower implements RacePower {
 
 	@Override
 	public void onRemove(ServerPlayerEntity p) {
+		READY_AT.remove(p.getUuid());
 		LegendKit.stop(p, "devour_glow");
 		EntityFlags.set(p, "purple_fire", false);
 	}

@@ -20,14 +20,18 @@ public final class DamageImmunityPower implements RacePower {
 	private final TagKey<DamageType> tag;
 	/** opcional: um tipo exato (ex.: "minecraft:sweet_berry_bush") em vez de uma tag */
 	private final String type;
+	private final boolean all;
 
 	public DamageImmunityPower(JsonObject json) {
 		this.type = JsonParams.str(json, "damage_type", "");
+		this.all = JsonParams.bool(json, "all", false);
 		this.tag = TagKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(JsonParams.str(json, "damage_tag", "minecraft:is_fire")));
 	}
 
 	@Override
 	public boolean allowDamage(ServerPlayerEntity player, DamageSource source, float amount) {
+		// "all": imune a qualquer fonte (só o vazio e o /kill passam)
+		if (all) return source.isIn(net.minecraft.registry.tag.DamageTypeTags.BYPASSES_INVULNERABILITY);
 		if (!type.isEmpty()) return !source.getTypeRegistryEntry().getKey()
 				.map(k -> k.getValue().toString().equals(type)).orElse(false);
 		return !source.isIn(tag);

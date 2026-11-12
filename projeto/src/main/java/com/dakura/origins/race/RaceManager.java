@@ -23,6 +23,8 @@ import java.util.UUID;
  */
 public final class RaceManager {
 	private static final Map<UUID, long[]> COOLDOWNS = new HashMap<>();
+	/** Jogadores com "/do no cooldown" ligado. */
+	public static final java.util.Set<UUID> NO_COOLDOWN = java.util.concurrent.ConcurrentHashMap.newKeySet();
 	private static long serverTicks = 0;
 
 	private RaceManager() {}
@@ -30,7 +32,7 @@ public final class RaceManager {
 	// ------------------------------------------------------------ consulta
 
 	public static Optional<Race> getRace(ServerPlayerEntity player) {
-		return RaceRegistry.get(player.getAttached(RaceAttachments.RACE));
+		return RaceAccess.getRace(player);
 	}
 
 	public static boolean hasRace(ServerPlayerEntity player) {
@@ -59,10 +61,9 @@ public final class RaceManager {
 	}
 
 	public static void onRespawn(ServerPlayerEntity player) {
-		getRace(player).ifPresent(r -> {
-			removeAbilities(player, r);
-			applyPowers(player, r);
-		});
+		getRace(player).ifPresent(r -> removeAbilities(player, r));
+		// a transformação acaba ao morrer: reaplica a raça verdadeira
+		getRace(player).ifPresent(r -> applyPowers(player, r));
 	}
 
 	public static void tick(MinecraftServer server) {
@@ -72,6 +73,7 @@ public final class RaceManager {
 			Optional<Race> race = getRace(player);
 			if (race.isEmpty()) continue;
 			for (RacePower power : race.get().powers()) power.tick(player);
+			if (serverTicks % 40 == 0 && NO_COOLDOWN.contains(player.getUuid())) resetPassives(player, race.get());
 		}
 	}
 
@@ -107,6 +109,7 @@ public final class RaceManager {
 	}
 
 	public static void clearRace(ServerPlayerEntity player) {
+		com.dakura.origins.power.ability.MimicAbility.revert(player);
 		getRace(player).ifPresent(r -> {
 			removeAbilities(player, r);
 			for (RacePower power : r.powers()) power.onRemove(player);
@@ -151,6 +154,7 @@ public final class RaceManager {
 		Race.AbilityInfo info = race.get().abilities().get(slot);
 
 		long[] ready = COOLDOWNS.computeIfAbsent(player.getUuid(), u -> new long[2]);
+		if (NO_COOLDOWN.contains(player.getUuid())) ready[slot < ready.length ? slot : 0] = 0;
 		if (slot < ready.length && serverTicks < ready[slot]) {
 			long secs = (ready[slot] - serverTicks + 19) / 20;
 			if (mode != 2) player.sendMessage(Text.translatable("dakura_origins.message.cooldown", info.nameText(), secs)
@@ -174,12 +178,41 @@ public final class RaceManager {
 			com.dakura.origins.network.ModNetworking.sendAround(
 					new com.dakura.origins.network.AnimPayload(player.getId(), "fx:flourish", glow), player);
 		}
-		if (used && slot < ready.length) {
+		if (used && slot < ready.length && !NO_COOLDOWN.contains(player.getUuid())) {
 			ready[slot] = serverTicks + info.cooldownTicks();
 			if (info.cooldownTicks() > 0) {
 				sendCooldown(player, new CooldownPayload(slot, info.cooldownTicks(), info.cooldownTicks()));
 			}
 		}
+	}
+
+	/** /do reset cooldown: habilidades e passivas prontas na hora (não mexe em maturidade, atributos nem raça). */
+	public static void resetCooldowns(ServerPlayerEntity player) {
+		COOLDOWNS.remove(player.getUuid());
+		sendCooldown(player, CooldownPayload.reset());
+		getRace(player).ifPresent(r -> resetPassives(player, r));
+	}
+
+	/** Passivas guardam a recarga no próprio poder e a limpam no onRemove: reaplica só as que têm recarga. */
+	private static void resetPassives(ServerPlayerEntity player, Race race) {
+		for (RacePower pw : race.powers()) {
+			if (pw instanceof com.dakura.origins.power.types.SecondChancePower || pw instanceof com.dakura.origins.power.types.RebirthPower
+					|| pw instanceof com.dakura.origins.power.types.DollLeapPower || pw instanceof com.dakura.origins.power.types.DevourPower
+					|| pw instanceof com.dakura.origins.power.types.SoryePower || pw instanceof com.dakura.origins.power.types.FungalEmergencyPower
+					|| (pw instanceof com.dakura.origins.power.types.GoldenWardPower && !com.dakura.origins.power.EntityFlags.has(player, com.dakura.origins.power.types.GoldenWardPower.FLAG))) {
+				pw.onRemove(player);
+				pw.onApply(player);
+			}
+		}
+		if (race.powers().stream().anyMatch(p -> p instanceof com.dakura.origins.power.types.GoldenWardPower))
+			com.dakura.origins.power.EntityFlags.set(player, com.dakura.origins.power.types.GoldenWardPower.FLAG, true);
+	}
+
+	/** /do full maturity: aplica na hora os valores do estágio final (escala e atributos sem crescimento gradual). */
+	public static void snapAttributes(ServerPlayerEntity player) {
+		getRace(player).ifPresent(r -> {
+			for (RacePower pw : r.powers()) if (pw instanceof com.dakura.origins.power.types.AttributePower ap) ap.snap(player);
+		});
 	}
 
 	/** Avisa a HUD do jogador (indicadores de recarga). */

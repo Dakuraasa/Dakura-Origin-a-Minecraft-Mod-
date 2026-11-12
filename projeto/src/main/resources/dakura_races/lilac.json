@@ -146,7 +146,7 @@
 			"cooldown": 160,
 			"range": 4,
 			"damage": 7,
-			"jackpot_chance": 0.08,
+			"jackpot_chance": 0.2,
 			"jackpot_mult": 3
 		},
 		{

@@ -73,6 +73,23 @@ public final class GoldenWardPower implements RacePower {
 				|| src.isIn(DamageTypeTags.IS_EXPLOSION);
 	}
 
+	/** Explosão de energia reaproveitável (Égide Dourada, ressurreição da Kitsune): fere e empurra quem estiver perto. */
+	public static void burst(ServerPlayerEntity p, double radius, double push, float damage) {
+		Vec3d c = p.getPos();
+		for (LivingEntity o : p.getWorld().getEntitiesByClass(LivingEntity.class, new Box(c, c).expand(radius), x -> x != p && x.isAlive())) {
+			if (damage > 0 && LegendKit.enemy(p, o)) {
+				o.timeUntilRegen = 0;
+				o.damage(p.getDamageSources().playerAttack(p), damage);
+			}
+			Vec3d d = LegendKit.flat(o.getPos().subtract(c));
+			o.addVelocity(d.x * push, 0.5, d.z * push);
+			o.velocityModified = true;
+		}
+		LegendKit.fx(p, "ward_melee", 0);
+		LegendKit.snd(p, SoundEvents.BLOCK_BEACON_DEACTIVATE, 1.0f, 1.6f);
+		LegendKit.snd(p, SoundEvents.BLOCK_AMETHYST_BLOCK_BREAK, 1.0f, 1.0f);
+	}
+
 	/** Golpe físico: a aura explode em luz e arremessa o atacante e quem estiver por perto. */
 	private void repel(ServerPlayerEntity p, LivingEntity attacker) {
 		Vec3d c = p.getPos();
@@ -91,6 +108,11 @@ public final class GoldenWardPower implements RacePower {
 	/** Projétil: some em luz e reaparece longe, sobre o chão ou no ar com queda lenta. */
 	private void blink(ServerPlayerEntity p, DamageSource src) {
 		if (src.getSource() instanceof ProjectileEntity proj) proj.discard();
+		escape(p, min, max);
+	}
+
+	/** O salto/teleporte defensivo da Égide: reaparece longe, no chão ou no ar caindo devagar. Sem nenhum ataque. */
+	public static void escape(ServerPlayerEntity p, double min, double max) {
 		ServerWorld w = p.getServerWorld();
 		Vec3d from = p.getPos();
 		LegendKit.fxAt(w, "boom_gold", from.add(0, 1, 0), 1.6f, 0, 0);

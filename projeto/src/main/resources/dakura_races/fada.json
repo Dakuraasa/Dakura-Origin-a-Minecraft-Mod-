@@ -61,6 +61,10 @@
 		{
 			"type": "desvantagem",
 			"text": "Não sabe nadar: dentro d'água, afunda."
+		},
+		{
+			"type": "vantagem",
+			"text": "Bênção das fadas: não toma dano de queda, enxerga no escuro, tem sorte, é mais rápida e alcança blocos mais longe."
 		}
 	],
 	"powers": [
@@ -81,32 +85,32 @@
 		},
 		{
 			"type": "dakura_origins:flight",
-			"speed": 0.045,
+			"speed": 0.055,
 			"exhaustion": 0.01
 		},
 		{
 			"type": "dakura_origins:regeneration",
-			"interval": 60,
+			"interval": 40,
 			"amount": 1.0
 		},
 		{
 			"type": "dakura_origins:growth_aura",
-			"radius": 5,
+			"radius": 8,
 			"interval": 20,
-			"attempts": 4,
-			"chance": 0.25
+			"attempts": 8,
+			"chance": 0.4
 		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.max_health",
 			"operation": "add_value",
-			"amount": -8.0
+			"amount": -6.0
 		},
 		{
 			"type": "dakura_origins:attribute",
 			"attribute": "minecraft:generic.attack_damage",
 			"operation": "add_value",
-			"amount": -1.5
+			"amount": -0.5
 		},
 		{
 			"type": "dakura_origins:flag",
@@ -134,21 +138,45 @@
 		},
 		{
 			"type": "dakura_origins:lily_pad"
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"damage_tag": "minecraft:is_fall"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:night_vision"
+		},
+		{
+			"type": "dakura_origins:status_effect",
+			"effect": "minecraft:luck"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.movement_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.15
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:player.block_interaction_range",
+			"operation": "add_value",
+			"amount": 1.5
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:fairy_perch",
-			"cooldown": 40,
+			"cooldown": 20,
 			"name": "Pouso no Ombro",
 			"description": "Pousa no ombro do jogador mais próximo: enquanto estiver lá, os dois regeneram e ele ganha o dobro de experiência. Use de novo (ou agache) para sair."
 		},
 		{
 			"type": "dakura_origins:flower_sanctuary",
-			"cooldown": 900,
-			"radius": 7,
-			"duration": 300,
-			"heal": 1.0,
+			"cooldown": 700,
+			"radius": 10,
+			"duration": 400,
+			"heal": 2.0,
 			"interval": 20,
 			"name": "Santuário de Flores",
 			"description": "Abre um grande círculo mágico no chão por 15 segundos. Nenhum monstro consegue entrar, e um campo de flores encantadas desabrocha lá dentro, curando sem parar os jogadores e aliados que estiverem no círculo."

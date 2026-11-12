@@ -34,7 +34,7 @@
 ## Como usar
 
 - Ao entrar num mundo novo, o livro de origens abre e você escolhe a sua raça.
-- `/raca trocar` (ou `/race change`) volta para a escolha de raça.
+- `/do race change` volta para a escolha de raça. Para testes (OP): `/do full maturity`, `/do reset cooldown`, `/do no cooldown`.
 - Teclas padrão (trocáveis em *Opções → Controles → Dakura Origins*):
 
 | Tecla | Ação |

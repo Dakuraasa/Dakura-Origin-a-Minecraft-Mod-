@@ -74,16 +74,18 @@
 		{
 			"type": "dakura_origins:maturity",
 			"thresholds": [
-				15,
-				50
+				38,
+				125
 			],
 			"per_kill": 1,
-			"only_monsters": false,
+			"only_monsters": true,
 			"colors": [
 				"#7ED957",
 				"#3FB548",
 				"#1E7A2A"
-			]
+			],
+			"from_xp": false,
+			"from_kills": true
 		},
 		{
 			"type": "dakura_origins:attribute",
@@ -155,9 +157,9 @@
 			"fire_count": 12,
 			"fire_radius": 3,
 			"maturity_damage": [
-				1.0,
-				1.4,
-				1.8
+				0.88,
+				1.23,
+				1.58
 			],
 			"palette": "green"
 		},

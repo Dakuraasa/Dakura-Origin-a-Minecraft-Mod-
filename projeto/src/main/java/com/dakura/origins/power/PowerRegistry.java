@@ -206,6 +206,8 @@ public final class PowerRegistry {
 		registerAbilityType(DakuraOrigins.id("fist_barrage"), com.dakura.origins.power.ability.FistBarrageAbility::new);
 		registerAbilityType(DakuraOrigins.id("spirit_orb"), com.dakura.origins.power.ability.SpiritOrbAbility::new);
 		registerAbilityType(DakuraOrigins.id("dark_comet"), com.dakura.origins.power.ability.DarkCometAbility::new);
+		registerAbilityType(DakuraOrigins.id("steel_tempest"), com.dakura.origins.power.ability.SteelTempestAbility::new);
+		registerPowerType(DakuraOrigins.id("doll_leap"), com.dakura.origins.power.types.DollLeapPower::new);
 		registerAbilityType(DakuraOrigins.id("natural_growth"), com.dakura.origins.power.ability.NaturalGrowthAbility::new);
 		registerAbilityType(DakuraOrigins.id("mana_orbs"), com.dakura.origins.power.ability.ManaOrbsAbility::new);
 		registerAbilityType(DakuraOrigins.id("flower_sanctuary"), com.dakura.origins.power.ability.FlowerSanctuaryAbility::new);

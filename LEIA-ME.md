@@ -31,10 +31,14 @@ Java **JDK 21** instalado (ex.: Eclipse Temurin 21). Depois é só dar dois cliq
 
 | Comando | Quem | O que faz |
 |---|---|---|
-| `/raca` | todos | mostra sua raça |
-| `/raca trocar` | todos | tira sua raça e reabre o livro |
-| `/raca trocar <jogador>` | OP | faz outro jogador escolher de novo |
-| `/raca definir <jogador> <raça>` | OP | define a raça direto |
+| `/do race` | todos | mostra sua raça |
+| `/do race change` | todos | tira sua raça e reabre o livro |
+| `/do race change <jogador>` | OP | faz outro jogador escolher de novo |
+| `/do race set <jogador> <raça>` | OP | define a raça direto |
+| `/do race list` | todos | lista as raças |
+| `/do full maturity` | OP | vai direto à forma final da maturidade |
+| `/do reset cooldown` | OP | zera as recargas de habilidades e passivas |
+| `/do no cooldown` | OP | liga/desliga o modo sem recarga |
 | `/raca lista` | todos | lista as raças instaladas |
 
 Os mesmos comandos existem em inglês: `/race`, `/race change`, `/race set`, `/race list`.

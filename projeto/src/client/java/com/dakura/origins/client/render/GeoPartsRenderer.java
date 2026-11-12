@@ -140,7 +140,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 				|| e.getWorld().getTimeOfDay() % 24000L > 23460);
 		if (DakuraConfig.cosmetic(e, "demon_horns") || (DakuraConfig.cosmetic(e, "succubus_horns") && !day)) horns(m, vcp, light, t);
 		if (DakuraConfig.cosmetic(e, "mushroom_cap")) mushroom(m, vcp, light, e, t);
-		if (DakuraConfig.cosmetic(e, "mermaid_tail") && e.isTouchingWater()) mermaid(m, vcp, light, e, t, true);
+		if (DakuraConfig.cosmetic(e, "mermaid_tail")) mermaid(m, vcp, light, e, t, true);
 		boolean red = DakuraConfig.cosmetic(e, "dragon_red"), brown = DakuraConfig.cosmetic(e, "dragon_brown");
 		if (red || brown) dragon(m, vcp, light, e, t, brown, red);
 		if (DakuraConfig.cosmetic(e, "fairy_wings")) fairy(m, vcp, light, e, t);
@@ -373,6 +373,7 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 		float[] st = phys(e);
 		float v = Math.min(0.35f, speed(e));
 		boolean fan = AbilityAnimations.active("fan").contains(e.getId());
+		boolean pivotScale = n != 1;
 		float scale = n < 0 ? 1.2f : n <= 1 ? 1.0f : n <= 3 ? 1.32f : n <= 6 ? 1.2f : 1.1f;   // -1 = Raposa da Neve (cauda maior)
 		n = Math.abs(n);
 		float spreadMax = n <= 1 ? 0 : n <= 3 ? 0.75f : n <= 6 ? 1.15f : 1.45f;
@@ -398,14 +399,14 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 			}
 			m.push();
 			// mais redondas e volumosas: engrossa a cauda sem alongar
-			if (n > 1) {
+			if (pivotScale) {
 				// Kitsune: a cauda cresce a partir da própria raiz, que fica na mesma altura da Raposa de Fogo
-				m.translate(0, (10.8f - 10.5f * 1.18f + 1.6f) / 16f, 0);
+				m.translate(0, (10.8f - 10.5f + 1.6f) / 16f, 0);
 				m.translate(0, 10.5f / 16f, 2f / 16f);
 				m.scale(scale * 1.18f, scale * 1.18f, scale);
 				m.translate(0, -10.5f / 16f, -2f / 16f);
 			} else m.scale(scale * 1.18f, scale * 1.18f, scale);
-			Emissive.geo(g, m, vcp, tex, glow, tint);
+			g.render(m, vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(tex)), Emissive.FULL_BRIGHT);
 			m.pop();
 		}
 		m.pop();

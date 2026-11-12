@@ -119,8 +119,16 @@ public final class SkyfallGrabAbility implements Ability {
 				if (!tg.isFireImmune()) tg.setOnFireFor(6);
 				tg.fallDistance = 0;
 			}
-			DragonFire.explode(pl.getServerWorld(), c.add(0, 0.5, 0), pl, (float) radius, splash, splash * 0.5f, 6, 100, 4f);
-			LegendKit.fxAt(pl.getServerWorld(), "crater", c, (float) radius, 200, 0);
+			DragonFire.quiet = true;
+			try {
+				DragonFire.explode(pl.getServerWorld(), c.add(0, 0.5, 0), pl, (float) radius, splash, splash * 0.5f, 6, 100, 4f);
+			} finally {
+				DragonFire.quiet = false;
+			}
+			// impacto = o mesmo pisão do dragão (ondas, pedaços do chão e poeira)
+			com.dakura.origins.network.ModNetworking.sendAround(new com.dakura.origins.network.AnimPayload(pl.getId(), "fx:stomp", (int) Math.round(radius * 10)), pl);
+			LegendKit.fxAt(pl.getServerWorld(), "debris", c, (int) Math.round(radius * 7), (float) radius, 0);
+			LegendKit.fxAt(pl.getServerWorld(), "dust", c, (float) radius, 0, 0);
 			ModSounds.play(pl, ModSounds.DRAGON_SLAM, 1.6f, 0.9f);
 		});
 		return true;

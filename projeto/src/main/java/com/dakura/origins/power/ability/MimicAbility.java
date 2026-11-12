@@ -22,6 +22,10 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
+import com.dakura.origins.race.Race;
+import com.dakura.origins.race.RaceAccess;
+import com.dakura.origins.power.RacePower;
 import java.util.Map;
 import java.util.UUID;
 
@@ -54,8 +58,8 @@ public final class MimicAbility implements Ability {
 				ServerPlayerEntity p = server.getPlayerManager().getPlayer(en.getKey());
 				if (p == null) return true;
 				if (ticks >= (long) en.getValue()[1] || !p.isAlive()) {
-					clear(p, (UUID) en.getValue()[0]);
-					return true;
+					server.execute(() -> revert(p));
+					return false;
 				}
 				return false;
 			});
@@ -68,25 +72,33 @@ public final class MimicAbility implements Ability {
 
 	@Override
 	public boolean activate(ServerPlayerEntity p) {
-		Object[] cur = ACTIVE.remove(p.getUuid());
-		if (cur != null) {
-			clear(p, (UUID) cur[0]);
+		// 2º botão de novo = volta à forma original
+		if (ACTIVE.containsKey(p.getUuid())) {
+			revert(p);
 			return false;
 		}
 		var t = TargetUtil.aimed(p, range, e -> e instanceof PlayerEntity);
-		if (!(t instanceof PlayerEntity target)) {
+		if (!(t instanceof ServerPlayerEntity target)) {
 			p.sendMessage(Text.translatable("dakura_origins.message.no_target").formatted(Formatting.GRAY), true);
 			return false;
 		}
-		for (var a : ATTRS) {
-			var mine = p.getAttributeInstance(a);
-			if (mine == null || target.getAttributeInstance(a) == null) continue;
-			mine.removeModifier(id(a));
-			double delta = target.getAttributeValue(a) - mine.getValue();
-			if (Math.abs(delta) > 1e-4) mine.addTemporaryModifier(new EntityAttributeModifier(id(a), delta, EntityAttributeModifier.Operation.ADD_VALUE));
+		Race base = RaceAccess.baseRace(p).orElse(null);
+		Race copy = RaceAccess.baseRace(target).orElse(null);
+		if (base == null || copy == null || copy.id().equals(base.id()) || base.abilities().size() < 2) {
+			p.sendMessage(Text.translatable("dakura_origins.message.no_target").formatted(Formatting.GRAY), true);
+			return false;
 		}
+		// sai a Succubus, entra a raça copiada: poderes (vantagens, fraquezas, atributos, imunidades, aparência) e a 1ª habilidade
+		for (RacePower pw : base.powers()) pw.onRemove(p);
+		List<Race.AbilityInfo> abilities = new ArrayList<>();
+		abilities.add(copy.abilities().isEmpty() ? base.abilities().get(0) : copy.abilities().get(0));
+		abilities.add(base.abilities().get(1));
+		Race mix = new Race(base.id(), base.order(), base.name(), base.epithet(), base.icon(), base.iconWidth(), base.iconHeight(),
+				base.palette(), base.description(), base.traits(), copy.powers(), abilities);
+		RaceAccess.BORROWED.put(p.getUuid(), mix);
+		for (RacePower pw : copy.powers()) pw.onApply(p);
 		p.setHealth(Math.min(p.getHealth(), p.getMaxHealth()));
-		ACTIVE.put(p.getUuid(), new Object[]{target.getUuid(), ticks + duration});
+		ACTIVE.put(p.getUuid(), new Object[]{target.getUuid(), ticks + duration, copy});
 		EntityFlags.set(p, PREFIX + target.getUuid(), true);
 		p.calculateDimensions();
 		ModNetworking.sendAround(new AnimPayload(p.getId(), "fx:morph", 1), p);
@@ -96,13 +108,20 @@ public final class MimicAbility implements Ability {
 		return true;
 	}
 
-	private static void clear(ServerPlayerEntity p, UUID target) {
-		for (var a : ATTRS) {
-			var inst = p.getAttributeInstance(a);
-			if (inst != null) inst.removeModifier(id(a));
+	/** Desfaz a transformação: tira tudo da raça copiada e devolve os poderes da Succubus. Seguro chamar sem transformação. */
+	public static void revert(ServerPlayerEntity p) {
+		Object[] cur = ACTIVE.remove(p.getUuid());
+		Race mix = RaceAccess.BORROWED.remove(p.getUuid());
+		if (cur == null && mix == null) return;
+		if (mix != null) {
+			if (!mix.abilities().isEmpty() && mix.abilities().get(0).ability() != null) mix.abilities().get(0).ability().onRemove(p);
+			for (RacePower pw : mix.powers()) pw.onRemove(p);
 		}
+		RaceAccess.baseRace(p).ifPresent(b -> {
+			for (RacePower pw : b.powers()) pw.onApply(p);
+		});
 		p.setHealth(Math.min(p.getHealth(), p.getMaxHealth()));
-		EntityFlags.set(p, PREFIX + target, false);
+		if (cur != null) EntityFlags.set(p, PREFIX + cur[0], false);
 		p.calculateDimensions();
 		ModNetworking.sendAround(new AnimPayload(p.getId(), "fx:morph", 0), p);
 		p.getWorld().playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.ENTITY_ILLUSIONER_MIRROR_MOVE, SoundCategory.PLAYERS, 0.7f, 0.8f);
@@ -110,7 +129,6 @@ public final class MimicAbility implements Ability {
 
 	@Override
 	public void onRemove(ServerPlayerEntity p) {
-		Object[] cur = ACTIVE.remove(p.getUuid());
-		if (cur != null) clear(p, (UUID) cur[0]);
+		revert(p);
 	}
 }

@@ -57,6 +57,9 @@ public final class DragonFire {
 		}
 	}
 
+	/** true: explode sem a esfera 3D (quem chama usa outro efeito de impacto). */
+	public static boolean quiet;
+
 	public static void explode(ServerWorld w, Vec3d c, Entity owner, float radius, float blast, float fire, int fireSeconds,
 							   int zoneTicks, float zoneRadius) {
 		for (LivingEntity e : w.getEntitiesByClass(LivingEntity.class, new Box(c, c).expand(radius), LivingEntity::isAlive)) {
@@ -78,7 +81,7 @@ public final class DragonFire {
 		}
 		// fogo de verdade espalhado de forma irregular (sem área 3D desenhada)
 		if (zoneTicks > 0) igniteGround(w, c, Math.max(2, Math.round(zoneRadius)), 10 + Math.round(zoneRadius * 3));
-		LegendKit.fxAt(w, "boom_green", c, radius, 0, 0);
+		if (!quiet) LegendKit.fxAt(w, "boom_green", c, radius, 0, 0);
 		LegendKit.fxAt(w, "debris", c, (int) (radius * 5), radius, 0);
 		ModSounds.play(w, c, ModSounds.MAGMA_EXPLODE, 1.4f, 0.9f + w.random.nextFloat() * 0.2f);
 	}

@@ -156,6 +156,7 @@ public final class SoryePower implements RacePower {
 
 	@Override
 	public void onRemove(ServerPlayerEntity p) {
+		READY_AT.remove(p.getUuid());
 		LegendKit.stop(p, "chest_reroll");
 	}
 }

@@ -18,11 +18,11 @@
 			"#C9BA8B",
 			"#DBD9D1"
 		],
-		"sky": "#060608",
+		"sky": "#000000",
 		"glow": "#DBDBDB",
-		"text": "#123524",
+		"text": "#FFFFFF",
 		"accent": "#977627",
-		"muted": "#506E5C"
+		"muted": "#C8C8C8"
 	},
 	"description": "Um anjo da mais alta ordem, envolto em luz branca, com seis asas que se fecham sobre o corpo em descanso e se abrem como um coro quando ele voa. Não ergue a mão contra criatura alguma, e nenhuma criatura ousa feri-lo. Seu dom é cuidar: cura, protege e abençoa as armas e ferramentas dos amigos num altar celestial.",
 	"traits": [
@@ -53,6 +53,10 @@
 		{
 			"type": "neutro",
 			"text": "Aura branca permanente; as seis asas brilham com luz própria."
+		},
+		{
+			"type": "vantagem",
+			"text": "Intocável: imune a qualquer tipo de dano."
 		}
 	],
 	"powers": [
@@ -117,6 +121,10 @@
 			"type": "dakura_origins:status_effect",
 			"effect": "minecraft:glowing",
 			"amplifier": 0
+		},
+		{
+			"type": "dakura_origins:damage_immunity",
+			"all": true
 		}
 	],
 	"abilities": [
@@ -136,5 +144,6 @@
 			"options": 3,
 			"description": "Ergue o item da mão diante de um altar alado: escolha uma entre três bênçãos sorteadas (encantamentos aleatórios, em níveis aleatórios). Demora 3 minutos para voltar."
 		}
-	]
+	],
+	"dark_page": true
 }

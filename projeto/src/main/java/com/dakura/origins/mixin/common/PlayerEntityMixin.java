@@ -86,6 +86,17 @@ public abstract class PlayerEntityMixin {
 		}
 	}
 
+	/** Sereia fora d'água: não anda, rasteja (postura deitada do vanilla, lenta), sempre com a cauda. */
+	@Inject(method = "updatePose", at = @At("HEAD"), cancellable = true, require = 0)
+	private void dakura$mermaidCrawl(CallbackInfo ci) {
+		PlayerEntity p = (PlayerEntity) (Object) this;
+		boolean crawl = p.getWorld().isClient ? com.dakura.origins.power.EntityFlags.clientHas(p, "mermaid_crawl")
+				: p instanceof net.minecraft.server.network.ServerPlayerEntity sp && com.dakura.origins.power.EntityFlags.has(sp, "mermaid_crawl");
+		if (!crawl || p.isTouchingWater() || p.isFallFlying() || p.hasVehicle() || p.isSleeping() || p.getAbilities().flying) return;
+		p.setPose(EntityPose.SWIMMING);
+		ci.cancel();
+	}
+
 	@Inject(method = "addExperienceLevels", at = @At("HEAD"), cancellable = true)
 	private void dakura$blockLevels(int levels, CallbackInfo ci) {
 		if (MaturityPower.blocksExperience((PlayerEntity) (Object) this)) ci.cancel();

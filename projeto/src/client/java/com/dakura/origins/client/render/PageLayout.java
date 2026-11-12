@@ -31,7 +31,7 @@ public final class PageLayout {
 	private static final int LINE_H = 11;
 	private static final int TEXT_INDENT = 13;
 	/** Caixa padrão de todos os ícones de raça (em pixels de interface). */
-	public static final int ICON_BOX_W = 110, ICON_BOX_H = 120; // olhos ~25% maiores
+	public static final int ICON_BOX_W = 134, ICON_BOX_H = 144; // olhos maiores, sempre limitados à largura da folha
 
 	/**
 	 * Dados extras da página de consulta (só na tela "sua raça").
@@ -405,9 +405,14 @@ public final class PageLayout {
 			case TEXT -> pal.text();
 			case ACCENT -> pal.accent();
 			case MUTED, NEUTRAL -> pal.muted();
-			case PRO, JADE -> 0xFF2E6B4F;
-			case CON -> 0xFFA8445A;
+			// página escura (texto claro): verde e vermelho mais vivos para ler sobre o preto
+			case PRO, JADE -> light(pal.text()) ? 0xFF7FE0AE : 0xFF2E6B4F;
+			case CON -> light(pal.text()) ? 0xFFFF8FA5 : 0xFFA8445A;
 		};
+	}
+
+	private static boolean light(int c) {
+		return ((c >> 16 & 0xFF) + (c >> 8 & 0xFF) + (c & 0xFF)) > 600;
 	}
 
 	public static String roman(int n) {

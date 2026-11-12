@@ -27,6 +27,7 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 	@Override
 	public void render(GeoProjectileEntity e, float yaw, float tickDelta, MatrixStack m, VertexConsumerProvider vcp, int light) {
 		float t = e.age + tickDelta;
+		if (e.kind() == GeoProjectileEntity.MANA || e.kind() == GeoProjectileEntity.DARK) nativeTrail(e);
 		if (e.kind() == GeoProjectileEntity.MANA) {
 			FxGlow.manaOrb(m, vcp, t, e.getVelocity(), e.size());
 			super.render(e, yaw, tickDelta, m, vcp, light);
@@ -61,5 +62,24 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 	@Override
 	public Identifier getTexture(GeoProjectileEntity e) {
 		return e.kind() == GeoProjectileEntity.MAGMA ? MAGMA : CAULDRON;
+	}
+
+	/** Rastro nativo do Minecraft atrás das esferas da Kitsune (mana azul) e da Corrompida (cometa negro). */
+	private static void nativeTrail(GeoProjectileEntity e) {
+		var w = e.getWorld();
+		var r = w.random;
+		boolean dark = e.kind() == GeoProjectileEntity.DARK;
+		for (int i = 0; i < 4; i++) {
+			double x = e.getX() + r.nextGaussian() * 0.18, y = e.getY() + 0.3 + r.nextGaussian() * 0.18, z = e.getZ() + r.nextGaussian() * 0.18;
+			double vx = -e.getVelocity().x * 0.05 + r.nextGaussian() * 0.03, vy = r.nextGaussian() * 0.03, vz = -e.getVelocity().z * 0.05 + r.nextGaussian() * 0.03;
+			net.minecraft.particle.ParticleEffect fx = dark
+					? switch (i) { case 0 -> net.minecraft.particle.ParticleTypes.REVERSE_PORTAL; case 1 -> net.minecraft.particle.ParticleTypes.SOUL_FIRE_FLAME;
+						case 2 -> net.minecraft.particle.ParticleTypes.WITCH; default -> net.minecraft.particle.ParticleTypes.SQUID_INK; }
+					: switch (i) { case 0 -> net.minecraft.particle.ParticleTypes.END_ROD; case 1 -> net.minecraft.particle.ParticleTypes.GLOW;
+						case 2 -> net.minecraft.particle.ParticleTypes.SNOWFLAKE; default -> net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK; };
+			w.addParticle(fx, x, y, z, vx, vy, vz);
+		}
+		if (r.nextInt(3) == 0) w.addParticle(dark ? net.minecraft.particle.ParticleTypes.DRAGON_BREATH : net.minecraft.particle.ParticleTypes.FIREWORK,
+				e.getX(), e.getY() + 0.3, e.getZ(), 0, 0, 0);
 	}
 }

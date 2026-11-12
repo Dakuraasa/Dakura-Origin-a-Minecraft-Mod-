@@ -94,9 +94,9 @@
 		{
 			"type": "dakura_origins:maturity",
 			"thresholds": [
-				450,
-				1350,
-				3000
+				1125,
+				3375,
+				7500
 			],
 			"points_per_health": 0.5,
 			"only_monsters": true,
@@ -107,7 +107,9 @@
 				"#E2E8B0"
 			],
 			"grow_message": "dakura_origins.message.undead_grow",
-			"style": "undead"
+			"style": "undead",
+			"from_xp": false,
+			"from_kills": true
 		},
 		{
 			"type": "dakura_origins:effect_immunity",

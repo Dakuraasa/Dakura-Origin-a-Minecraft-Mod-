@@ -79,8 +79,8 @@
 		{
 			"type": "dakura_origins:maturity",
 			"thresholds": [
-				1500,
-				4500
+				3750,
+				11250
 			],
 			"points_per_health": 0.5,
 			"only_monsters": true,
@@ -88,7 +88,9 @@
 				"#7ED957",
 				"#F2B33D",
 				"#D9364A"
-			]
+			],
+			"from_xp": false,
+			"from_kills": true
 		},
 		{
 			"type": "dakura_origins:attribute",
@@ -243,9 +245,9 @@
 			"fire_count": 12,
 			"fire_radius": 3,
 			"maturity_damage": [
-				1.0,
-				1.4,
-				1.8
+				0.88,
+				1.23,
+				1.58
 			]
 		},
 		{

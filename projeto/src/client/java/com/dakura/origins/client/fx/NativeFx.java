@@ -25,7 +25,7 @@ public final class NativeFx {
 
 	/** Explosão de mana: clarão, anel de faíscas, estrelas, brilho e flocos gelados (congelamento). */
 	public static void manaBurst(ClientWorld w, Vec3d c, float size, Random r) {
-		float s = Math.max(0.5f, size);
+		float s = Math.max(0.5f, size) * 1.8f;
 		w.addParticle(ParticleTypes.FLASH, c.x, c.y, c.z, 0, 0, 0);
 		w.addParticle(ParticleTypes.EXPLOSION, c.x, c.y, c.z, 0, 0, 0);
 		int n = (int) (36 * s);
@@ -48,7 +48,7 @@ public final class NativeFx {
 
 	/** Explosão sombria (Kitsune Corrompida): fumaça negra, almas e faíscas brancas. */
 	public static void darkBurst(ClientWorld w, Vec3d c, float size, Random r) {
-		float s = Math.max(0.5f, size);
+		float s = Math.max(0.5f, size) * 1.8f;
 		w.addParticle(ParticleTypes.EXPLOSION, c.x, c.y, c.z, 0, 0, 0);
 		for (int i = 0; i < 34 * s; i++) {
 			double vx = r.nextGaussian() * 0.25 * s, vy = r.nextGaussian() * 0.25 * s, vz = r.nextGaussian() * 0.25 * s;

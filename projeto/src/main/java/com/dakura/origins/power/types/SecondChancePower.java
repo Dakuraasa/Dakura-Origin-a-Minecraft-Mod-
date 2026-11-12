@@ -32,10 +32,14 @@ public final class SecondChancePower implements RacePower {
 
 	private final int cooldown;
 	private final int regenTicks;
+	private final float burstDamage, burstRadius, burstPush;
 
 	public SecondChancePower(JsonObject json) {
 		this.cooldown = JsonParams.integer(json, "cooldown", 6000);
 		this.regenTicks = Math.round(JsonParams.num(json, "regen_seconds", 5f) * 20);
+		this.burstDamage = JsonParams.num(json, "burst_damage", 0f);
+		this.burstRadius = JsonParams.num(json, "burst_radius", 4f);
+		this.burstPush = JsonParams.num(json, "burst_push", 1.6f);
 	}
 
 	public static void bootstrap() {
@@ -56,6 +60,11 @@ public final class SecondChancePower implements RacePower {
 		player.setHealth(2f);
 		player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, regenTicks, 0, true, false, true));
 		ServerWorld w = player.getServerWorld();
+		if (burstDamage > 0) {
+			// volta direto à vida: só a explosão de energia da Égide Dourada, ferindo e empurrando quem estiver perto
+			GoldenWardPower.burst(player, burstRadius, burstPush, burstDamage);
+			return true;
+		}
 		w.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 0.55f, 0.5f);
 		w.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WITHER_SKELETON_AMBIENT, SoundCategory.PLAYERS, 0.8f, 0.55f);
 		w.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PARTICLE_SOUL_ESCAPE.value(), SoundCategory.PLAYERS, 1.2f, 0.6f);

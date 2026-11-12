@@ -1,7 +1,7 @@
 {
 	"id": "huli_jing_neve",
 	"order": 7,
-	"name": "Huli Jing das Neves",
+	"name": "Raposa Mística",
 	"epithet": "A Raposa que Não Divide o Inverno",
 	"icon": "dakura_origins:textures/race/huli_jing_neve.png",
 	"icon_size": [
@@ -140,7 +140,7 @@
 			"type": "dakura_origins:fox_form",
 			"name": "Forma de Raposa",
 			"description": "Vira uma raposa veloz que dá saltos enormes. Nessa forma os inimigos a ignoram e ela não ataca: o botão de ataque libera uma explosão de gelo que quebra blocos e devolve a forma humana.",
-			"cooldown": 20,
+			"cooldown": 200,
 			"snow": true,
 			"speed": 0.35,
 			"jump": 0.9
@@ -151,7 +151,7 @@
 			"description": "Cria três ilusões de raposa que lutam ao seu lado, sem limite de tempo (novas ilusões substituem as antigas).",
 			"cooldown": 900,
 			"count": 3,
-			"duration": 0,
+			"duration": 200,
 			"snow": true
 		}
 	],

@@ -194,6 +194,15 @@ public final class MaturityPower implements RacePower {
 		of(player).filter(m -> m.fromXp).ifPresent(m -> m.addPoints(sp, amount));
 	}
 
+	/** /do full maturity: vai direto ao último estágio. false se a raça não tem maturidade. */
+	public static boolean maxOut(ServerPlayerEntity player) {
+		var m = of(player);
+		if (m.isEmpty()) return false;
+		int before = points(player);
+		if (before < m.get().maxPoints()) m.get().addPoints(player, m.get().maxPoints() - before);
+		return true;
+	}
+
 	/** Soma maturidade vinda de fora (ex.: devorar da Kitsune Corrompida). */
 	public static void grant(ServerPlayerEntity player, int gain) {
 		if (gain > 0) of(player).ifPresent(m -> m.addPoints(player, gain));

@@ -51,8 +51,9 @@ public final class StatusEffectPower extends ConditionalPower {
 	private void sync(ServerPlayerEntity player) {
 		StatusEffectInstance current = player.getStatusEffect(effect);
 		if (isActive(player)) {
-			if (current == null || (isOurs(current) && current.getDuration() < REFRESH_BELOW)) {
-				player.addStatusEffect(new StatusEffectInstance(effect, DURATION, amplifier, true, false, false));
+			// característica racial permanente: duração infinita (sem renovação, sem piscar, sem ícone)
+			if (current == null || (isOurs(current) && !current.isInfinite())) {
+				player.addStatusEffect(new StatusEffectInstance(effect, StatusEffectInstance.INFINITE, amplifier, true, false, false));
 			}
 		} else if (isOurs(current)) {
 			player.removeStatusEffect(effect);
@@ -61,7 +62,7 @@ public final class StatusEffectPower extends ConditionalPower {
 
 	/** Nosso efeito é "ambiente" e sem partículas — poções normais não são removidas por engano. */
 	private boolean isOurs(StatusEffectInstance instance) {
-		return instance != null && instance.isAmbient() && !instance.shouldShowParticles()
-				&& instance.getAmplifier() == amplifier && instance.getDuration() <= DURATION;
+		return instance != null && instance.isAmbient() && !instance.shouldShowParticles() && !instance.shouldShowIcon()
+				&& instance.getAmplifier() == amplifier && (instance.isInfinite() || instance.getDuration() <= DURATION);
 	}
 }

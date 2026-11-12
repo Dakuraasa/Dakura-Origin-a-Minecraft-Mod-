@@ -31,6 +31,15 @@ public abstract class BipedEntityModelMixin {
 	@Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
 	private void dakura$abilityPoses(LivingEntity entity, float limbAngle, float limbDistance, float animationProgress,
 									 float headYaw, float headPitch, CallbackInfo ci) {
+		// Sereia: a cauda substitui as pernas o tempo todo (na água e rastejando em terra)
+		if (com.dakura.origins.power.EntityFlags.clientHas(entity, "mermaid_tail")) {
+			leftLeg.visible = false;
+			rightLeg.visible = false;
+			if ((Object) this instanceof net.minecraft.client.render.entity.model.PlayerEntityModel<?> pm) {
+				pm.leftPants.visible = false;
+				pm.rightPants.visible = false;
+			}
+		}
 		float p = AbilityAnimations.progress(entity, "bite", animationProgress);
 		if (p >= 0f) poseBite(p, animationProgress);
 

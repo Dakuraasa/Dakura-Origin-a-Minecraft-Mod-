@@ -117,6 +117,20 @@ final class ExtraEffects {
 				for (int i = 0; i < 10; i++) world.addParticle(ParticleTypes.CLOUD, mouth.x, mouth.y, mouth.z,
 						e.getRotationVec(1f).x * 0.3 + rnd.nextGaussian() * 0.05, 0.02, e.getRotationVec(1f).z * 0.3 + rnd.nextGaussian() * 0.05);
 			}
+			case "tempest_cut", "tempest_empowered" -> {
+				boolean big = name.equals("tempest_empowered");
+				Vec3d look = e.getRotationVec(1f), c = base.add(0, e.getHeight() * 0.6, 0);
+				for (int i = 1; i <= (big ? 22 : 12); i++) {
+					Vec3d p = c.add(look.multiply(i * 0.3));
+					world.addParticle(big ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.CRIT, p.x, p.y, p.z, look.x * 0.2, 0.01, look.z * 0.2);
+					if (i % 2 == 0) world.addParticle(ParticleTypes.SWEEP_ATTACK, p.x, p.y, p.z, 0, 0, 0);
+				}
+				if (big) {
+					world.addParticle(ParticleTypes.FLASH, c.x + look.x * 2, c.y, c.z + look.z * 2, 0, 0, 0);
+					for (int i = 0; i < 20; i++) world.addParticle(ParticleTypes.ENCHANTED_HIT, c.x + look.x * 2, c.y, c.z + look.z * 2,
+							rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.3, rnd.nextGaussian() * 0.3);
+				}
+			}
 			case "gold_fist" -> {
 				Vec3d c = base.add(0, e.getHeight() * 0.55, 0);
 				ClientEffects.ring(world, c, 0.6, 16, GOLD);

@@ -229,6 +229,7 @@ public class RaceSelectionScreen extends Screen {
 			case OPENING -> renderOpening(ctx, mouseX, mouseY, pal, t, shown, now);
 			case OPEN -> renderOpen(ctx, mouseX, mouseY, pal, t, shown, shownToc, flipping ? flip : -1f, viewOnly ? pop(now) : 1f);
 		}
+		drawRunes(ctx);
 		Text sig = Text.literal("Created by: Dakuraasa").formatted(net.minecraft.util.Formatting.BOLD);
 		float ss = 0.75f;
 		ctx.getMatrices().push();
@@ -415,7 +416,8 @@ public class RaceSelectionScreen extends Screen {
 	/** Uma folha do livro aberto. side 0 = esquerda (vantagens, fraquezas, habilidades / sumário), 1 = direita (retrato e descrição). */
 	private void drawLeaf(DrawContext ctx, int side, Race race, boolean showToc, int mouseX, int mouseY, Race.Palette pal, boolean interactive) {
 		int lw = leafW(), lx = pageX + side * lw;
-		paper.render(ctx, lx, pageY, lw, pageH);
+		if (race != null && "serafim".equals(race.id())) ctx.fill(lx, pageY, lx + lw, pageY + pageH, 0xFF000000);
+		else paper.render(ctx, lx, pageY, lw, pageH);
 		// dobra perto da lombada: sombra em degradê
 		for (int i = 0; i < 10; i++) {
 			int a = (10 - i) * 7;
@@ -804,6 +806,7 @@ public class RaceSelectionScreen extends Screen {
 		scroll = 0;
 		armed = false;
 		if (client == null) return;
+		enchantFx();
 		if (variantKind) {
 			client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.35f));
 			boolean fire = view(newIndex, newVariant).id().equals("huli_jing");
@@ -811,6 +814,49 @@ public class RaceSelectionScreen extends Screen {
 					fire ? SoundEvents.ITEM_FIRECHARGE_USE : SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, fire ? 1.4f : 1.4f + 0.15f * newVariant, 0.35f));
 		} else {
 			client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_BOOK_PAGE_TURN, newToc ? 0.85f : 1.0f));
+		}
+	}
+
+	// ----- efeito de mesa de encantamento ao virar a página
+	private long runeStart = -1;
+	private final long[] runeSeed = new long[18];
+
+	private void enchantFx() {
+		runeStart = System.currentTimeMillis();
+		for (int i = 0; i < runeSeed.length; i++) runeSeed[i] = (long) (Math.random() * Long.MAX_VALUE);
+		client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 0.9f));
+		var p = client.player;
+		if (p != null && client.world != null) {
+			for (int i = 0; i < 40; i++) {
+				double a = Math.random() * Math.PI * 2, r = 1 + Math.random() * 1.5;
+				client.world.addParticle(net.minecraft.particle.ParticleTypes.ENCHANT, p.getX(), p.getY() + 1.6, p.getZ(),
+						Math.cos(a) * r, Math.random() * 1.2 - 0.3, Math.sin(a) * r);
+			}
+		}
+	}
+
+	/** Runas do alfabeto galáctico (a fonte da mesa de encantamento) voando até o centro do livro, só durante a virada. */
+	private void drawRunes(DrawContext ctx) {
+		if (runeStart < 0) return;
+		float k = (System.currentTimeMillis() - runeStart) / 900f;
+		if (k >= 1f) {
+			runeStart = -1;
+			return;
+		}
+		int cx = width / 2, cy = height / 2;
+		for (int i = 0; i < runeSeed.length; i++) {
+			java.util.Random r = new java.util.Random(runeSeed[i]);
+			double a = r.nextDouble() * Math.PI * 2, d = (0.35 + r.nextDouble() * 0.25) * Math.min(width, height);
+			float t = Math.min(1f, k * (1.1f + r.nextFloat() * 0.5f));
+			int x = (int) (cx + Math.cos(a) * d * (1 - t)), y = (int) (cy + Math.sin(a) * d * (1 - t) - Math.sin(t * Math.PI) * 20);
+			int alpha = (int) (255 * Math.sin(t * Math.PI)) & 0xFF;
+			if (alpha < 8) continue;
+			String ch = String.valueOf((char) ('a' + r.nextInt(26)));
+			Text rune = Text.literal(ch).setStyle(net.minecraft.text.Style.EMPTY.withFont(Identifier.ofVanilla("alt")));
+			ctx.getMatrices().push();
+			ctx.getMatrices().translate(0, 0, 400);
+			ctx.drawText(textRenderer, rune, x, y, (alpha << 24) | 0xC8B8FF, false);
+			ctx.getMatrices().pop();
 		}
 	}
 

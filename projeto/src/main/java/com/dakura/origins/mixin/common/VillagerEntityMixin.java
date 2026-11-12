@@ -29,8 +29,11 @@ public abstract class VillagerEntityMixin {
 			frac = 0.3;
 		} else {
 			if (!MarkerPower.has(player, "villager_discount")) return;
+			// Demônio: quanto mais o aldeão o teme (reputação negativa por ataques), maior o desconto.
+			// A reputação ruim do vanilla aumentaria o preço: zera isso antes de aplicar o desconto.
 			int rep = v.getReputation(player);
-			frac = 0.5 * Math.max(0.0, Math.min(1.0, 1.0 + rep / 60.0));
+			for (TradeOffer offer : v.getOffers()) offer.clearSpecialPrice();
+			frac = 0.2 + 0.4 * Math.max(0.0, Math.min(1.0, -rep / 60.0));
 		}
 		if (frac <= 0) return;
 		for (TradeOffer offer : v.getOffers()) {

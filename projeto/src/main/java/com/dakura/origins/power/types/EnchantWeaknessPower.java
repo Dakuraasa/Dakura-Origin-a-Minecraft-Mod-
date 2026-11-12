@@ -72,6 +72,16 @@ public final class EnchantWeaknessPower implements RacePower {
 			}
 		}
 		if (removed) p.sendMessage(message, true);
+		// carregar itens encantados em qualquer lugar do inventário queima: 1 de dano a cada 2 s (uma vez por ciclo)
+		if (p.age % 40 == 0) {
+			var inv = p.getInventory();
+			boolean cursed = false;
+			for (int i = 0; i < inv.size() && !cursed; i++) cursed = inv.getStack(i).hasEnchantments();
+			if (cursed) {
+				p.damage(p.getDamageSources().magic(), 1.0f);
+				p.sendMessage(message, true);
+			}
+		}
 	}
 
 	@Override

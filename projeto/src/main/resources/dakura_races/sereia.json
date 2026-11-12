@@ -53,6 +53,14 @@
 		{
 			"type": "desvantagem",
 			"text": "O fogo resseca as escamas: 50% mais dano de fogo."
+		},
+		{
+			"type": "vantagem",
+			"text": "Senhora do mar: na água ganha muito mais força, armadura, vida máxima e velocidade de ataque, e regenera vida sem parar."
+		},
+		{
+			"type": "desvantagem",
+			"text": "Cauda sempre: em terra não anda, só rasteja devagar."
 		}
 	],
 	"powers": [
@@ -76,14 +84,8 @@
 			"type": "dakura_origins:conditional_attribute",
 			"attribute": "minecraft:generic.attack_damage",
 			"operation": "add_value",
-			"amount": 3.0,
+			"amount": 7.0,
 			"when": "water"
-		},
-		{
-			"type": "dakura_origins:attribute",
-			"attribute": "minecraft:generic.max_health",
-			"operation": "add_value",
-			"amount": -2.0
 		},
 		{
 			"type": "dakura_origins:damage_multiplier",
@@ -94,26 +96,64 @@
 			"type": "dakura_origins:flag",
 			"flag": "aura#6FE3FF",
 			"when": "night"
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 2.0
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 8.0,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 10.0,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:conditional_attribute",
+			"attribute": "minecraft:generic.attack_speed",
+			"operation": "add_multiplied_base",
+			"amount": 0.3,
+			"when": "water"
+		},
+		{
+			"type": "dakura_origins:regeneration",
+			"interval": 20,
+			"amount": 1.0,
+			"when": "in_water"
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "mermaid_crawl",
+			"when": "always"
 		}
 	],
 	"abilities": [
 		{
 			"type": "dakura_origins:tidal_song",
 			"name": "Canto das Marés",
-			"cooldown": 700,
-			"radius": 10,
-			"duration": 160,
-			"heal": 1,
+			"cooldown": 600,
+			"radius": 16,
+			"duration": 240,
+			"heal": 3,
 			"description": "Canta uma melodia hipnótica em ondas de notas e bolhas. Monstros por perto esquecem o alvo e são puxados devagar, encantados. Aliados se curam e ganham respiração aquática."
 		},
 		{
 			"type": "dakura_origins:tsunami",
 			"name": "Maremoto",
-			"cooldown": 500,
-			"length": 18,
-			"width": 7,
-			"damage": 7,
-			"speed": 0.7,
+			"cooldown": 400,
+			"length": 26,
+			"width": 10,
+			"damage": 13,
+			"speed": 0.8,
 			"description": "Ergue uma onda gigante e enrolada que avança pela frente, arrastando e afogando os inimigos e apagando o fogo. A Sereia surfa na crista."
 		}
 	]
