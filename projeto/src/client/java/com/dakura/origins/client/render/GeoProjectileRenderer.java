@@ -33,8 +33,7 @@ public class GeoProjectileRenderer extends EntityRenderer<GeoProjectileEntity> {
 			m.translate(0, 0.25, 0);
 			com.dakura.origins.client.fx.ElfFx.sword(m, vcp, e.getVelocity(), t, false);
 			m.pop();
-			if (e.getWorld().random.nextInt(2) == 0) e.getWorld().addParticle(e.getWorld().random.nextBoolean()
-					? net.minecraft.particle.ParticleTypes.WITCH : net.minecraft.particle.ParticleTypes.SQUID_INK, e.getX(), e.getY() + 0.25, e.getZ(), 0, 0, 0);
+			com.dakura.origins.client.fx.ElfFx.swordTrail(e.getWorld(), e.getPos().add(0, 0.25, 0));
 			super.render(e, yaw, tickDelta, m, vcp, light);
 			return;
 		}

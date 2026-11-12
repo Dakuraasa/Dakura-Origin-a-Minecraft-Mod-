@@ -43,7 +43,7 @@ public class DakuraOriginsClient implements ClientModInitializer {
 
 	/**
 	 * Teclas das habilidades: keybinds nativos do Minecraft, trocáveis em
-	 * Opções → Controles → Dakura Origins. Z e B são só o padrão sugerido.
+	 * Opções → Controles → Datura Origins. Z e B são só o padrão sugerido.
 	 */
 	public static KeyBinding ABILITY_1;
 	public static KeyBinding ABILITY_2;
@@ -61,6 +61,8 @@ public class DakuraOriginsClient implements ClientModInitializer {
 				com.dakura.origins.entity.ModEntities.FEATHER, com.dakura.origins.client.render.FeatherRenderer::new);
 		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
 				com.dakura.origins.entity.ModEntities.GEO_PROJECTILE, com.dakura.origins.client.render.GeoProjectileRenderer::new);
+		net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(
+				com.dakura.origins.entity.ModEntities.SOUL_ORB, com.dakura.origins.client.render.SoulOrbRenderer::new);
 		com.dakura.origins.client.fx.FxWorld.init();
 		com.dakura.origins.client.fx.DarkFx.init();
 		com.dakura.origins.client.fx.ElfFx.init();

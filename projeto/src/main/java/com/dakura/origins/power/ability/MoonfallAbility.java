@@ -23,7 +23,7 @@ import net.minecraft.world.RaycastContext;
  * esferas da Kitsune, maior, branca, lenta e teleguiada). Ao ativar, todos por perto ficam cegos e muito lentos; durante
  * a invocação ele não pode atacar. A lua cai no alvo da mira (ou no ponto mirado) abrindo uma cratera (respeita
  * mobGriefing) e causando dano muito alto.
- * { "windup": 50, "radius": 10, "damage": 22, "blast": 6, "crater": 4.5, "range": 40 }
+ * { "windup": 50, "radius": 10, "damage": 34, "blast": 6, "crater": 4.5, "range": 40 }
  */
 public final class MoonfallAbility implements Ability {
 	private final int windup;
@@ -34,7 +34,7 @@ public final class MoonfallAbility implements Ability {
 		this.windup = JsonParams.integer(json, "windup", 50);
 		this.radius = JsonParams.num(json, "radius", 10f);
 		this.range = JsonParams.num(json, "range", 40f);
-		this.damage = JsonParams.num(json, "damage", 22f);
+		this.damage = JsonParams.num(json, "damage", 34f);
 		this.blast = JsonParams.num(json, "blast", 6f);
 		this.crater = JsonParams.num(json, "crater", 4.5f);
 	}

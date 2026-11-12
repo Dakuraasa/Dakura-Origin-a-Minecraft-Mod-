@@ -17,11 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Ponto de entrada comum (cliente + servidor) do Dakura Origins.
+ * Ponto de entrada comum (cliente + servidor) do Datura Origins.
  */
 public class DakuraOrigins implements ModInitializer {
 	public static final String MOD_ID = "dakura_origins";
-	public static final Logger LOGGER = LoggerFactory.getLogger("Dakura Origins");
+	public static final Logger LOGGER = LoggerFactory.getLogger("Datura Origins");
 
 	public static Identifier id(String path) {
 		return Identifier.of(MOD_ID, path);
@@ -47,6 +47,6 @@ public class DakuraOrigins implements ModInitializer {
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> RaceManager.onRespawn(newPlayer));
 		ServerTickEvents.END_SERVER_TICK.register(RaceManager::tick);
 
-		LOGGER.info("Dakura Origins carregado com {} raça(s).", RaceRegistry.all().size());
+		LOGGER.info("Datura Origins carregado com {} raça(s).", RaceRegistry.all().size());
 	}
 }

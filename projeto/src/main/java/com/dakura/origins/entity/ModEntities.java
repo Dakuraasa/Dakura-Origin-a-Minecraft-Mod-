@@ -27,6 +27,11 @@ public final class ModEntities {
 			EntityType.Builder.<GeoProjectileEntity>create(GeoProjectileEntity::new, SpawnGroup.MISC).dimensions(0.6f, 0.6f)
 					.maxTrackingRange(8).trackingTickInterval(1).alwaysUpdateVelocity(true).build("geo_projectile"));
 
+	public static final EntityType<SoulOrbEntity> SOUL_ORB = Registry.register(Registries.ENTITY_TYPE,
+			DakuraOrigins.id("soul_orb"),
+			EntityType.Builder.<SoulOrbEntity>create(SoulOrbEntity::new, SpawnGroup.MISC).dimensions(0.5f, 0.5f)
+					.maxTrackingRange(6).trackingTickInterval(20).build("soul_orb"));
+
 	private ModEntities() {}
 
 	public static void init() {

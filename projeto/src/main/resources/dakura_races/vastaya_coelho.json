@@ -2,7 +2,7 @@
 	"id": "vastaya_coelho",
 	"order": 14,
 	"tag": "combat",
-	"name": "Vastaya Coelho",
+	"name": "Meio-Coelho",
 	"epithet": "A Lebre da Lua Cheia",
 	"icon": "dakura_origins:textures/race/vastaya_coelho.png",
 	"icon_size": [
@@ -24,7 +24,7 @@
 		"accent": "#E879A8",
 		"muted": "#5E806B"
 	},
-	"description": "Uma vastaya-coelho de orelhas longas e pernas que parecem molas. Não usa armas nem magia: luta só com as mãos e os pés, rápida demais para ser acompanhada. Cada golpe seguido a deixa mais veloz, até que um chute em meia-lua manda o inimigo para o céu. Dizem que treinou sob a lua cheia até conseguir saltar até ela.",
+	"description": "Uma meio-coelho de orelhas longas e pernas que parecem molas. Não usa armas nem magia: luta só com as mãos e os pés, rápida demais para ser acompanhada. Cada golpe seguido a deixa mais veloz, até que um chute em meia-lua manda o inimigo para o céu. Dizem que treinou sob a lua cheia até conseguir saltar até ela.",
 	"traits": [
 		{
 			"type": "vantagem",

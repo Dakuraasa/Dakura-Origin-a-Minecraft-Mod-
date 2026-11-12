@@ -59,39 +59,41 @@ public final class ElfFx {
 				ms.translate(at.x - cam.x, at.y - cam.y, at.z - cam.z);
 				sword(ms, vcp, fwd, t + i * 10, true);
 				ms.pop();
-				if (world.random.nextInt(8) == 0)
+				if (world.random.nextInt(6) == 0)
 					world.addParticle(world.random.nextBoolean() ? PURPLE : PINK, at.x + world.random.nextGaussian() * 0.15, at.y,
 							at.z + world.random.nextGaussian() * 0.15, 0, 0.01, 0);
-				if (world.random.nextInt(20) == 0) world.addParticle(ParticleTypes.WITCH, at.x, at.y, at.z, 0, 0, 0);
+				if (world.random.nextInt(14) == 0) world.addParticle(ParticleTypes.WITCH, at.x, at.y, at.z, 0, 0, 0);
+				if (world.random.nextInt(18) == 0) world.addParticle(ParticleTypes.REVERSE_PORTAL, at.x, at.y, at.z, 0, 0.02, 0);
 			}
 		}
 	}
 
-	/** Espada de ferro vanilla com a ponta apontando para "dir", envolta em brilho roxo e rosa. */
+	/**
+	 * Espada de ferro vanilla com a ponta apontando para "dir" e a lâmina em pé (plano vertical), sem nada 3D em volta:
+	 * a aura é só de partículas nativas. Modelo cru do item (modo NONE): a ponta do sprite fica no canto (+x, +y).
+	 */
 	public static void sword(MatrixStack ms, VertexConsumerProvider vcp, Vec3d dir, float t, boolean idle) {
 		Vec3d d = dir.lengthSquared() < 1e-6 ? new Vec3d(0, 0, 1) : dir.normalize();
 		float yaw = (float) Math.atan2(d.x, d.z);
 		float pitch = (float) Math.atan2(d.y, Math.sqrt(d.x * d.x + d.z * d.z));
 		ms.push();
-		ms.multiply(RotationAxis.POSITIVE_Y.rotation(yaw));
-		ms.multiply(RotationAxis.POSITIVE_X.rotation(MathHelper.HALF_PI - pitch));
-		ms.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(45));
-		ms.scale(0.9f, 0.9f, 0.9f);
-		MinecraftClient.getInstance().getItemRenderer().renderItem(SWORD, ModelTransformationMode.FIXED, 0xF000F0, OverlayTexture.DEFAULT_UV,
+		ms.multiply(RotationAxis.POSITIVE_Y.rotation(yaw));                       // 4) gira para a direção do olhar
+		ms.multiply(RotationAxis.POSITIVE_X.rotation(MathHelper.HALF_PI - pitch)); // 3) +Y vira a frente (+Z), com a inclinação
+		ms.multiply(RotationAxis.POSITIVE_Y.rotation(MathHelper.HALF_PI));        // 2) lâmina em pé
+		ms.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(45));                  // 1) ponta diagonal do sprite -> +Y
+		ms.scale(0.85f, 0.85f, 0.85f);
+		MinecraftClient.getInstance().getItemRenderer().renderItem(SWORD, ModelTransformationMode.NONE, 0xF000F0, OverlayTexture.DEFAULT_UV,
 				ms, vcp, MinecraftClient.getInstance().world, 0);
 		ms.pop();
-		VertexConsumer glow = vcp.getBuffer(RenderLayer.getLightning());
-		Matrix4f m = ms.peek().getPositionMatrix();
-		float pulse = 0.8f + 0.2f * MathHelper.sin(t * 0.3f);
-		FxWorld.sphere(m, glow, 0, 0, 0, 0.32f * pulse, 0x5A1A8C, 0.22f);
-		FxWorld.sphere(m, glow, 0, 0, 0, 0.18f, 0xF25ABF, 0.18f);
-		if (!idle) {
-			for (int i = 1; i <= 6; i++) {
-				float k = 1 - i / 7f;
-				FxWorld.dot(m, glow, (float) -d.x * i * 0.22f, (float) -d.y * i * 0.22f, (float) -d.z * i * 0.22f, 0.12f * k,
-						i % 2 == 0 ? 0xF25ABF : 0x4A1A9C, 0.5f * k);
-			}
-		}
+	}
+
+	/** Rastro e aura nativos (pó roxo/rosa, bruxaria, portal reverso e tinta) de uma espada em voo. */
+	public static void swordTrail(net.minecraft.world.World w, Vec3d at) {
+		var r = w.random;
+		w.addParticle(r.nextBoolean() ? PURPLE : PINK, at.x + r.nextGaussian() * 0.08, at.y + r.nextGaussian() * 0.08, at.z + r.nextGaussian() * 0.08, 0, 0, 0);
+		if (r.nextInt(2) == 0) w.addParticle(ParticleTypes.REVERSE_PORTAL, at.x, at.y, at.z, 0, 0, 0);
+		if (r.nextInt(3) == 0) w.addParticle(ParticleTypes.WITCH, at.x, at.y, at.z, 0, 0, 0);
+		if (r.nextInt(5) == 0) w.addParticle(ParticleTypes.SQUID_INK, at.x, at.y, at.z, 0, 0, 0);
 	}
 
 	/** A lua do Elfo da Lua: esfera branca grande e luminosa (estrutura das esferas da Kitsune). */

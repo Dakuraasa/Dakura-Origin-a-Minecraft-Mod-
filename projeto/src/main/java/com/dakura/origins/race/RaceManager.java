@@ -113,7 +113,7 @@ public final class RaceManager {
 		} else {
 			// o cliente sem o mod não tem as traduções: o texto reserva aparece em português
 			player.sendMessage(Text.translatableWithFallback("dakura_origins.message.install_mod",
-					"[Dakura Origins] Instale o mod para escolher sua raça.").formatted(Formatting.RED), false);
+					"[Datura Origins] Instale o mod para escolher sua raça.").formatted(Formatting.RED), false);
 		}
 	}
 

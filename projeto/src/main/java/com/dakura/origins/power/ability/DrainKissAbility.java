@@ -67,8 +67,9 @@ public final class DrainKissAbility implements Ability {
 		}
 		ACTIVE.put(p.getUuid(), new int[]{0});
 		DATA.put(p.getUuid(), new Object[]{this, t});
-		com.dakura.origins.power.Control.lock(t, 3);
-		ModNetworking.sendAround(new AnimPayload(p.getId(), "reach", duration), p);
+		holdInFront(p, t);
+		// o mesmo agarrão da Vampira (corpo a corpo, puxando a vítima), sem sangue: o efeito é de beijo
+		ModNetworking.sendAround(new com.dakura.origins.network.BiteAnimPayload(p.getId(), t.getId(), duration), p, t);
 		p.getWorld().playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.ENTITY_ALLAY_ITEM_TAKEN, SoundCategory.PLAYERS, 1.0f, 0.6f);
 		p.getWorld().playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.PLAYERS, 0.8f, 0.7f);
 		return true;
@@ -103,11 +104,11 @@ public final class DrainKissAbility implements Ability {
 				com.dakura.origins.power.Control.release(t);
 				it.remove();
 				DATA.remove(en.getKey());
-				ModNetworking.sendAround(new AnimPayload(p.getId(), "reach", 0), p);
+				ModNetworking.sendAround(new com.dakura.origins.network.BiteAnimPayload(p.getId(), t.getId(), 0), p, t);
 				if (t.isAlive() && t.getWorld() == p.getWorld()) CharmAbility.charmDirect(p, t, 160);
 				continue;
 			}
-			com.dakura.origins.power.Control.lock(t, 3);
+			holdInFront(p, t);
 			kissFx(p, t);
 			int every = Math.max(1, ab.duration / ab.pulses);
 			if (age % every != 0) continue;
@@ -134,6 +135,20 @@ public final class DrainKissAbility implements Ability {
 			p.getWorld().playSound(null, t.getX(), t.getY(), t.getZ(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.5f, 0.6f);
 			p.getWorld().playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.4f, 1.4f);
 		}
+	}
+
+	/** Segura a vítima colada à frente dela, de frente uma para a outra (como o agarrão da Vampira). */
+	private static void holdInFront(ServerPlayerEntity p, LivingEntity t) {
+		net.minecraft.util.math.Vec3d f = LegendKit.flat(p.getRotationVec(1f));
+		if (f.lengthSquared() < 1e-4) f = new net.minecraft.util.math.Vec3d(0, 0, 1);
+		f = f.normalize();
+		net.minecraft.util.math.Vec3d at = p.getPos().add(f.multiply(0.75 + t.getWidth() * 0.5));
+		if (!t.getWorld().isSpaceEmpty(t, t.getDimensions(t.getPose()).getBoxAt(at))) at = t.getPos(); // parede: fica onde está
+		float face = p.getYaw() + 180f;
+		t.setYaw(face);
+		t.setHeadYaw(face);
+		t.setBodyYaw(face);
+		com.dakura.origins.power.Control.lock(t, 3, at);
 	}
 
 	/** Corações subindo do alvo até os lábios dela. */

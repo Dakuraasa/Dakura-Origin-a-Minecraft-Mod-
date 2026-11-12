@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title Dakura Origins - Compilar
+title Datura Origins - Compilar
 cd /d "%~dp0projeto"
 rem arquivos de raças/poderes removidos (Serafim e a passiva Sorye) - apaga as sobras antigas
 del /q "src\main\resources\dakura_races\serafim.json" 2>nul
@@ -12,14 +12,14 @@ del /q "src\client\java\com\dakura\origins\client\screen\SeraphAltarScreen.java"
 if not exist "..\logs" mkdir "..\logs"
 if not exist "..\builds" mkdir "..\builds"
 
-echo ==== Dakura Origins - build %date% %time% ==== > "..\logs\build-log.txt"
+echo ==== Datura Origins - build %date% %time% ==== > "..\logs\build-log.txt"
 echo. >> "..\logs\build-log.txt"
 echo [Java instalado] >> "..\logs\build-log.txt"
 java -version >> "..\logs\build-log.txt" 2>&1
 echo JAVA_HOME=%JAVA_HOME% >> "..\logs\build-log.txt"
 echo. >> "..\logs\build-log.txt"
 
-echo Compilando o Dakura Origins... (a primeira vez demora, baixa o Minecraft e o Fabric)
+echo Compilando o Datura Origins... (a primeira vez demora, baixa o Minecraft e o Fabric)
 call gradlew.bat build --no-daemon --stacktrace >> "..\logs\build-log.txt" 2>&1
 if errorlevel 1 (
     echo.
@@ -30,7 +30,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-copy /y "build\libs\dakura-origins-*.jar" "..\builds\" >nul
+copy /y "build\libs\datura-origins-*.jar" "..\builds\" >nul
 del /q "..\builds\*-sources.jar" 2>nul
 echo BUILD_RESULT=OK >> "..\logs\build-log.txt"
 echo.

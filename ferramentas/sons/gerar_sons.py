@@ -1,5 +1,5 @@
 """
-Sons originais do Dakura Origins, sintetizados do zero (nenhum som do Minecraft é reutilizado).
+Sons originais do Datura Origins, sintetizados do zero (nenhum som do Minecraft é reutilizado).
 Gera .ogg (mono, 44.1 kHz) em assets/dakura_origins/sounds/ e o sounds.json.
 
 Uso: python gerar_sons.py   (precisa de numpy e do ffmpeg no PATH)

@@ -7,7 +7,7 @@
 	"icon": "dakura_origins:textures/race/elfo_lua.png",
 	"icon_size": [
 		384,
-		145
+		158
 	],
 	"palette": {
 		"ink": [
@@ -165,7 +165,7 @@
 			"cooldown": 4800,
 			"windup": 50,
 			"radius": 10,
-			"damage": 22,
+			"damage": 34,
 			"blast": 6,
 			"crater": 4.5,
 			"range": 40,

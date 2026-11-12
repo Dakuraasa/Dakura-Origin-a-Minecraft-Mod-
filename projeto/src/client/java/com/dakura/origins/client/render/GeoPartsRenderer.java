@@ -403,22 +403,54 @@ public class GeoPartsRenderer extends FeatureRenderer<AbstractClientPlayerEntity
 				float wave = MathHelper.sin(ph - s * 0.55f) * (0.045f + v * 0.18f) * (1f - stretch * 0.5f);
 				g.turn("fox_" + s, wave * 0.5f + st[4] * 0.04f - stretch * 0.04f, wave + st[2] * 0.05f + st[5] * 0.04f, 0);
 			}
-			// Kitsune: perto do chão, a cauda sobe o necessário para não entrar nos blocos (suave, sem tremer)
-			if (n > 1 && grounded) {
-				float lift = 0f, low = lowestPoint(g, pivotScale, scale);
-				if (low > FLOOR) {
-					// descobre para que lado a cauda sobe e vai girando até sair do chão
-					g.turn("tail", pitch + 0.08f, tailYaw, k * 0.25f);
-					float dir = lowestPoint(g, pivotScale, scale) < low ? 1f : -1f;
-					for (int it = 0; it < 14 && low > FLOOR; it++) {
-						lift += 0.08f * dir;
-						g.turn("tail", pitch + lift, tailYaw, k * 0.25f);
-						low = lowestPoint(g, pivotScale, scale);
+			// Kitsune: perto do chão, a cauda sobe o necessário para não entrar nos blocos.
+			// Antes: a subida só existia "no chão" (sumia de uma vez ao pular), ia em degraus de 0.08, o lado era
+			// redescoberto a cada quadro e a suavização dependia do FPS — daí os trancos. Agora a subida-alvo é
+			// contínua (refinada por bisseção), o lado fica travado enquanto a cauda está erguida e a suavização
+			// usa o tempo real entre quadros, nos dois sentidos.
+			if (n > 1) {
+				float[] lf = TAIL_LIFT.computeIfAbsent(e.getId() * 16 + i, x -> new float[]{0, t, 0});
+				float target = 0f;
+				float low = lowestPoint(g, pivotScale, scale);
+				if (grounded && low > FLOOR) {
+					float dir = lf[2];
+					if (dir == 0) {
+						g.turn("tail", pitch + 0.08f, tailYaw, k * 0.25f);
+						dir = lowestPoint(g, pivotScale, scale) < low ? 1f : -1f;
+						lf[2] = dir;
 					}
+					float okLift = 0f, badLift = 0f;
+					boolean found = false;
+					for (int it = 1; it <= 16; it++) {
+						float tryLift = 0.08f * it * dir;
+						g.turn("tail", pitch + tryLift, tailYaw, k * 0.25f);
+						if (lowestPoint(g, pivotScale, scale) <= FLOOR) {
+							okLift = tryLift;
+							badLift = 0.08f * (it - 1) * dir;
+							found = true;
+							break;
+						}
+					}
+					if (found) {
+						for (int r = 0; r < 5; r++) {
+							float mid = (okLift + badLift) * 0.5f;
+							g.turn("tail", pitch + mid, tailYaw, k * 0.25f);
+							if (lowestPoint(g, pivotScale, scale) <= FLOOR) okLift = mid;
+							else badLift = mid;
+						}
+						target = okLift;
+					} else target = 0.08f * 16 * dir;
 				}
-				// suaviza a subida entre quadros (cada cauda guarda a sua)
-				float[] lf = TAIL_LIFT.computeIfAbsent(e.getId() * 16 + i, x -> new float[1]);
-				lf[0] = Math.abs(lift) > Math.abs(lf[0]) ? lift : MathHelper.lerp(0.15f, lf[0], lift);
+				float dt = MathHelper.clamp(t - lf[1], 0f, 3f);
+				lf[1] = t;
+				// subir rápido (para não afundar), descer devagar; independente do FPS
+				float rate = Math.abs(target) > Math.abs(lf[0]) ? 0.55f : 0.12f;
+				float alpha = 1f - (float) Math.pow(1f - rate, dt);
+				lf[0] = MathHelper.lerp(alpha, lf[0], target);
+				if (Math.abs(lf[0]) < 0.005f && target == 0f) {
+					lf[0] = 0f;
+					lf[2] = 0f; // cauda solta: na próxima vez o lado é redescoberto
+				}
 				g.turn("tail", pitch + lf[0], tailYaw, k * 0.25f);
 			}
 			m.push();

@@ -1,4 +1,4 @@
-# Modelos 3D do Dakura Origins no Blockbench
+# Modelos 3D do Datura Origins no Blockbench
 
 Os modelos das partes do corpo e dos projéteis ficam em
 `projeto/src/main/resources/assets/dakura_origins/`:

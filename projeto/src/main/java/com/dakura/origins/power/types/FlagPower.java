@@ -25,6 +25,7 @@ public final class FlagPower implements RacePower {
 			case "night" -> !p.getWorld().isDay() || !p.getWorld().getDimension().hasSkyLight();
 			case "day" -> p.getWorld().isDay() && p.getWorld().getDimension().hasSkyLight();
 			case "low_health" -> p.getHealth() <= p.getMaxHealth() * 0.35f;
+			case "max_maturity" -> MaturityPower.isMax(p);
 			default -> true;
 		};
 		if (on != EntityFlags.has(p, flag)) EntityFlags.set(p, flag, on);

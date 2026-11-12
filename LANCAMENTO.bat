@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title Dakura Origins - Preparar lancamento
+title Datura Origins - Preparar lancamento
 cd /d "%~dp0projeto\src\main"
 echo Removendo racas e arquivos antigos (Anubis, Oni, aureola e cauda antiga da Kitsune)...
 del /q "resources\dakura_races\anubis.json" "resources\dakura_races\oni.json" 2>nul

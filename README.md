@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="projeto/src/main/resources/assets/dakura_origins/textures/gui/book.png" width="128" alt="Dakura Origins">
+  <img src="projeto/src/main/resources/assets/dakura_origins/textures/gui/book.png" width="128" alt="Datura Origins">
 </p>
 
-<h1 align="center">Dakura Origins</h1>
+<h1 align="center">Datura Origins</h1>
 
 <p align="center">
   Mod de raças para <b>Minecraft 1.21.1</b> com <b>Fabric</b>.<br>
@@ -35,7 +35,7 @@
 
 - Ao entrar num mundo novo, o livro de origens abre e você escolhe a sua raça.
 - `/do race change` volta para a escolha de raça. Para testes (OP): `/do full maturity`, `/do reset cooldown`, `/do no cooldown`.
-- Teclas padrão (trocáveis em *Opções → Controles → Dakura Origins*):
+- Teclas padrão (trocáveis em *Opções → Controles → Datura Origins*):
 
 | Tecla | Ação |
 |---|---|
@@ -113,17 +113,21 @@ A experiência clássica do Minecraft, sem vantagens nem fraquezas.
 ### Demônio
 - **Vantagens:** força e velocidade, desconto com aldeões, monstros em trégua, regenera perto da morte, mais forte no Nether, imune a fogo.
 - **Fraquezas:** armas encantadas ferem muito e nada encantado pode ser usado, veneno/fome/Wither ferem mais, só come carne.
-- **Encanto:** o alvo passa a te seguir.
+- **Colheita de Almas:** quem ele mata deixa almas vermelhas; absorvê-las o faz amadurecer em 5 fases. Na última ganha aura de sangue e devolve 30% do dano recebido.
+- **Égide de Sangue:** pentagrama à frente que bloqueia golpes, com duas correntes de sangue que queimam e drenam dois inimigos por 5 s.
 - **Metamorfose:** vira a última criatura que matou (segure para liberar).
 
-### Vastaya (ave, felina, cão e coelho)
+### Meio-Pássaro, Meio-Gato, Meio-Lobo e Meio-Coelho
 - **Vantagens:** mais rápida e forte, quedas leves, os animais não fogem; nas florestas é silenciosa, sem nome, fora dos radares e ignorada pelos monstros.
 - **Sentidos Aguçados:** radar de monstros e jogadores.
-- **Ave:** Rajada de Penas · **Felina:** Corrida Felina · **Cão:** Caçada.
+- **Meio-Pássaro:** Rajada de Penas · **Meio-Gato:** Corrida Felina · **Meio-Lobo:** Caçada.
 
-### Alto Elfo e Elfo Noturno (variantes do Elfo)
+### Alto Elfo (variante do Elfo)
 - **Alto Elfo:** mais forte e rápido, +50% de experiência, encantar custa 1 nível, Presença Real (aliados regeneram). **Laço Áureo** prende e arremessa o alvo; **Égide Espelhada** devolve os golpes.
-- **Elfo Noturno:** visão noturna, mais forte à noite, passos silenciosos. **Orbe Sombria** cega; **Passo Sombrio** teleporta pelas sombras.
+
+### Elfo Noturno e Elfo da Lua (variante)
+- **Elfo Noturno:** assassino silencioso, mais forte à noite, golpes com Wither, os animais fogem dele. **Lâminas da Meia-Noite** (três espadas teleguiadas) e **Passo Sombrio** (teleporte até onde ele enxerga).
+- **Elfo da Lua:** muito mais forte à noite, o Warden o ignora. **Prisão do Eclipse** (feixe que prende o alvo) e **Queda da Lua** (lua gigante que abre uma cratera).
 
 ### Succubus (variante do Demônio)
 - Força de demônio, kit de charme: **Beijo Drenante** (vida, armadura e experiência) e **Metamorfose** (copia a aparência e os atributos de um jogador). De dia perde a força e os chifres.
@@ -143,9 +147,6 @@ A experiência clássica do Minecraft, sem vantagens nem fraquezas.
 ### Kitsune
 - Raposa celestial de nove caudas brancas, enormes e com física. Passiva **Pérola Estelar** (volta da morte). **Kitsunebi** (chamas-fantasma que curam aliados e caçam inimigos) e **Bênção das Nove Caudas**.
 
-### Serafim
-- Seis asas (dobradas no chão, abertas no voo), aura branca e auréola. Totalmente pacífico: não ataca e nenhum mob o ataca. **Coro Celestial** (cura em área) e **Altar Celestial** (escolhe um entre três encantamentos sorteados para o item da mão; recarga de 3 min).
-
 ### Dama Cogumelo (variante da Dríade)
 - Chapéu de cogumelo gigante e veneno roxo. **Caldeirão Venenoso** (o caldeirão fica plantado 10 s vazando veneno) e a passiva **Cogumelo de Emergência** (com 4 corações, um cogumelo gigante brota e a leva ao topo).
 
@@ -158,7 +159,7 @@ A experiência clássica do Minecraft, sem vantagens nem fraquezas.
 ### Fênix
 - Asas e crista de fogo, voa e é imune a fogo. Passiva **Renascimento** (renasce das cinzas com a vida cheia). **Mergulho Solar** (cometa que abre um anel de sol no chão) e **Asas da Aurora** (fogo sagrado que cura aliados e queima inimigos).
 
-### Vastaya Coelho (variante do Vastaya)
+### Meio-Coelho (variante do Meio-Pássaro)
 - Pura luta corpo a corpo: muito rápida, pula altíssimo e bate forte. Passiva **Frenesi da Lebre**. **Chuva de Chutes** e **Salto Lunar** (segurar para carregar, cratera de luar ao cair).
 
 Todas as raças ganharam uma vantagem e uma fraqueza a mais, auras em certas ocasiões e um floreio visual em cada habilidade.
@@ -187,6 +188,6 @@ Requer o **JDK 21**. No Windows, rode `COMPILAR.bat`. O `.jar` sai na pasta `bui
 
 ## Uma homenagem ao Origins
 
-O Dakura Origins nasceu da admiração pelo **[Origins](https://www.curseforge.com/minecraft/mc-mods/origins)**, de **apace100**. A ideia de escolher uma origem no começo do mundo, com dons e fraquezas que mudam o jeito de jogar, é dele. Este projeto foi escrito do zero, mas não existiria sem essa inspiração.
+O Datura Origins nasceu da admiração pelo **[Origins](https://www.curseforge.com/minecraft/mc-mods/origins)**, de **apace100**. A ideia de escolher uma origem no começo do mundo, com dons e fraquezas que mudam o jeito de jogar, é dele. Este projeto foi escrito do zero, mas não existiria sem essa inspiração.
 
 Obrigado ao apace100 e a todos que contribuíram com o Origins por mostrar o quanto o Minecraft fica mais rico quando cada jogador começa a história sendo alguém diferente. Se você gostou deste mod, conheça o original.

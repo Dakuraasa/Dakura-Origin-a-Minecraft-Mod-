@@ -1,4 +1,4 @@
-# Dakura Origins
+# Datura Origins
 
 Mod de raças para Minecraft **1.21.1 / Fabric**, feito para rodar junto com o Cobbleverse.
 Ao entrar num mundo, a tela trava num livro de origens e o jogador escolhe a raça.
@@ -45,7 +45,7 @@ Os mesmos comandos existem em inglês: `/race`, `/race change`, `/race set`, `/r
 
 No livro: setas (ou ← →, A/D) folheiam, a roda do mouse rola a página e o botão pede **dois cliques** para confirmar.
 
-Teclas (trocáveis em *Opções → Controles → Dakura Origins*): habilidades **Z** e **B**, página da raça **O**.
+Teclas (trocáveis em *Opções → Controles → Datura Origins*): habilidades **Z** e **B**, página da raça **O**.
 
 ## HUD
 

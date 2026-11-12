@@ -136,7 +136,7 @@
 			"type": "dakura_origins:steel_tempest",
 			"cooldown": 60,
 			"range": 5,
-			"damage": 5,
+			"damage": 7.5,
 			"dash": 0.9,
 			"empower_after": 3,
 			"reset_ticks": 100,

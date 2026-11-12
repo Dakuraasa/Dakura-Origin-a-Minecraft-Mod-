@@ -35,15 +35,23 @@ public final class RaceCommand {
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
 								CommandRegistryAccess registryAccess,
 								CommandManager.RegistrationEnvironment environment) {
-		// prefixo oficial: /do (Dakura Origins). Os antigos /raca e /race não existem mais.
+		// prefixo oficial: /do (Datura Origins). Os antigos /raca e /race não existem mais.
 		dispatcher.register(CommandManager.literal("do")
 				.then(build("race", "change", "set", "list", "player", "race"))
-				.then(CommandManager.literal("full").requires(src -> src.hasPermissionLevel(2)).then(CommandManager.literal("maturity")
+				.then(CommandManager.literal("full").requires(RaceCommand::cheats).then(CommandManager.literal("maturity")
 						.executes(ctx -> fullMaturity(ctx.getSource(), ctx.getSource().getPlayerOrThrow()))))
-				.then(CommandManager.literal("reset").requires(src -> src.hasPermissionLevel(2)).then(CommandManager.literal("cooldown")
+				.then(CommandManager.literal("reset").requires(RaceCommand::cheats).then(CommandManager.literal("cooldown")
 						.executes(ctx -> resetCooldown(ctx.getSource(), ctx.getSource().getPlayerOrThrow()))))
-				.then(CommandManager.literal("no").requires(src -> src.hasPermissionLevel(2)).then(CommandManager.literal("cooldown")
+				.then(CommandManager.literal("no").requires(RaceCommand::cheats).then(CommandManager.literal("cooldown")
 						.executes(ctx -> noCooldown(ctx.getSource(), ctx.getSource().getPlayerOrThrow())))));
+	}
+
+	/**
+	 * Comandos de teste: liberados para operadores (nível 2) e, no mundo singleplayer, para o próprio dono do mundo
+	 * mesmo sem "permitir comandos" — era isso que os escondia (nível de permissão 0 sem cheats).
+	 */
+	private static boolean cheats(ServerCommandSource src) {
+		return src.hasPermissionLevel(2) || src.getServer().isSingleplayer();
 	}
 
 	private static int fullMaturity(ServerCommandSource source, ServerPlayerEntity p) {

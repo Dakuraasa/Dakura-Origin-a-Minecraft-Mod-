@@ -29,6 +29,8 @@ import java.util.Set;
 public final class DarkFx {
 	private static final Identifier VOID_TEX = DakuraOrigins.id("textures/entity/void_core.png");
 	private static final Identifier CHAIN_TEX = DakuraOrigins.id("textures/entity/dark_chain.png");
+	/** Correntes de sangue do Demônio: mesma corrente, metal vermelho-sangue e brilho carmesim. */
+	private static final Identifier BLOOD_TEX = DakuraOrigins.id("textures/entity/blood_chain.png");
 
 	private DarkFx() {}
 
@@ -75,25 +77,35 @@ public final class DarkFx {
 			Set<String> flags = EntityFlags.CLIENT.get(pl.getId());
 			if (flags == null) continue;
 			for (String f : flags) {
-				if (!f.startsWith("chain#")) continue;
+				boolean blood = f.startsWith("bchain#");
+				if (!blood && !f.startsWith("chain#")) continue;
 				Entity t;
 				try {
-					t = world.getEntityById(Integer.parseInt(f.substring(6)));
+					t = world.getEntityById(Integer.parseInt(f.substring(blood ? 7 : 6)));
 				} catch (NumberFormatException ex) {
 					continue;
 				}
-				if (t != null) chain(ms, vcp, world, cam, pl.getLerpedPos(pt).add(0, pl.getHeight() * 0.55, 0),
-						t.getLerpedPos(pt).add(0, t.getHeight() * 0.5, 0), pl.age + pt);
+				if (t == null) continue;
+				Vec3d from;
+				if (blood) {
+					// saem do escudo à frente do Demônio (mesmo ponto em que o escudo é desenhado)
+					Vec3d eye = pl.getLerpedPos(pt).add(0, pl.getStandingEyeHeight(), 0);
+					from = eye.add(Vec3d.fromPolar(pl.getPitch(pt), pl.getYaw(pt)).multiply(1.4)).add(0, -0.35, 0);
+				} else from = pl.getLerpedPos(pt).add(0, pl.getHeight() * 0.55, 0);
+				chain(ms, vcp, world, cam, from, t.getLerpedPos(pt).add(0, t.getHeight() * 0.5, 0), pl.age + pt, blood);
 			}
 		}
 	}
 
-	private static void chain(MatrixStack ms, VertexConsumerProvider vcp, ClientWorld w, Vec3d cam, Vec3d a, Vec3d b, float t) {
+	private static void chain(MatrixStack ms, VertexConsumerProvider vcp, ClientWorld w, Vec3d cam, Vec3d a, Vec3d b, float t, boolean blood) {
+		// pontas nunca abaixo do chão: no mínimo 0.35 bloco acima do bloco sólido mais próximo embaixo
+		a = aboveGround(w, a);
+		b = aboveGround(w, b);
 		double len = a.distanceTo(b);
 		if (len < 0.3) return;
-		int links = Math.max(3, (int) (len / 0.3));
-		double sag = Math.max(0.15, 1.6 - len * 0.08);
-		VertexConsumer vc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(CHAIN_TEX));
+		int links = Math.max(3, (int) Math.round(len / 0.3));
+		double sag = 0;
+		VertexConsumer vc = vcp.getBuffer(RenderLayer.getEntityCutoutNoCull(blood ? BLOOD_TEX : CHAIN_TEX));
 		VertexConsumer glow = vcp.getBuffer(RenderLayer.getLightning());
 		int light = WorldRenderer.getLightmapCoordinates(w, BlockPos.ofFloored(a.lerp(b, 0.5)));
 		Vec3d prev = curve(a, b, 0, sag, t);
@@ -111,17 +123,23 @@ public final class DarkFx {
 			link(ms.peek(), vc, light);
 			// brilho violeta correndo pela corrente
 			float wave = MathHelper.sin((float) (u * 12 - t * 0.35));
-			if (wave > 0.6f) FxWorld.dot(ms.peek().getPositionMatrix(), glow, 0, 0, 0, 0.09f, 0xB45CFF, (wave - 0.6f) * 1.6f);
+			if (wave > 0.6f) FxWorld.dot(ms.peek().getPositionMatrix(), glow, 0, 0, 0, 0.09f, blood ? 0xC0101E : 0xB45CFF, (wave - 0.6f) * 1.6f);
 			ms.pop();
 			prev = p;
 		}
 	}
 
-	/** Ponto da corrente: linha reta com barriga (catenária aproximada) e um balanço leve. */
+	/** Ponto da corrente: reta e esticada entre as duas pontas (sem barriga nem balanço, que a enterravam no chão). */
 	private static Vec3d curve(Vec3d a, Vec3d b, double u, double sag, float t) {
-		Vec3d p = a.lerp(b, u);
-		double s = 4 * u * (1 - u);
-		return p.add(Math.sin(t * 0.15 + u * 3) * 0.06 * s, -sag * s, Math.cos(t * 0.13 + u * 3) * 0.06 * s);
+		return a.lerp(b, u);
+	}
+
+	private static Vec3d aboveGround(ClientWorld w, Vec3d p) {
+		BlockPos bp = BlockPos.ofFloored(p);
+		var shape = w.getBlockState(bp).getCollisionShape(w, bp);
+		if (shape.isEmpty()) return p;
+		double top = bp.getY() + shape.getMax(net.minecraft.util.math.Direction.Axis.Y);
+		return p.y < top + 0.35 ? new Vec3d(p.x, top + 0.35, p.z) : p;
 	}
 
 	/** Um elo: anel retangular com volume (4 barras), comprimento no eixo z. */

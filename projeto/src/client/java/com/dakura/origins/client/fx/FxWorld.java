@@ -69,6 +69,9 @@ public final class FxWorld {
 	private static final java.util.Map<Integer, Integer> TETHER = new java.util.HashMap<>();
 	private static final net.minecraft.util.Identifier SHIELD_TEX = com.dakura.origins.DakuraOrigins.id("textures/entity/golden_shield.png");
 	private static final int SHIELD_FRAMES = 60, SHIELD_GRID = 8;
+	/** Escudo do Demônio: o pentagrama animado (GIF do Artur), 180 quadros a 90 ms numa grade 14×14. */
+	private static final net.minecraft.util.Identifier DEMON_SHIELD_TEX = com.dakura.origins.DakuraOrigins.id("textures/entity/demon_shield.png");
+	private static final int DEMON_FRAMES = 180, DEMON_GRID = 14;
 	private static final List<Debris> DEBRIS = new ArrayList<>();
 	private static final int MAX_DEBRIS = 220;
 	private static final net.minecraft.util.Identifier LILY_TEX = com.dakura.origins.DakuraOrigins.id("textures/entity/lily_pad.png");
@@ -323,22 +326,24 @@ public final class FxWorld {
 
 		// Égide Espelhada: o círculo rúnico animado (GIF do Artur) como escudo emissivo à frente
 		for (net.minecraft.entity.player.PlayerEntity pl : world.getPlayers()) {
-			if (!com.dakura.origins.power.EntityFlags.clientHas(pl, "mirror_shield")) continue;
+			boolean demon = com.dakura.origins.power.EntityFlags.clientHas(pl, "demon_shield");
+			if (!demon && !com.dakura.origins.power.EntityFlags.clientHas(pl, "mirror_shield")) continue;
+			int frames = demon ? DEMON_FRAMES : SHIELD_FRAMES, grid = demon ? DEMON_GRID : SHIELD_GRID, msPer = demon ? 90 : 70;
 			Vec3d eye = pl.getLerpedPos(pt).add(0, pl.getStandingEyeHeight(), 0);
 			float yaw = pl.getYaw(pt), pitch = pl.getPitch(pt);
 			Vec3d look = Vec3d.fromPolar(pitch, yaw);
 			Vec3d c = eye.add(look.multiply(1.4)).add(0, -0.35, 0);
 			long ms0 = net.minecraft.util.Util.getMeasuringTimeMs();
-			int frame = (int) ((ms0 / 70) % SHIELD_FRAMES);
-			float u0 = (frame % SHIELD_GRID) / (float) SHIELD_GRID, v0 = (frame / SHIELD_GRID) / (float) SHIELD_GRID;
-			float du = 1f / SHIELD_GRID;
+			int frame = (int) ((ms0 / msPer) % frames);
+			float u0 = (frame % grid) / (float) grid, v0 = (frame / grid) / (float) grid;
+			float du = 1f / grid;
 			float pulse = 1f + 0.04f * MathHelper.sin(ms0 * 0.006f);
 			float half = 1.55f * pl.getScale() * pulse;
 			ms.push();
 			ms.translate(c.x - cam.x, c.y - cam.y, c.z - cam.z);
 			ms.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-yaw));
 			ms.multiply(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
-			VertexConsumer sv = vcp.getBuffer(RenderLayer.getEyes(SHIELD_TEX));
+			VertexConsumer sv = vcp.getBuffer(RenderLayer.getEyes(demon ? DEMON_SHIELD_TEX : SHIELD_TEX));
 			MatrixStack.Entry en = ms.peek();
 			Matrix4f mt = en.getPositionMatrix();
 			for (int side = 0; side < 2; side++) {

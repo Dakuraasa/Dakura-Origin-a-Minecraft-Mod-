@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 /**
  * Carrega as raças de resources/dakura_races/*.json de TODOS os mods instalados
- * (o Dakura Origins e qualquer addon). Para criar uma raça basta um JSON + um ícone.
+ * (o Datura Origins e qualquer addon). Para criar uma raça basta um JSON + um ícone.
  */
 public final class RaceRegistry {
 	public static final String DEFAULT_RACE = "humano";

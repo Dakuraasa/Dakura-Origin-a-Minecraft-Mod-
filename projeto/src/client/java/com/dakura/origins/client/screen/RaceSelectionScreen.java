@@ -230,7 +230,7 @@ public class RaceSelectionScreen extends Screen {
 			case OPEN -> renderOpen(ctx, mouseX, mouseY, pal, t, shown, shownToc, flipping ? flip : -1f, viewOnly ? pop(now) : 1f);
 		}
 		drawRunes(ctx);
-		Text sig = Text.literal("Created by: Dakuraasa").formatted(net.minecraft.util.Formatting.BOLD);
+		Text sig = Text.literal("Created by: Daturaasa").formatted(net.minecraft.util.Formatting.BOLD);
 		float ss = 0.75f;
 		ctx.getMatrices().push();
 		ctx.getMatrices().translate(width - 4 - textRenderer.getWidth(sig) * ss, height - 4 - 8 * ss, 400);

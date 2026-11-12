@@ -138,6 +138,10 @@ public final class PowerRegistry {
 		registerPowerType(DakuraOrigins.id("moon_mark"), com.dakura.origins.power.types.MoonMarkPower::new);
 		com.dakura.origins.power.types.MoonMarkPower.bootstrap();
 		com.dakura.origins.power.Control.bootstrap();
+		registerPowerType(DakuraOrigins.id("soul_harvest"), com.dakura.origins.power.types.SoulHarvestPower::new);
+		com.dakura.origins.power.types.SoulHarvestPower.bootstrap();
+		registerAbilityType(DakuraOrigins.id("blood_shield"), com.dakura.origins.power.ability.BloodShieldAbility::new);
+		com.dakura.origins.power.ability.BloodShieldAbility.bootstrap();
 		registerPowerType(DakuraOrigins.id("devour"), com.dakura.origins.power.types.DevourPower::new);
 		com.dakura.origins.power.types.DevourPower.bootstrap();
 		com.dakura.origins.power.types.SleepAltitudePower.bootstrap();

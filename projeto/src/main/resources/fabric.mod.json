@@ -2,10 +2,10 @@
 	"schemaVersion": 1,
 	"id": "dakura_origins",
 	"version": "${version}",
-	"name": "Dakura Origins",
+	"name": "Datura Origins",
 	"description": "Escolha sua origem. Cada raça é um capítulo: poderes, fraquezas e duas habilidades ativas.",
 	"authors": [
-		"Dakura (Artur Carmo dos Santos)"
+		"Daturaasa (Artur Carmo dos Santos)"
 	],
 	"contact": {
 		"sources": "https://github.com/arturcsantos1610"

@@ -1,5 +1,5 @@
 """
-Gerador dos modelos 3D do Dakura Origins (Etapas 1 a 3 + textura).
+Gerador dos modelos 3D do Datura Origins (Etapas 1 a 3 + textura).
 
 Para cada peça cria, a partir das referências:
   - assets/dakura_origins/geo/<peca>.geo.json          (Bedrock Geometry 1.12.0, abre no Blockbench)

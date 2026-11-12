@@ -119,7 +119,7 @@ public final class GeoModel {
 				return parse(JsonParser.parseReader(reader).getAsJsonObject());
 			}
 		} catch (Exception ex) {
-			DakuraOrigins.LOGGER.error("[Dakura Origins] Não consegui ler o modelo {}: {}", id, ex.toString());
+			DakuraOrigins.LOGGER.error("[Datura Origins] Não consegui ler o modelo {}: {}", id, ex.toString());
 			ModelData md = new ModelData();
 			return new GeoModel(TexturedModelData.of(md, 16, 16).createModel(), Map.of(), Map.of());
 		}

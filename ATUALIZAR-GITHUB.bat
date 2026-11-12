@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title Dakura Origins - Atualizar o GitHub
+title Datura Origins - Atualizar o GitHub
 cd /d "%~dp0"
 where git >nul 2>&1 || (echo Git nao encontrado. Instale em https://git-scm.com/download/win e rode de novo. & pause & exit /b 1)
 if not exist ".git" (
@@ -40,5 +40,5 @@ if errorlevel 1 (
     exit /b 1
 )
 echo.
-echo  [OK] Repositorio atualizado: https://github.com/Dakuraasa/Dakura-Origin-a-Minecraft-Mod-
+echo  [OK] Repositorio atualizado: https://github.com/Dakuraasa/Datura-Origins-a-Minecraft-Mod
 timeout /t 5 >nul

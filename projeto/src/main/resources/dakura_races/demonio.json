@@ -32,7 +32,7 @@
 		},
 		{
 			"type": "vanilla",
-			"text": "Lábia infernal: aldeões dão desconto sem precisar apanhar. Aldeões que ele encantou ficam desconfiados e o desconto cai."
+			"text": "Lábia infernal: aldeões dão desconto sem precisar apanhar."
 		},
 		{
 			"type": "vantagem",
@@ -49,6 +49,14 @@
 		{
 			"type": "vantagem",
 			"text": "Olhos das trevas: visão noturna."
+		},
+		{
+			"type": "vantagem",
+			"text": "Colheita de almas: quem ele mata deixa almas vermelhas (mais almas quanto mais forte a vítima). Ao absorvê-las, amadurece em 5 fases, cada uma mais forte. A experiência normal continua à parte."
+		},
+		{
+			"type": "vantagem",
+			"text": "Forma final: uma aura de sangue permanente e Espinhos Infernais, que devolvem 30% do dano recebido a quem o atacou."
 		},
 		{
 			"type": "desvantagem",
@@ -160,17 +168,96 @@
 		{
 			"type": "dakura_origins:flag",
 			"flag": "curse_immune"
+		},
+		{
+			"type": "dakura_origins:maturity",
+			"thresholds": [
+				250,
+				700,
+				1400,
+				2400
+			],
+			"from_kills": false,
+			"keep_xp": true,
+			"colors": [
+				"#7A0F1A",
+				"#A3121F",
+				"#C8102E",
+				"#8E0B2E",
+				"#5C0012"
+			]
+		},
+		{
+			"type": "dakura_origins:soul_harvest",
+			"points_per_health": 1.0,
+			"player_points": 60,
+			"max_orbs": 10,
+			"thorns": 0.3
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.attack_damage",
+			"operation": "add_value",
+			"amount": 0,
+			"stage_values": [
+				0,
+				1,
+				2,
+				3.5,
+				5
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.max_health",
+			"operation": "add_value",
+			"amount": 0,
+			"stage_values": [
+				0,
+				2,
+				4,
+				6,
+				8
+			]
+		},
+		{
+			"type": "dakura_origins:attribute",
+			"attribute": "minecraft:generic.armor",
+			"operation": "add_value",
+			"amount": 0,
+			"stage_values": [
+				0,
+				1,
+				2,
+				4,
+				6
+			]
+		},
+		{
+			"type": "dakura_origins:flag",
+			"flag": "aura#7A0A1C",
+			"when": "max_maturity"
 		}
 	],
 	"abilities": [
 		{
-			"type": "dakura_origins:charm",
-			"name": "Encanto",
-			"description": "Encanta o alvo na mira e o faz te seguir sem te atacar. Monstros de porte normal, aldeões e animais ficam encantados sem limite; os demais, só 3 segundos.",
-			"cooldown": 1800,
-			"range": 16,
-			"short": 60,
-			"max": 4
+			"type": "dakura_origins:blood_shield",
+			"name": "Égide de Sangue",
+			"cooldown": 600,
+			"duration": 100,
+			"range": 5,
+			"every": 10,
+			"damage": 1.5,
+			"heal": 0.6,
+			"burn": 3,
+			"maturity_damage": [
+				1,
+				1.25,
+				1.5,
+				1.8,
+				2.2
+			],
+			"description": "Abre à sua frente um pentagrama de sangue que bloqueia os golpes vindos da frente. Dele saem duas correntes, cada uma presa a um inimigo a até 5 blocos: por 5 segundos eles queimam, levam dano contínuo e têm a vida drenada para curar o Demônio (mais forte a cada fase de maturidade)."
 		},
 		{
 			"type": "dakura_origins:morph",

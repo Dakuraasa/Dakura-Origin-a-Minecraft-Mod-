@@ -62,6 +62,8 @@ public final class MaturityPower implements RacePower {
 	/** false = matar não dá maturidade. */
 	private final boolean fromKills;
 	private final boolean kitsune;
+	/** Demônio: a experiência vanilla continua funcionando à parte (a maturidade só vem das almas). */
+	private final boolean keepXp;
 
 	public MaturityPower(JsonObject json) {
 		List<Integer> t = new ArrayList<>();
@@ -79,6 +81,7 @@ public final class MaturityPower implements RacePower {
 		this.fromXp = JsonParams.bool(json, "from_xp", false);
 		this.fromKills = JsonParams.bool(json, "from_kills", true);
 		this.perKill = JsonParams.integer(json, "per_kill", 0);
+		this.keepXp = JsonParams.bool(json, "keep_xp", false);
 		this.colors = c.stream().mapToInt(s -> 0xFF000000 | Integer.parseInt(s.replace("#", ""), 16)).toArray();
 	}
 
@@ -158,14 +161,19 @@ public final class MaturityPower implements RacePower {
 
 	/** Usado pelo mixin: esta raça não ganha nem usa experiência vanilla. */
 	public static boolean blocksExperience(PlayerEntity player) {
-		return !restoringXp && of(player).isPresent();
+		return !restoringXp && of(player).filter(m -> !m.keepXp).isPresent();
+	}
+
+	/** Já está no último estágio? */
+	public static boolean isMax(PlayerEntity player) {
+		return of(player).map(m -> m.stageOf(points(player)) >= m.stageCount() - 1).orElse(false);
 	}
 
 	// ================================================================== ciclo de vida (servidor)
 
 	@Override
 	public void onApply(ServerPlayerEntity player) {
-		if (player.getAttached(STORED_XP) == null) {
+		if (!keepXp && player.getAttached(STORED_XP) == null) {
 			player.setAttached(STORED_XP, player.totalExperience);
 			player.setExperienceLevel(0);
 			player.setExperiencePoints(0);
