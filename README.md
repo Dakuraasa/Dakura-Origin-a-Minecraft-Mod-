@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="projeto/src/main/resources/assets/dakura_origins/icon.png" width="128" alt="Datura Origins">
+<p align="center">
+  <img src="banner.png" width="70%" alt="Datura Origins Banner">
 </p>
 
 <h1 align="center">Datura Origins</h1>
